@@ -80,15 +80,6 @@ PYTHONHASHSEED=0 python -m src.experiments.compute_pooled_permutation
 # 5. Reports that read the step-3 artefact
 PYTHONHASHSEED=0 python scripts/run_p3_sensitivity.py
 PYTHONHASHSEED=0 python scripts/run_heldout_rho.py
-
-# 6. Figures
-python ajcai/figures/make_fig1_method.py                      # schematic, no data
-python ajcai/figures/make_fig2_audit.py                       # reads results/rho_geometry/results.json
-PYTHONHASHSEED=0 python ajcai/figures/make_fig3_shortcut.py   # BUS-UCLM follow-up; reuses fig3_placebo_warning.json if present (delete it to recompute)
-
-# 7. Paper
-make -C ajcai        # main.pdf
-make -C ajcai supp   # main-supp.pdf (with Supplementary Material)
 ```
 
 Each experiment writes `results/<name>/results.json` (with metadata, git commit and a full config snapshot) and `results/<name>/summary.txt` (the table printed to the console).
