@@ -1,4 +1,4 @@
-# Auditing BI-RADS Expressibility of Breast-Ultrasound Decisions in Frozen Vision--Language Models
+# Auditing BI-RADS Expressibility of Breast-Ultrasound Decisions in Frozen Vision-Language Models
 
 Code for the research paper "Auditing BI-RADS Expressibility of Breast-Ultrasound Decisions in Frozen Vision-Language Models" (AJCAI 2026). The paper source is in `ajcai/`.
 
