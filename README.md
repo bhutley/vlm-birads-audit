@@ -24,7 +24,6 @@ All scripts live in `src/experiments/` unless a path is given.
 | Supp. S8 | `compute_pooled_permutation` | Pooled clinical+anatomy label permutation test | `results/pooled_permutation/` |
 | Supp. S6, App. B | `scripts/run_p3_sensitivity.py` | Gate k-sweep; drop-one placebo descriptor (BiomedCLIP) | `results/rho_geometry/p3_sensitivity.json` |
 | Supp. S6 (fold-refit table) | `scripts/run_heldout_rho.py` | Fold-refit direction stability report (reads the `rho_geometry` artefact) | `results/rho_geometry/fold_refit_stability.json` |
-| §5.2, Supp. S9 | `ajcai/figures/make_fig3_shortcut.py` | BUS-UCLM placebo-null warning (group-aware separability) | `ajcai/figures/fig3_placebo_warning.json` |
 
 ---
 
