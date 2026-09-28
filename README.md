@@ -1,6 +1,6 @@
 # Auditing BI-RADS Expressibility of Breast-Ultrasound Decisions in Frozen Vision-Language Models
 
-Code for the research paper "Auditing BI-RADS Expressibility of Breast-Ultrasound Decisions in Frozen Vision-Language Models" (AJCAI 2026). The paper source is in `ajcai/`.
+Code for the research paper "Auditing BI-RADS Expressibility of Breast-Ultrasound Decisions in Frozen Vision-Language Models" (AJCAI 2026). 
 
 The object of study is a frozen image-text encoder whose benign/malignant probe direction `w` is audited against a BI-RADS concept subspace `C` (m = 5 text-derived directions: margin, shape, orientation, echogenicity, posterior). The headline quantity is ρ = ‖P_C w‖² / ‖w‖², reported as an excess over three nulls (random subspace, placebo bank, malignancy-synonym bank) and combined into a four-criterion audit rule per checkpoint. Nothing in any backbone is fine-tuned.
 
