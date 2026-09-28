@@ -1,0 +1,82 @@
+==========================================================================
+E2 — interventional grounding (representation-space dose-response)  site=busi
+==========================================================================
+Per concept: monotonicity = Spearman(alpha, zero-shot malignancy margin);
+effect_z = clinical endpoint-delta vs random-direction null. RQ1: z >> 0.
+
+[biomedclip]  n=600
+  concept        mono(zs)  effz(zs)  holm  effz(probe)  effz(zs,plac)
+  -------------------------------------------------------------------
+  margin            +1.00      +6.2     *         +1.6           +1.9
+  shape             +1.00      +7.8     *         +6.3           +2.6
+  orientation       +0.73      +0.3               +3.3           -0.5
+  echogenicity      +1.00      +2.6     *         -0.8           +0.4
+  posterior         -0.93      -0.3               +4.7           -0.8
+  MEAN                         +3.3                              +0.7
+  (holm * = Holm-Bonferroni sig. at 0.05 vs random-direction null,
+   family = the 5 concepts; effz(zs,plac) vs 16 placebo axes, descriptive)
+
+[unimed_clip]  n=600
+  concept        mono(zs)  effz(zs)  holm  effz(probe)  effz(zs,plac)
+  -------------------------------------------------------------------
+  margin            +1.00      +3.0     *         +0.2           +0.6
+  shape             +1.00     +11.1     *         +3.2           +2.7
+  orientation       +1.00      +1.4               +5.1           +0.2
+  echogenicity      +1.00      +2.5     *         -3.2           +0.5
+  posterior         -1.00      -2.4               -2.3           -0.8
+  MEAN                         +3.1                              +0.6
+  (holm * = Holm-Bonferroni sig. at 0.05 vs random-direction null,
+   family = the 5 concepts; effz(zs,plac) vs 16 placebo axes, descriptive)
+
+[pmc_clip]  n=600
+  concept        mono(zs)  effz(zs)  holm  effz(probe)  effz(zs,plac)
+  -------------------------------------------------------------------
+  margin            -0.41      -0.2               +4.7           -0.5
+  shape             +1.00      +2.7     *         +6.1           +1.3
+  orientation       +0.96      +0.7               +2.3           +0.0
+  echogenicity      +1.00      +4.2     *         -0.3           +2.2
+  posterior         -0.73      -0.4               +3.1           -0.7
+  MEAN                         +1.4                              +0.4
+  (holm * = Holm-Bonferroni sig. at 0.05 vs random-direction null,
+   family = the 5 concepts; effz(zs,plac) vs 16 placebo axes, descriptive)
+
+[pubmedclip]  n=600
+  concept        mono(zs)  effz(zs)  holm  effz(probe)  effz(zs,plac)
+  -------------------------------------------------------------------
+  margin            -1.00      -1.7               +0.8           -2.0
+  shape             +1.00      +2.5     *         -0.1           +1.9
+  orientation       +1.00      +1.2               -0.5           +0.7
+  echogenicity      +1.00      +0.4               +0.3           -0.1
+  posterior         +1.00      +0.6               +1.3           +0.1
+  MEAN                         +0.6                              +0.1
+  (holm * = Holm-Bonferroni sig. at 0.05 vs random-direction null,
+   family = the 5 concepts; effz(zs,plac) vs 16 placebo axes, descriptive)
+
+[clip]  n=600
+  concept        mono(zs)  effz(zs)  holm  effz(probe)  effz(zs,plac)
+  -------------------------------------------------------------------
+  margin            +1.00      +2.8     *         +0.0           +2.4
+  shape             +1.00      +3.4     *         -0.6           +2.8
+  orientation       +1.00      +0.5               -0.8           +1.1
+  echogenicity      +1.00      +5.9     *         -0.5           +4.3
+  posterior         -1.00      -3.9               +1.8           -1.5
+  MEAN                         +1.8                              +1.8
+  (holm * = Holm-Bonferroni sig. at 0.05 vs random-direction null,
+   family = the 5 concepts; effz(zs,plac) vs 16 placebo axes, descriptive)
+
+[siglip]  n=600
+  concept        mono(zs)  effz(zs)  holm  effz(probe)  effz(zs,plac)
+  -------------------------------------------------------------------
+  margin            +1.00      +0.6               -1.0           +0.6
+  shape             +1.00      +2.8     *         +1.9           +2.3
+  orientation       +1.00      +0.4               +0.9           +0.5
+  echogenicity      +1.00      +5.6     *         -0.5           +4.4
+  posterior         -1.00      -1.5               +2.4           -0.9
+  MEAN                         +1.6                              +1.4
+  (holm * = Holm-Bonferroni sig. at 0.05 vs random-direction null,
+   family = the 5 concepts; effz(zs,plac) vs 16 placebo axes, descriptive)
+
+RQ1: clinical axes should show monotonicity ~ +1 and effect_z >> 0 vs BOTH
+     the random-direction null (Holm-corrected) AND the placebo null.
+RQ3: compare MEAN effect_z (and placebo effect_z) across backbones.
+Curves (zs_curve / probe_curve over alphas) are saved for the dose-response figure.

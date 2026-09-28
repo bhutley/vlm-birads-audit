@@ -1,0 +1,73 @@
+============================================================================
+E3 (WP4) — group-weighted rho-excess + global backbone core test
+============================================================================
+concepts (m=5 held fixed): margin, shape, orientation, echogenicity, posterior
+backbones run: biomedclip, unimed_clip, pmc_clip, pubmedclip, clip, siglip
+
+Per-site PLACEBO excess (group-weighted probe; [95% cluster-bootstrap CI]).
+Site cells are descriptive — the verdict is the global core test below.
+
+backbone              busi      bus_uclm       bus_bra      busi_whu         udiat        breast
+------------------------------------------------------------------------------------------------
+biomedclip   +0.137> +0.09 +0.009> -0.03 +0.047> +0.01 +0.052> +0.00 +0.111> +0.06 +0.082> +0.04
+unimed_clip  +0.040> +0.01 +0.047> -0.01 -0.035> -0.05 -0.004> -0.03 +0.021> -0.01 +0.056> +0.01
+pmc_clip     +0.071> +0.05 +0.077> +0.02 +0.067> +0.05 +0.048> +0.03 +0.117> +0.08 +0.040> +0.02
+pubmedclip   -0.007> -0.01 -0.002> -0.01 -0.016> -0.02 -0.004> -0.01 -0.016> -0.02 -0.016> -0.02
+clip         -0.001> -0.00 +0.005> -0.00 -0.007> -0.01 -0.003> -0.01 -0.007> -0.01 -0.004> -0.01
+siglip       +0.009> +0.00 +0.007> -0.01 +0.001> -0.01 +0.001> -0.00 +0.011> +0.00 +0.007> -0.00
+
+PERF-01 — group-disjoint OUT-OF-FOLD probe discrimination (AUC [95% CI]),
+group-weighted, fixed C; the direction each geometry cell above is read from.
+'*' = AUC CI lower bound does not clear 0.50 (weak probe).
+
+backbone                busi        bus_uclm         bus_bra        busi_whu           udiat          breast
+------------------------------------------------------------------------------------------------------------
+biomedclip  0.89[0.86,0.91] 0.72[0.64,0.81] 0.79[0.77,0.82] 0.73[0.70,0.76] 0.81[0.75,0.87] 0.78[0.73,0.82] 
+unimed_clip 0.86[0.84,0.89] 0.65[0.55,0.76] 0.79[0.77,0.81] 0.74[0.71,0.77] 0.79[0.73,0.85] 0.77[0.73,0.82] 
+pmc_clip    0.92[0.90,0.94] 0.76[0.67,0.84] 0.84[0.83,0.86] 0.80[0.78,0.83] 0.89[0.85,0.93] 0.82[0.78,0.86] 
+pubmedclip  0.86[0.83,0.88] 0.63[0.53,0.74] 0.77[0.75,0.79] 0.71[0.68,0.74] 0.77[0.71,0.84] 0.74[0.70,0.79] 
+clip        0.82[0.79,0.85] 0.63[0.55,0.70] 0.75[0.73,0.77] 0.73[0.70,0.76] 0.71[0.64,0.78] 0.69[0.64,0.74] 
+siglip      0.88[0.85,0.90] 0.68[0.58,0.78] 0.78[0.76,0.80] 0.74[0.71,0.77] 0.79[0.73,0.85] 0.73[0.68,0.78] 
+
+  biomedclip   AUC min/med/max = 0.72/0.79/0.89   bal.acc = 0.65/0.71/0.81   weak: none
+  unimed_clip  AUC min/med/max = 0.65/0.78/0.86   bal.acc = 0.62/0.69/0.79   weak: none
+  pmc_clip     AUC min/med/max = 0.76/0.83/0.92   bal.acc = 0.69/0.76/0.84   weak: none
+  pubmedclip   AUC min/med/max = 0.63/0.76/0.86   bal.acc = 0.60/0.68/0.79   weak: none
+  clip         AUC min/med/max = 0.63/0.72/0.82   bal.acc = 0.60/0.68/0.76   weak: none
+  siglip       AUC min/med/max = 0.68/0.76/0.88   bal.acc = 0.61/0.68/0.81   weak: none
+
+GLOBAL backbone test: T_clin = equal-site mean rho.
+  p_rand  = Monte-Carlo random-subspace null (20k) -> a calibrated p-value;
+            Holm-corrected across the six backbones (the ONLY such family).
+  plac    = position in the FIXED placebo bank (C(16,5)=4368) -> an empirical
+            reference RANK, not a p-value (the +1 is rank smoothing).
+EXPRESSIBLE = Holm(p_rand)<.05 AND plac<.05 AND CI>0 AND excess>2m/d.
+
+backbone      T_clin exc_plac         [95% CI]  p_rand   holmP   plac  express
+------------------------------------------------------------------------------
+biomedclip     0.114   +0.073  [+0.053,+0.089]  0.0000  0.0003  0.000      YES
+unimed_clip    0.069   +0.021  [+0.004,+0.034]  0.0000  0.0003  0.118       no
+pmc_clip       0.083   +0.070  [+0.053,+0.074]  0.0000  0.0003  0.000      YES
+pubmedclip     0.006   -0.010  [-0.013,-0.007]  0.8751  1.0000  1.000       no
+clip           0.006   -0.003  [-0.005,-0.001]  0.9228  1.0000  0.957       no
+siglip         0.015   +0.006  [+0.002,+0.009]  0.0051  0.0154  0.016       no
+
+Gate-k sensitivity (expressible? at k in the sweep):
+  biomedclip   k=1.5:Y  k=2.0:Y  k=3.0:Y
+  unimed_clip  k=1.5:n  k=2.0:n  k=3.0:n
+  pmc_clip     k=1.5:Y  k=2.0:Y  k=3.0:Y
+  pubmedclip   k=1.5:n  k=2.0:n  k=3.0:n
+  clip         k=1.5:n  k=2.0:n  k=3.0:n
+  siglip       k=1.5:n  k=2.0:n  k=3.0:n
+
+Which axes reconstruct w (cos with decision dir), site-averaged:
+  biomedclip   shape=+0.25  posterior=+0.17  orientation=+0.09  margin=+0.08  echogenicity=+0.02
+  unimed_clip  shape=+0.14  orientation=+0.13  posterior=-0.05  echogenicity=-0.04  margin=+0.03
+  pmc_clip     shape=+0.23  margin=+0.17  posterior=+0.08  orientation=+0.06  echogenicity=-0.02
+  pubmedclip   margin=+0.03  shape=+0.02  echogenicity=+0.02  posterior=+0.01  orientation=-0.01
+  clip         shape=+0.03  orientation=-0.02  posterior=+0.01  echogenicity=-0.01  margin=+0.01
+  siglip       shape=+0.07  posterior=+0.05  orientation=+0.03  echogenicity=-0.03  margin=-0.01
+
+RQ2/RQ3: read the global table — which checkpoints clear BOTH nulls after
+  Holm + the 2m/d gate. RQ4: fold-refit stability + site CIs (per-site JSON).
+  Site significance stars are deliberately NOT shown (no per-site family).

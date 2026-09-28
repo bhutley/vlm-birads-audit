@@ -1,0 +1,563 @@
+{
+  "metadata": {
+    "experiment": "decomposition",
+    "author": "unknown",
+    "timestamp": "2026-07-22T14:50:08.460205",
+    "git_commit": "e9ce64b",
+    "config": {
+      "reproducibility": {
+        "global_seed": 42,
+        "deterministic_algorithms": true
+      },
+      "data": {
+        "busi_root": "~/var/data/busi/Dataset_BUSI_with_GT",
+        "tn3k_root": "~/var/data/tn3k",
+        "thyroid_cancer_root": "~/var/data/thyroid-cancer/Thyroid Data",
+        "test_split": 0.2,
+        "split_seed": 42,
+        "image_size": 224
+      },
+      "bus_datasets": {
+        "busi": "~/var/data/BUSdatasets/2020_BUSI/2020_BUSI",
+        "bus_uclm": "~/var/data/BUSdatasets/2025_BUS_UCLM/2025_BUS_UCLM",
+        "bus_bra": "~/var/data/BUSdatasets/2024_BUSBRA/2024_BUSBRA",
+        "busi_whu": "~/var/data/BUSdatasets/2025_BUSI_WHU/2025_BUSI_WHU",
+        "udiat": "~/var/data/BUSdatasets/2020_UDIAT/2020_UDIAT",
+        "breast": "~/var/data/BUSdatasets/2024_BrEaST_USG"
+      },
+      "few_shot": {
+        "k_values": [
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "n_trials": 10,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "models": {
+        "clip": {
+          "name": "ViT-B-32",
+          "pretrained": "openai"
+        },
+        "biomedclip": {
+          "name": "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"
+        },
+        "resnet": {
+          "name": "resnet50",
+          "epochs": 50,
+          "lr": 0.001,
+          "batch_size": 32
+        }
+      },
+      "prompts": {
+        "bus": {
+          "lesion": "a breast ultrasound image showing a mass"
+        },
+        "busi": {
+          "simple": {
+            "normal": "normal",
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "normal": "a breast ultrasound image showing normal tissue with no abnormalities",
+            "benign": "a breast ultrasound image showing a benign lesion",
+            "malignant": "a breast ultrasound image showing a malignant tumor"
+          },
+          "clinical": {
+            "normal": "breast ultrasound demonstrating homogeneous fat lobules and normal fibroglandular tissue with no focal lesions",
+            "benign": "breast ultrasound showing a well-circumscribed oval homogeneous hypoechoic mass with parallel orientation consistent with a benign fibroadenoma",
+            "malignant": "breast ultrasound demonstrating an irregular hypoechoic mass with angular margins spiculation and posterior acoustic shadowing suggestive of malignancy"
+          }
+        },
+        "thyroid": {
+          "simple": {
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "benign": "a thyroid ultrasound image showing a benign nodule",
+            "malignant": "a thyroid ultrasound image showing a malignant nodule"
+          },
+          "clinical": {
+            "benign": "thyroid ultrasound showing a well-defined isoechoic or hyperechoic nodule with smooth margins and regular shape consistent with a benign colloid nodule",
+            "malignant": "thyroid ultrasound demonstrating a solid hypoechoic nodule with irregular margins microcalcifications and taller-than-wide shape suggestive of papillary thyroid carcinoma"
+          }
+        }
+      },
+      "birads_concept_bank": {
+        "carrier_templates": [
+          "breast ultrasound showing a mass with {d}",
+          "a breast ultrasound image of a lesion with {d}",
+          "sonographic breast mass demonstrating {d}"
+        ],
+        "concepts": {
+          "margin": {
+            "pos": [
+              "spiculated margins",
+              "angular margins",
+              "microlobulated margins",
+              "indistinct margins"
+            ],
+            "neg": [
+              "circumscribed margins",
+              "well-defined smooth margins"
+            ]
+          },
+          "shape": {
+            "pos": [
+              "irregular shape"
+            ],
+            "neg": [
+              "oval shape",
+              "round shape"
+            ]
+          },
+          "orientation": {
+            "pos": [
+              "taller-than-wide non-parallel orientation",
+              "vertical orientation"
+            ],
+            "neg": [
+              "parallel wider-than-tall orientation"
+            ]
+          },
+          "echogenicity": {
+            "pos": [
+              "markedly hypoechoic echotexture"
+            ],
+            "neg": [
+              "isoechoic echotexture",
+              "hyperechoic echotexture"
+            ]
+          },
+          "posterior": {
+            "pos": [
+              "posterior acoustic shadowing"
+            ],
+            "neg": [
+              "posterior acoustic enhancement",
+              "no posterior acoustic features"
+            ]
+          }
+        },
+        "reference_axes": {
+          "malignancy": {
+            "pos": [
+              "malignant tumor",
+              "malignant breast lesion"
+            ],
+            "neg": [
+              "benign lesion",
+              "benign breast mass"
+            ]
+          }
+        },
+        "placebo_concepts": {
+          "laterality": {
+            "pos": [
+              "a left-breast annotation"
+            ],
+            "neg": [
+              "a right-breast annotation"
+            ]
+          },
+          "image_side": {
+            "pos": [
+              "a left-sided position in the image"
+            ],
+            "neg": [
+              "a right-sided position in the image"
+            ]
+          },
+          "scale_bar": {
+            "pos": [
+              "a centimeter scale bar"
+            ],
+            "neg": [
+              "no scale markings"
+            ]
+          },
+          "caliper": {
+            "pos": [
+              "caliper measurement markers"
+            ],
+            "neg": [
+              "no caliper markers"
+            ]
+          },
+          "annotation": {
+            "pos": [
+              "overlaid annotation text"
+            ],
+            "neg": [
+              "no overlaid text"
+            ]
+          },
+          "transducer": {
+            "pos": [
+              "a linear-transducer appearance"
+            ],
+            "neg": [
+              "a curved-transducer appearance"
+            ]
+          },
+          "arrow_marker": {
+            "pos": [
+              "an arrow marker"
+            ],
+            "neg": [
+              "no arrow marker"
+            ]
+          },
+          "panel_layout": {
+            "pos": [
+              "a dual-panel layout"
+            ],
+            "neg": [
+              "a single-panel layout"
+            ]
+          },
+          "timestamp": {
+            "pos": [
+              "a timestamp overlay"
+            ],
+            "neg": [
+              "no timestamp overlay"
+            ]
+          },
+          "patient_banner": {
+            "pos": [
+              "a patient information banner"
+            ],
+            "neg": [
+              "no information banner"
+            ]
+          },
+          "institution_label": {
+            "pos": [
+              "a hospital name label"
+            ],
+            "neg": [
+              "no facility label"
+            ]
+          },
+          "body_marker": {
+            "pos": [
+              "a body-position pictogram"
+            ],
+            "neg": [
+              "no body pictogram"
+            ]
+          },
+          "image_border": {
+            "pos": [
+              "a rectangular image border"
+            ],
+            "neg": [
+              "no image border"
+            ]
+          },
+          "vendor_logo": {
+            "pos": [
+              "a manufacturer logo"
+            ],
+            "neg": [
+              "no manufacturer logo"
+            ]
+          },
+          "grid_overlay": {
+            "pos": [
+              "a measurement grid overlay"
+            ],
+            "neg": [
+              "no grid overlay"
+            ]
+          },
+          "thumbnail": {
+            "pos": [
+              "a thumbnail preview strip"
+            ],
+            "neg": [
+              "no thumbnail strip"
+            ]
+          }
+        },
+        "malignancy_synonym_concepts": {
+          "diagnosis": {
+            "pos": [
+              "a malignant tumor"
+            ],
+            "neg": [
+              "a benign lesion"
+            ]
+          },
+          "cancer": {
+            "pos": [
+              "a cancerous mass"
+            ],
+            "neg": [
+              "a non-cancerous mass"
+            ]
+          },
+          "entity": {
+            "pos": [
+              "a carcinoma"
+            ],
+            "neg": [
+              "a fibroadenoma"
+            ]
+          },
+          "aggressiveness": {
+            "pos": [
+              "an aggressive tumor"
+            ],
+            "neg": [
+              "an indolent lesion"
+            ]
+          },
+          "suspicion": {
+            "pos": [
+              "a high-suspicion lesion"
+            ],
+            "neg": [
+              "a low-suspicion lesion"
+            ]
+          },
+          "biopsy": {
+            "pos": [
+              "a lesion requiring biopsy"
+            ],
+            "neg": [
+              "a lesion needing no biopsy"
+            ]
+          },
+          "probability": {
+            "pos": [
+              "a probably malignant mass"
+            ],
+            "neg": [
+              "a probably benign mass"
+            ]
+          },
+          "concern": {
+            "pos": [
+              "a worrisome breast finding"
+            ],
+            "neg": [
+              "a reassuring breast finding"
+            ]
+          },
+          "malignant_benign": {
+            "pos": [
+              "a cancer"
+            ],
+            "neg": [
+              "a cyst"
+            ]
+          },
+          "grade": {
+            "pos": [
+              "a high-grade tumor"
+            ],
+            "neg": [
+              "a low-grade lesion"
+            ]
+          }
+        }
+      },
+      "evaluation": {
+        "metrics": [
+          "accuracy",
+          "f1_macro",
+          "f1_weighted",
+          "auc_roc"
+        ],
+        "confidence_level": 0.95
+      },
+      "output": {
+        "results_dir": "results",
+        "figures_dpi": 300
+      },
+      "decomposition": {
+        "backbone": "biomedclip",
+        "probe_C": 1.0,
+        "cohort_manifest": "results/dataset_audit",
+        "n_conf_bins": 4,
+        "outer_folds": 5,
+        "meta_cv_folds": 5,
+        "cv_seeds": 20,
+        "n_boot": 2000,
+        "n_boot_transfer": 500,
+        "boot_seed": 12345,
+        "delta_auc_threshold": 0.01,
+        "sites_transfer": [
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat"
+        ],
+        "embedding_cache": "results/cross_modal_probe/embeddings"
+      }
+    }
+  },
+  "results": {
+    "backbone": "biomedclip",
+    "in_distribution": {
+      "n_images": 631,
+      "n_audit_units": 507,
+      "n_errors": 100,
+      "base_error": 0.19723865877712032,
+      "corr_s_error": 0.2956887772460261,
+      "corr_conf_error": -0.34737676458683,
+      "corr_s_error_ci": {
+        "lo": 0.20532172204569113,
+        "median": 0.29603247276876776,
+        "hi": 0.3856353689254781,
+        "frac_valid": 1.0
+      },
+      "auc_conf": 0.7553464373464374,
+      "auc_conf_plus_s": 0.758286240786241,
+      "delta_auc_mean": 0.0029398034398034458,
+      "delta_auc_std": 0.0022066190513079205,
+      "delta_auc_ci": {
+        "lo": -0.007317827421823778,
+        "median": 0.001803830826963837,
+        "hi": 0.01740737289191106,
+        "frac_valid": 1.0
+      },
+      "delta_auc_se": 0.006397254328004406,
+      "delta_auc_valid_frac": 1.0,
+      "mde_80": 0.017922453161846357,
+      "equiv_margin": 0.01740737289191106,
+      "lr_test": {
+        "ll0": -216.51655781850025,
+        "ll1": -215.3959769244475,
+        "stat": 2.241161788105501,
+        "df": 1,
+        "p": 0.13437998029274117,
+        "valid": true,
+        "reason": ""
+      },
+      "matched_confidence": {
+        "per_bin": [
+          {
+            "bin": 0,
+            "n": 127,
+            "err_low_s": 0.40625,
+            "err_high_s": 0.4603174603174603,
+            "gap": -0.05406746031746029
+          },
+          {
+            "bin": 1,
+            "n": 126,
+            "err_low_s": 0.12698412698412698,
+            "err_high_s": 0.2857142857142857,
+            "gap": -0.15873015873015872
+          },
+          {
+            "bin": 2,
+            "n": 127,
+            "err_low_s": 0.109375,
+            "err_high_s": 0.09523809523809523,
+            "gap": 0.014136904761904767
+          },
+          {
+            "bin": 3,
+            "n": 127,
+            "err_low_s": 0.046875,
+            "err_high_s": 0.047619047619047616,
+            "gap": -0.0007440476190476164
+          }
+        ],
+        "pooled_low_s_err": 0.17254901960784313,
+        "pooled_high_s_err": 0.2222222222222222,
+        "pooled_gap": -0.049673202614379075
+      },
+      "matched_gap_ci": {
+        "lo": -0.13021352091633465,
+        "median": -0.05560570219123506,
+        "hi": 0.013776034370038298,
+        "frac_valid": 1.0
+      },
+      "cv_seeds": 20,
+      "n_boot": 2000,
+      "VERDICT_s_adds_value": false
+    },
+    "transfer": {
+      "bus_uclm": {
+        "n_images": 264,
+        "n_groups": 35,
+        "base_error": 0.3371212121212121,
+        "pooled_low_s_err": 0.3409090909090909,
+        "pooled_high_s_err": 0.3333333333333333,
+        "pooled_gap": 0.007575757575757569,
+        "pooled_gap_ci": {
+          "lo": -0.13951460817504055,
+          "median": -0.02624894297341579,
+          "hi": 0.10162963903595901,
+          "frac_valid": 1.0
+        },
+        "exploratory": true
+      },
+      "bus_bra": {
+        "n_images": 1875,
+        "n_groups": 1064,
+        "base_error": 0.32693333333333335,
+        "pooled_low_s_err": 0.36421725239616615,
+        "pooled_high_s_err": 0.28952991452991456,
+        "pooled_gap": 0.07468733786625159,
+        "pooled_gap_ci": {
+          "lo": 0.027845396663237328,
+          "median": 0.07626642748791926,
+          "hi": 0.11751541482711061,
+          "frac_valid": 1.0
+        },
+        "exploratory": true
+      },
+      "busi_whu": {
+        "n_images": 925,
+        "n_groups": 814,
+        "base_error": 0.39135135135135135,
+        "pooled_low_s_err": 0.40301724137931033,
+        "pooled_high_s_err": 0.3796095444685466,
+        "pooled_gap": 0.02340769691076372,
+        "pooled_gap_ci": {
+          "lo": -0.05292731820094525,
+          "median": 0.021079544548314705,
+          "hi": 0.09446752996880495,
+          "frac_valid": 1.0
+        },
+        "exploratory": true
+      },
+      "udiat": {
+        "n_images": 163,
+        "n_groups": 158,
+        "base_error": 0.2331288343558282,
+        "pooled_low_s_err": 0.2289156626506024,
+        "pooled_high_s_err": 0.2375,
+        "pooled_gap": -0.008584337349397592,
+        "pooled_gap_ci": {
+          "lo": -0.13228065539112052,
+          "median": 0.01552529446198303,
+          "hi": 0.15329140030510502,
+          "frac_valid": 1.0
+        },
+        "exploratory": true
+      }
+    }
+  }
+}

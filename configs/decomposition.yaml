@@ -1,0 +1,24 @@
+# E4 — make-or-break per-case test (RQ5): does the clinical share s(z) predict
+# error BEYOND the classifier's own confidence? Overlays default.yaml.
+#
+# WP5 (2026-07-22): audit-unit-aware repair. LOCKED per the WP0 freeze
+# (docs/20260722-wp0-protocol-freeze.md §6.2). The two-part negative gate is
+# unchanged: PASS iff bootstrap delta-AUC CI lower bound > 0 AND a VALID
+# (unpenalized) likelihood-ratio test has p < 0.05.
+
+decomposition:
+  backbone: biomedclip
+  probe_C: 1.0
+  cohort_manifest: results/dataset_audit    # audit-unit fold manifest (WP1)
+
+  n_conf_bins: 4                             # matched-confidence stratification
+  outer_folds: 5                             # canonical group-disjoint cross-fitting
+  meta_cv_folds: 5                           # inner CV for the incremental delta-AUC
+  cv_seeds: 20                               # seed-average the inner meta-model CV split
+  n_boot: 2000                               # bootstrap AUDIT UNITS (not images)
+  n_boot_transfer: 500
+  boot_seed: 12345
+  delta_auc_threshold: 0.01                  # reference only; verdict uses the bootstrap CI
+
+  sites_transfer: [bus_uclm, bus_bra, busi_whu, udiat]   # exploratory cross-site (RQ5b)
+  embedding_cache: results/cross_modal_probe/embeddings

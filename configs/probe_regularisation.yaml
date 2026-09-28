@@ -1,0 +1,24 @@
+# ROB-04 — logistic regularisation sensitivity of the expressibility verdict.
+# Overlays configs/default.yaml. Concept bank = default.yaml:birads_concept_bank.
+#
+# SENSITIVITY ANALYSIS, declared before running in
+# docs/20260724-probe-regularisation-declaration.md. C=1 REMAINS PRIMARY; this
+# sweep tests whether the story is a regularisation artefact and must not be used
+# to select a new primary C.
+
+probe_regularisation:
+  backbones: [biomedclip, unimed_clip, pmc_clip, pubmedclip, clip, siglip]
+  sites: [busi, bus_uclm, bus_bra, busi_whu, udiat, breast]
+
+  C_grid: [0.01, 0.1, 1.0, 10.0, 100.0]   # fixed grid, not tuned
+  C_primary: 1.0
+  orthonormalize_basis: true
+  batch_size: 32
+  embedding_cache: results/cross_modal_probe/embeddings
+  cohort_manifest: results/dataset_audit
+
+  global_random_trials: 20000
+  gate_k_primary: 2.0
+
+  # Nulls depend on the site directions, which move with C, so both references are
+  # recomputed per grid point rather than reused across the sweep.

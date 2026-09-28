@@ -1,0 +1,11 @@
+# E6 — concept-direction validity (P2 / Domain reviewer).
+# Do the text-derived BI-RADS directions encode the named features? Validate the
+# per-axis projection <z, c_k> against BrEaST's radiologist per-feature labels.
+# Overlays configs/default.yaml. Concept bank = default.yaml:birads_concept_bank.
+
+concept_validity:
+  backbones: [biomedclip, pmc_clip, clip]   # 2 figure-trained biomedical + 1 general control
+  dataset: breast                            # only set with per-feature BI-RADS labels
+  n_boot: 1000                               # case-level bootstrap for per-axis AUC CIs
+  n_perm: 2000                               # within-diagnosis permutation null for conditioned AUC
+  batch_size: 32

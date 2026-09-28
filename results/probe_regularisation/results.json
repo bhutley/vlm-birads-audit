@@ -1,0 +1,1878 @@
+{
+  "metadata": {
+    "experiment": "probe_regularisation",
+    "author": "unknown",
+    "timestamp": "2026-07-23T22:49:50.820532",
+    "git_commit": "38a5c6a",
+    "config": {
+      "reproducibility": {
+        "global_seed": 42,
+        "deterministic_algorithms": true
+      },
+      "data": {
+        "busi_root": "~/var/data/busi/Dataset_BUSI_with_GT",
+        "tn3k_root": "~/var/data/tn3k",
+        "thyroid_cancer_root": "~/var/data/thyroid-cancer/Thyroid Data",
+        "test_split": 0.2,
+        "split_seed": 42,
+        "image_size": 224
+      },
+      "bus_datasets": {
+        "busi": "~/var/data/BUSdatasets/2020_BUSI/2020_BUSI",
+        "bus_uclm": "~/var/data/BUSdatasets/2025_BUS_UCLM/2025_BUS_UCLM",
+        "bus_bra": "~/var/data/BUSdatasets/2024_BUSBRA/2024_BUSBRA",
+        "busi_whu": "~/var/data/BUSdatasets/2025_BUSI_WHU/2025_BUSI_WHU",
+        "udiat": "~/var/data/BUSdatasets/2020_UDIAT/2020_UDIAT",
+        "breast": "~/var/data/BUSdatasets/2024_BrEaST_USG"
+      },
+      "few_shot": {
+        "k_values": [
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "n_trials": 10,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "models": {
+        "clip": {
+          "name": "ViT-B-32",
+          "pretrained": "openai"
+        },
+        "biomedclip": {
+          "name": "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"
+        },
+        "resnet": {
+          "name": "resnet50",
+          "epochs": 50,
+          "lr": 0.001,
+          "batch_size": 32
+        }
+      },
+      "prompts": {
+        "bus": {
+          "lesion": "a breast ultrasound image showing a mass"
+        },
+        "busi": {
+          "simple": {
+            "normal": "normal",
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "normal": "a breast ultrasound image showing normal tissue with no abnormalities",
+            "benign": "a breast ultrasound image showing a benign lesion",
+            "malignant": "a breast ultrasound image showing a malignant tumor"
+          },
+          "clinical": {
+            "normal": "breast ultrasound demonstrating homogeneous fat lobules and normal fibroglandular tissue with no focal lesions",
+            "benign": "breast ultrasound showing a well-circumscribed oval homogeneous hypoechoic mass with parallel orientation consistent with a benign fibroadenoma",
+            "malignant": "breast ultrasound demonstrating an irregular hypoechoic mass with angular margins spiculation and posterior acoustic shadowing suggestive of malignancy"
+          }
+        },
+        "thyroid": {
+          "simple": {
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "benign": "a thyroid ultrasound image showing a benign nodule",
+            "malignant": "a thyroid ultrasound image showing a malignant nodule"
+          },
+          "clinical": {
+            "benign": "thyroid ultrasound showing a well-defined isoechoic or hyperechoic nodule with smooth margins and regular shape consistent with a benign colloid nodule",
+            "malignant": "thyroid ultrasound demonstrating a solid hypoechoic nodule with irregular margins microcalcifications and taller-than-wide shape suggestive of papillary thyroid carcinoma"
+          }
+        }
+      },
+      "birads_concept_bank": {
+        "carrier_templates": [
+          "breast ultrasound showing a mass with {d}",
+          "a breast ultrasound image of a lesion with {d}",
+          "sonographic breast mass demonstrating {d}"
+        ],
+        "concepts": {
+          "margin": {
+            "pos": [
+              "spiculated margins",
+              "angular margins",
+              "microlobulated margins",
+              "indistinct margins"
+            ],
+            "neg": [
+              "circumscribed margins",
+              "well-defined smooth margins"
+            ]
+          },
+          "shape": {
+            "pos": [
+              "irregular shape"
+            ],
+            "neg": [
+              "oval shape",
+              "round shape"
+            ]
+          },
+          "orientation": {
+            "pos": [
+              "taller-than-wide non-parallel orientation",
+              "vertical orientation"
+            ],
+            "neg": [
+              "parallel wider-than-tall orientation"
+            ]
+          },
+          "echogenicity": {
+            "pos": [
+              "markedly hypoechoic echotexture"
+            ],
+            "neg": [
+              "isoechoic echotexture",
+              "hyperechoic echotexture"
+            ]
+          },
+          "posterior": {
+            "pos": [
+              "posterior acoustic shadowing"
+            ],
+            "neg": [
+              "posterior acoustic enhancement",
+              "no posterior acoustic features"
+            ]
+          }
+        },
+        "reference_axes": {
+          "malignancy": {
+            "pos": [
+              "malignant tumor",
+              "malignant breast lesion"
+            ],
+            "neg": [
+              "benign lesion",
+              "benign breast mass"
+            ]
+          }
+        },
+        "placebo_concepts": {
+          "laterality": {
+            "pos": [
+              "a left-breast annotation"
+            ],
+            "neg": [
+              "a right-breast annotation"
+            ]
+          },
+          "image_side": {
+            "pos": [
+              "a left-sided position in the image"
+            ],
+            "neg": [
+              "a right-sided position in the image"
+            ]
+          },
+          "scale_bar": {
+            "pos": [
+              "a centimeter scale bar"
+            ],
+            "neg": [
+              "no scale markings"
+            ]
+          },
+          "caliper": {
+            "pos": [
+              "caliper measurement markers"
+            ],
+            "neg": [
+              "no caliper markers"
+            ]
+          },
+          "annotation": {
+            "pos": [
+              "overlaid annotation text"
+            ],
+            "neg": [
+              "no overlaid text"
+            ]
+          },
+          "transducer": {
+            "pos": [
+              "a linear-transducer appearance"
+            ],
+            "neg": [
+              "a curved-transducer appearance"
+            ]
+          },
+          "arrow_marker": {
+            "pos": [
+              "an arrow marker"
+            ],
+            "neg": [
+              "no arrow marker"
+            ]
+          },
+          "panel_layout": {
+            "pos": [
+              "a dual-panel layout"
+            ],
+            "neg": [
+              "a single-panel layout"
+            ]
+          },
+          "timestamp": {
+            "pos": [
+              "a timestamp overlay"
+            ],
+            "neg": [
+              "no timestamp overlay"
+            ]
+          },
+          "patient_banner": {
+            "pos": [
+              "a patient information banner"
+            ],
+            "neg": [
+              "no information banner"
+            ]
+          },
+          "institution_label": {
+            "pos": [
+              "a hospital name label"
+            ],
+            "neg": [
+              "no facility label"
+            ]
+          },
+          "body_marker": {
+            "pos": [
+              "a body-position pictogram"
+            ],
+            "neg": [
+              "no body pictogram"
+            ]
+          },
+          "image_border": {
+            "pos": [
+              "a rectangular image border"
+            ],
+            "neg": [
+              "no image border"
+            ]
+          },
+          "vendor_logo": {
+            "pos": [
+              "a manufacturer logo"
+            ],
+            "neg": [
+              "no manufacturer logo"
+            ]
+          },
+          "grid_overlay": {
+            "pos": [
+              "a measurement grid overlay"
+            ],
+            "neg": [
+              "no grid overlay"
+            ]
+          },
+          "thumbnail": {
+            "pos": [
+              "a thumbnail preview strip"
+            ],
+            "neg": [
+              "no thumbnail strip"
+            ]
+          }
+        },
+        "malignancy_synonym_concepts": {
+          "diagnosis": {
+            "pos": [
+              "a malignant tumor"
+            ],
+            "neg": [
+              "a benign lesion"
+            ]
+          },
+          "cancer": {
+            "pos": [
+              "a cancerous mass"
+            ],
+            "neg": [
+              "a non-cancerous mass"
+            ]
+          },
+          "entity": {
+            "pos": [
+              "a carcinoma"
+            ],
+            "neg": [
+              "a fibroadenoma"
+            ]
+          },
+          "aggressiveness": {
+            "pos": [
+              "an aggressive tumor"
+            ],
+            "neg": [
+              "an indolent lesion"
+            ]
+          },
+          "suspicion": {
+            "pos": [
+              "a high-suspicion lesion"
+            ],
+            "neg": [
+              "a low-suspicion lesion"
+            ]
+          },
+          "biopsy": {
+            "pos": [
+              "a lesion requiring biopsy"
+            ],
+            "neg": [
+              "a lesion needing no biopsy"
+            ]
+          },
+          "probability": {
+            "pos": [
+              "a probably malignant mass"
+            ],
+            "neg": [
+              "a probably benign mass"
+            ]
+          },
+          "concern": {
+            "pos": [
+              "a worrisome breast finding"
+            ],
+            "neg": [
+              "a reassuring breast finding"
+            ]
+          },
+          "malignant_benign": {
+            "pos": [
+              "a cancer"
+            ],
+            "neg": [
+              "a cyst"
+            ]
+          },
+          "grade": {
+            "pos": [
+              "a high-grade tumor"
+            ],
+            "neg": [
+              "a low-grade lesion"
+            ]
+          }
+        }
+      },
+      "evaluation": {
+        "metrics": [
+          "accuracy",
+          "f1_macro",
+          "f1_weighted",
+          "auc_roc"
+        ],
+        "confidence_level": 0.95
+      },
+      "output": {
+        "results_dir": "results",
+        "figures_dpi": 300
+      },
+      "probe_regularisation": {
+        "backbones": [
+          "biomedclip",
+          "unimed_clip",
+          "pmc_clip",
+          "pubmedclip",
+          "clip",
+          "siglip"
+        ],
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "C_grid": [
+          0.01,
+          0.1,
+          1.0,
+          10.0,
+          100.0
+        ],
+        "C_primary": 1.0,
+        "orthonormalize_basis": true,
+        "batch_size": 32,
+        "embedding_cache": "results/cross_modal_probe/embeddings",
+        "cohort_manifest": "results/dataset_audit",
+        "global_random_trials": 20000,
+        "gate_k_primary": 2.0
+      }
+    }
+  },
+  "results": {
+    "status": "SENSITIVITY \u2014 C=1 remains primary; do not select a new C from this",
+    "declaration": "docs/20260724-probe-regularisation-declaration.md",
+    "C_grid": [
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "C_primary": 1.0,
+    "criteria_covered": "Holm(p_random), placebo tail<0.05, gate; the cohort bootstrap CI is held at its C=1 value (2000 refits per grid point is prohibitive)",
+    "by_backbone": {
+      "biomedclip": {
+        "m": 5,
+        "embed_dim": 512,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_C": {
+          "C=0.01": {
+            "C": 0.01,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9381235445743268,
+                "oof_auc": 0.8691918183532361,
+                "oof_balanced_accuracy": 0.7910635253402549
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9841861324923312,
+                "oof_auc": 0.7071724793130864,
+                "oof_balanced_accuracy": 0.6554184802256587
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.8577523425277356,
+                "oof_auc": 0.7462437835123369,
+                "oof_balanced_accuracy": 0.6805555555555554
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.8703156749532135,
+                "oof_auc": 0.6767268632970319,
+                "oof_balanced_accuracy": 0.6102610317060293
+              },
+              "udiat": {
+                "cos_with_primary": 0.9873834812191211,
+                "oof_auc": 0.8008979292651646,
+                "oof_balanced_accuracy": 0.7132123877588417
+              },
+              "breast": {
+                "cos_with_primary": 0.9738393449179538,
+                "oof_auc": 0.7590776570368386,
+                "oof_balanced_accuracy": 0.6924860853432283
+              }
+            },
+            "min_cos_with_primary": 0.8577523425277356,
+            "median_oof_auc": 0.7526607202745877,
+            "T_clin": 0.11589443838163051,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "mean_excess_placebo": 0.07766306463779314,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": true
+          },
+          "C=0.1": {
+            "C": 0.1,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9608276582958291,
+                "oof_auc": 0.874084657933357,
+                "oof_balanced_accuracy": 0.7962588599381052
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9878011275519974,
+                "oof_auc": 0.7102319136537995,
+                "oof_balanced_accuracy": 0.6447540146802393
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9151960064638817,
+                "oof_auc": 0.7616098475644357,
+                "oof_balanced_accuracy": 0.6996768236380424
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.92463257684248,
+                "oof_auc": 0.69071705589158,
+                "oof_balanced_accuracy": 0.6274808337733615
+              },
+              "udiat": {
+                "cos_with_primary": 0.9902398655166837,
+                "oof_auc": 0.801356056441269,
+                "oof_balanced_accuracy": 0.722558182151365
+              },
+              "breast": {
+                "cos_with_primary": 0.9808646102591533,
+                "oof_auc": 0.7621918897429081,
+                "oof_balanced_accuracy": 0.6869202226345084
+              }
+            },
+            "min_cos_with_primary": 0.9151960064638817,
+            "median_oof_auc": 0.7619008686536719,
+            "T_clin": 0.11752595869199522,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "mean_excess_placebo": 0.0784882758042574,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": true
+          },
+          "C=1": {
+            "C": 1.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9999999999999875,
+                "oof_auc": 0.886608044102795,
+                "oof_balanced_accuracy": 0.8077143855445743
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9999999999999603,
+                "oof_auc": 0.7235718907135117,
+                "oof_balanced_accuracy": 0.6485996467294286
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9999999999999931,
+                "oof_auc": 0.7938940726701373,
+                "oof_balanced_accuracy": 0.7238381040320098
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.9999999999999819,
+                "oof_auc": 0.7316634778514746,
+                "oof_balanced_accuracy": 0.6794043318772401
+              },
+              "udiat": {
+                "cos_with_primary": 0.9999999999999255,
+                "oof_auc": 0.8100604727872462,
+                "oof_balanced_accuracy": 0.7412497709364118
+              },
+              "breast": {
+                "cos_with_primary": 0.9999999999999472,
+                "oof_auc": 0.7788232175987257,
+                "oof_balanced_accuracy": 0.6948051948051949
+              }
+            },
+            "min_cos_with_primary": 0.9999999999999255,
+            "median_oof_auc": 0.7863586451344315,
+            "T_clin": 0.11438822849514041,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "mean_excess_placebo": 0.07301091072490719,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": true
+          },
+          "C=10": {
+            "C": 10.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.8635449029796323,
+                "oof_auc": 0.8974839994231953,
+                "oof_balanced_accuracy": 0.8082759309174403
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9036723607596048,
+                "oof_auc": 0.7136864926447586,
+                "oof_balanced_accuracy": 0.6451396055532694
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.8898152517446154,
+                "oof_auc": 0.811103821418742,
+                "oof_balanced_accuracy": 0.7384964604493689
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.859323998284114,
+                "oof_auc": 0.765049370104134,
+                "oof_balanced_accuracy": 0.70961426531298
+              },
+              "udiat": {
+                "cos_with_primary": 0.9025544071421552,
+                "oof_auc": 0.8288436870075135,
+                "oof_balanced_accuracy": 0.7450064137804654
+              },
+              "breast": {
+                "cos_with_primary": 0.8904431045949889,
+                "oof_auc": 0.8057911476278801,
+                "oof_balanced_accuracy": 0.7235621521335808
+              }
+            },
+            "min_cos_with_primary": 0.859323998284114,
+            "median_oof_auc": 0.808447484523311,
+            "T_clin": 0.09001080248017994,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "mean_excess_placebo": 0.04536881913578026,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": true
+          },
+          "C=100": {
+            "C": 100.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.6001153486176256,
+                "oof_auc": 0.8965296033779533,
+                "oof_balanced_accuracy": 0.8177598083258462
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.6551496403258235,
+                "oof_auc": 0.6678141644595048,
+                "oof_balanced_accuracy": 0.5972098188437156
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.7280682702402018,
+                "oof_auc": 0.8063472971440662,
+                "oof_balanced_accuracy": 0.7322637734687596
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.6438765340089625,
+                "oof_auc": 0.767736439298785,
+                "oof_balanced_accuracy": 0.6991912232382873
+              },
+              "udiat": {
+                "cos_with_primary": 0.5962447074651803,
+                "oof_auc": 0.8275609309144227,
+                "oof_balanced_accuracy": 0.7646142569177203
+              },
+              "breast": {
+                "cos_with_primary": 0.5873523138678469,
+                "oof_auc": 0.7963159289689876,
+                "oof_balanced_accuracy": 0.7365491651205938
+              }
+            },
+            "min_cos_with_primary": 0.5873523138678469,
+            "median_oof_auc": 0.8013316130565269,
+            "T_clin": 0.05983395525971443,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.08194094758525979,
+            "mean_excess_placebo": 0.013149232371711533,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": false
+          }
+        }
+      },
+      "unimed_clip": {
+        "m": 5,
+        "embed_dim": 512,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_C": {
+          "C=0.01": {
+            "C": 0.01,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9363088540313381,
+                "oof_auc": 0.8247305968741951,
+                "oof_balanced_accuracy": 0.7642258161126085
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.951818283122313,
+                "oof_auc": 0.6374762313564751,
+                "oof_balanced_accuracy": 0.5785864619655054
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.8800216175486296,
+                "oof_auc": 0.7243534447846298,
+                "oof_balanced_accuracy": 0.657202216066482
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.8375381928986398,
+                "oof_auc": 0.6848879258828146,
+                "oof_balanced_accuracy": 0.6217617677531362
+              },
+              "udiat": {
+                "cos_with_primary": 0.9699917422091943,
+                "oof_auc": 0.763423126259851,
+                "oof_balanced_accuracy": 0.674454828660436
+              },
+              "breast": {
+                "cos_with_primary": 0.9580889782806413,
+                "oof_auc": 0.7507288629737585,
+                "oof_balanced_accuracy": 0.6781076066790352
+              }
+            },
+            "min_cos_with_primary": 0.8375381928986398,
+            "median_oof_auc": 0.7375411538791942,
+            "T_clin": 0.0783981507697141,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.10894941634241245,
+            "mean_excess_placebo": 0.02243580615013116,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": false
+          },
+          "C=0.1": {
+            "C": 0.1,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9603297339057528,
+                "oof_auc": 0.8355326038327371,
+                "oof_balanced_accuracy": 0.7752321054207847
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9666650901941768,
+                "oof_auc": 0.6391986760485869,
+                "oof_balanced_accuracy": 0.5836405122252275
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9344199032283995,
+                "oof_auc": 0.7538554373005475,
+                "oof_balanced_accuracy": 0.6874807633117881
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.9126188945242939,
+                "oof_auc": 0.6996888925891285,
+                "oof_balanced_accuracy": 0.6369386390729007
+              },
+              "udiat": {
+                "cos_with_primary": 0.9783299289984453,
+                "oof_auc": 0.769470404984425,
+                "oof_balanced_accuracy": 0.674454828660436
+              },
+              "breast": {
+                "cos_with_primary": 0.970837206376457,
+                "oof_auc": 0.7543069175722212,
+                "oof_balanced_accuracy": 0.6679035250463823
+              }
+            },
+            "min_cos_with_primary": 0.9126188945242939,
+            "median_oof_auc": 0.7540811774363844,
+            "T_clin": 0.07686911502627405,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.09109636072327763,
+            "mean_excess_placebo": 0.023526949361186322,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": false
+          },
+          "C=1": {
+            "C": 1.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9999999999999871,
+                "oof_auc": 0.8647479839827777,
+                "oof_balanced_accuracy": 0.7928771089148448
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9999999999999593,
+                "oof_auc": 0.6546999906555118,
+                "oof_balanced_accuracy": 0.6151541396623436
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9999999999999931,
+                "oof_auc": 0.7942737441480029,
+                "oof_balanced_accuracy": 0.717951677439212
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.999999999999983,
+                "oof_auc": 0.7422155295716736,
+                "oof_balanced_accuracy": 0.6696794594854071
+              },
+              "udiat": {
+                "cos_with_primary": 0.9999999999999277,
+                "oof_auc": 0.7898112516034461,
+                "oof_balanced_accuracy": 0.7024922118380061
+              },
+              "breast": {
+                "cos_with_primary": 0.9999999999999489,
+                "oof_auc": 0.7743837794858184,
+                "oof_balanced_accuracy": 0.6859925788497218
+              }
+            },
+            "min_cos_with_primary": 0.9999999999999277,
+            "median_oof_auc": 0.7820975155446322,
+            "T_clin": 0.06899358958431916,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.11764705882352941,
+            "mean_excess_placebo": 0.020975151137675202,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": false
+          },
+          "C=10": {
+            "C": 10.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.8791718229489208,
+                "oof_auc": 0.8967144742826011,
+                "oof_balanced_accuracy": 0.8307502246181492
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9060915733625217,
+                "oof_auc": 0.6656339831986872,
+                "oof_balanced_accuracy": 0.5960083991252915
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.879943770525435,
+                "oof_auc": 0.8167421959793368,
+                "oof_balanced_accuracy": 0.7337642351492766
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.8671166823541715,
+                "oof_auc": 0.7650937298876047,
+                "oof_balanced_accuracy": 0.6977568814404123
+              },
+              "udiat": {
+                "cos_with_primary": 0.9022121686333245,
+                "oof_auc": 0.8216969030602911,
+                "oof_balanced_accuracy": 0.7403335165842038
+              },
+              "breast": {
+                "cos_with_primary": 0.878759815999621,
+                "oof_auc": 0.7874370527431724,
+                "oof_balanced_accuracy": 0.6980519480519481
+              }
+            },
+            "min_cos_with_primary": 0.8671166823541715,
+            "median_oof_auc": 0.8020896243612546,
+            "T_clin": 0.06263960621861826,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.026321812771801328,
+            "mean_excess_placebo": 0.021360754464613926,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": true
+          },
+          "C=100": {
+            "C": 100.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.6756852637501062,
+                "oof_auc": 0.9079107184453019,
+                "oof_balanced_accuracy": 0.8280048916841369
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.6778027273328895,
+                "oof_auc": 0.6326348440234744,
+                "oof_balanced_accuracy": 0.563030275138377
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.6027753852445363,
+                "oof_auc": 0.8151688373750705,
+                "oof_balanced_accuracy": 0.7406124961526623
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.6219677063178253,
+                "oof_auc": 0.7632506230398776,
+                "oof_balanced_accuracy": 0.6987741965485791
+              },
+              "udiat": {
+                "cos_with_primary": 0.6548805466045172,
+                "oof_auc": 0.835898845519517,
+                "oof_balanced_accuracy": 0.7450064137804654
+              },
+              "breast": {
+                "cos_with_primary": 0.5648326076459366,
+                "oof_auc": 0.765968725152396,
+                "oof_balanced_accuracy": 0.6757884972170687
+              }
+            },
+            "min_cos_with_primary": 0.5648326076459366,
+            "median_oof_auc": 0.7905687812637332,
+            "T_clin": 0.04942147224675895,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.025635156786449988,
+            "mean_excess_placebo": 0.014758019026115184,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": false
+          }
+        }
+      },
+      "pmc_clip": {
+        "m": 5,
+        "embed_dim": 768,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_C": {
+          "C=0.01": {
+            "C": 0.01,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9073345230573145,
+                "oof_auc": 0.875135417937646,
+                "oof_balanced_accuracy": 0.8049399354430802
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9632688701503122,
+                "oof_auc": 0.7273479305830507,
+                "oof_balanced_accuracy": 0.6826324529945
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.8652008539632406,
+                "oof_auc": 0.7637015842931443,
+                "oof_balanced_accuracy": 0.6974453678054785
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.837994921907927,
+                "oof_auc": 0.733878559894503,
+                "oof_balanced_accuracy": 0.6623946432571686
+              },
+              "udiat": {
+                "cos_with_primary": 0.9858909666030532,
+                "oof_auc": 0.8831775700934591,
+                "oof_balanced_accuracy": 0.7842221000549752
+              },
+              "breast": {
+                "cos_with_primary": 0.9679643570863398,
+                "oof_auc": 0.7998277232971086,
+                "oof_balanced_accuracy": 0.7328385899814471
+              }
+            },
+            "min_cos_with_primary": 0.837994921907927,
+            "median_oof_auc": 0.7817646537951264,
+            "T_clin": 0.09903984141673944,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "mean_excess_placebo": 0.08687327516878782,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": true
+          },
+          "C=0.1": {
+            "C": 0.1,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.944948850465181,
+                "oof_auc": 0.8872731171822629,
+                "oof_balanced_accuracy": 0.8099439286546205
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9745551756354364,
+                "oof_auc": 0.7323525128464853,
+                "oof_balanced_accuracy": 0.6922840992506613
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.92685176002371,
+                "oof_auc": 0.8049571933064468,
+                "oof_balanced_accuracy": 0.737380732533087
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.9076593411852939,
+                "oof_auc": 0.7515956479548057,
+                "oof_balanced_accuracy": 0.6824120243695597
+              },
+              "udiat": {
+                "cos_with_primary": 0.9894495146849208,
+                "oof_auc": 0.885376580538758,
+                "oof_balanced_accuracy": 0.7842221000549752
+              },
+              "breast": {
+                "cos_with_primary": 0.9770024179038345,
+                "oof_auc": 0.8038695997879644,
+                "oof_balanced_accuracy": 0.7458256029684602
+              }
+            },
+            "min_cos_with_primary": 0.9076593411852939,
+            "median_oof_auc": 0.8044133965472056,
+            "T_clin": 0.09827404181546896,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "mean_excess_placebo": 0.08603061726279099,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": true
+          },
+          "C=1": {
+            "C": 1.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9999999999999901,
+                "oof_auc": 0.9188273453647237,
+                "oof_balanced_accuracy": 0.8445143256464012
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.999999999999971,
+                "oof_auc": 0.7585434147830704,
+                "oof_balanced_accuracy": 0.6930092618489907
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9999999999999949,
+                "oof_auc": 0.8446151447408996,
+                "oof_balanced_accuracy": 0.7728531855955678
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.999999999999989,
+                "oof_auc": 0.8030010337328286,
+                "oof_balanced_accuracy": 0.7244131124391961
+              },
+              "udiat": {
+                "cos_with_primary": 0.9999999999999564,
+                "oof_auc": 0.8905992303463444,
+                "oof_balanced_accuracy": 0.8080447132123878
+              },
+              "breast": {
+                "cos_with_primary": 0.9999999999999609,
+                "oof_auc": 0.8178505168301057,
+                "oof_balanced_accuracy": 0.7481447124304268
+              }
+            },
+            "min_cos_with_primary": 0.9999999999999564,
+            "median_oof_auc": 0.8312328307855026,
+            "T_clin": 0.08253409842430437,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "mean_excess_placebo": 0.07006141085287275,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": true
+          },
+          "C=10": {
+            "C": 10.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.8837321042211007,
+                "oof_auc": 0.942287000987202,
+                "oof_balanced_accuracy": 0.8574548267944495
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9066796046706901,
+                "oof_auc": 0.7666527296236498,
+                "oof_balanced_accuracy": 0.6770714552529028
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.8305133305978196,
+                "oof_auc": 0.8597797297954122,
+                "oof_balanced_accuracy": 0.7885887965527854
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.862444433753224,
+                "oof_auc": 0.8381629452062739,
+                "oof_balanced_accuracy": 0.7635706185195854
+              },
+              "udiat": {
+                "cos_with_primary": 0.9124630496692093,
+                "oof_auc": 0.9107568260949244,
+                "oof_balanced_accuracy": 0.802455561663918
+              },
+              "breast": {
+                "cos_with_primary": 0.8608006385118653,
+                "oof_auc": 0.8328915981977175,
+                "oof_balanced_accuracy": 0.7690166975881263
+              }
+            },
+            "min_cos_with_primary": 0.8305133305978196,
+            "median_oof_auc": 0.848971337500843,
+            "T_clin": 0.03938712312264448,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "mean_excess_placebo": 0.02616623776973208,
+            "passes_gate": true,
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "holm_reject": true,
+            "expressible_3crit": true
+          },
+          "C=100": {
+            "C": 100.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.6385395434949117,
+                "oof_auc": 0.9480951826339578,
+                "oof_balanced_accuracy": 0.8740516122591595
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.675078707215558,
+                "oof_auc": 0.7506878249290438,
+                "oof_balanced_accuracy": 0.6559394583471503
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.5196575692023063,
+                "oof_auc": 0.8559374544394315,
+                "oof_balanced_accuracy": 0.7817020621729762
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.5784374687224708,
+                "oof_auc": 0.8370962991631495,
+                "oof_balanced_accuracy": 0.7641649315556196
+              },
+              "udiat": {
+                "cos_with_primary": 0.6539115815342201,
+                "oof_auc": 0.9173538574308232,
+                "oof_balanced_accuracy": 0.836540223566062
+              },
+              "breast": {
+                "cos_with_primary": 0.5538384951710755,
+                "oof_auc": 0.8363371322554961,
+                "oof_balanced_accuracy": 0.7806122448979593
+              }
+            },
+            "min_cos_with_primary": 0.5196575692023063,
+            "median_oof_auc": 0.8465168768012905,
+            "T_clin": 0.01325637641756687,
+            "p_random": 0.0010499475026248687,
+            "placebo_tail_fraction": 0.3204394598306249,
+            "mean_excess_placebo": 0.0014044416067826113,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 0.004199790010499475,
+            "holm_reject": true,
+            "expressible_3crit": false
+          }
+        }
+      },
+      "pubmedclip": {
+        "m": 5,
+        "embed_dim": 512,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_C": {
+          "C=0.01": {
+            "C": 0.01,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9628467169308152,
+                "oof_auc": 0.820318421646157,
+                "oof_balanced_accuracy": 0.7504617150843567
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9698812596528275,
+                "oof_auc": 0.6118415716086525,
+                "oof_balanced_accuracy": 0.5765229442186423
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.8842743252363968,
+                "oof_auc": 0.7110062205374956,
+                "oof_balanced_accuracy": 0.6752462296091104
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.9141612981639751,
+                "oof_auc": 0.6789146922069702,
+                "oof_balanced_accuracy": 0.6408953173003072
+              },
+              "udiat": {
+                "cos_with_primary": 0.9947643238367374,
+                "oof_auc": 0.7612241158145512,
+                "oof_balanced_accuracy": 0.6637346527396004
+              },
+              "breast": {
+                "cos_with_primary": 0.9692326608646009,
+                "oof_auc": 0.7215080837529795,
+                "oof_balanced_accuracy": 0.6734693877551021
+              }
+            },
+            "min_cos_with_primary": 0.8842743252363968,
+            "median_oof_auc": 0.7162571521452376,
+            "T_clin": 0.005161407491237161,
+            "p_random": 0.9165041747912605,
+            "placebo_tail_fraction": 0.9997711146715496,
+            "mean_excess_placebo": -0.011526617050501925,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          },
+          "C=0.1": {
+            "C": 0.1,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9752222137783714,
+                "oof_auc": 0.8268217178943871,
+                "oof_balanced_accuracy": 0.7586103623839473
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9787219171138858,
+                "oof_auc": 0.6152267861705214,
+                "oof_balanced_accuracy": 0.5856691854488313
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9293548190983009,
+                "oof_auc": 0.7266436231391067,
+                "oof_balanced_accuracy": 0.6790935672514619
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.9340976684758625,
+                "oof_auc": 0.6838198783611061,
+                "oof_balanced_accuracy": 0.640711905561956
+              },
+              "udiat": {
+                "cos_with_primary": 0.9949334652227253,
+                "oof_auc": 0.7645226314825001,
+                "oof_balanced_accuracy": 0.6922301630932746
+              },
+              "breast": {
+                "cos_with_primary": 0.9753553924684846,
+                "oof_auc": 0.7245560561887073,
+                "oof_balanced_accuracy": 0.6665120593692022
+              }
+            },
+            "min_cos_with_primary": 0.9293548190983009,
+            "median_oof_auc": 0.725599839663907,
+            "T_clin": 0.005086017009247655,
+            "p_random": 0.9224038798060097,
+            "placebo_tail_fraction": 0.9997711146715496,
+            "mean_excess_placebo": -0.01159530995834296,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          },
+          "C=1": {
+            "C": 1.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9999999999999851,
+                "oof_auc": 0.8569244783867348,
+                "oof_balanced_accuracy": 0.7932514724967555
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9999999999999242,
+                "oof_auc": 0.6285900776191993,
+                "oof_balanced_accuracy": 0.6012902829215891
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9999999999999925,
+                "oof_auc": 0.7681199478382055,
+                "oof_balanced_accuracy": 0.7072560787934749
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.9999999999999775,
+                "oof_auc": 0.7136417730734793,
+                "oof_balanced_accuracy": 0.6624231200796851
+              },
+              "udiat": {
+                "cos_with_primary": 0.999999999999867,
+                "oof_auc": 0.7744181784863488,
+                "oof_balanced_accuracy": 0.6824262415246471
+              },
+              "breast": {
+                "cos_with_primary": 0.9999999999999292,
+                "oof_auc": 0.7426451099920465,
+                "oof_balanced_accuracy": 0.6850649350649352
+              }
+            },
+            "min_cos_with_primary": 0.999999999999867,
+            "median_oof_auc": 0.7553825289151259,
+            "T_clin": 0.005782111123593297,
+            "p_random": 0.8751062446877657,
+            "placebo_tail_fraction": 1.0,
+            "mean_excess_placebo": -0.0102201927130167,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          },
+          "C=10": {
+            "C": 10.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9169597400779715,
+                "oof_auc": 0.8982403525118332,
+                "oof_balanced_accuracy": 0.8235499650593989
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9266808732425407,
+                "oof_auc": 0.6473068135446479,
+                "oof_balanced_accuracy": 0.5989986503775497
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.8507548558562295,
+                "oof_auc": 0.8109155043657205,
+                "oof_balanced_accuracy": 0.7299938442597722
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.8646874475278404,
+                "oof_auc": 0.7849566816720749,
+                "oof_balanced_accuracy": 0.7140022711453534
+              },
+              "udiat": {
+                "cos_with_primary": 0.9414169004811732,
+                "oof_auc": 0.7993402968664114,
+                "oof_balanced_accuracy": 0.7211838006230529
+              },
+              "breast": {
+                "cos_with_primary": 0.8526241065773625,
+                "oof_auc": 0.7996289424860824,
+                "oof_balanced_accuracy": 0.7481447124304268
+              }
+            },
+            "min_cos_with_primary": 0.8507548558562295,
+            "median_oof_auc": 0.7994846196762468,
+            "T_clin": 0.007199376180003182,
+            "p_random": 0.76001199940003,
+            "placebo_tail_fraction": 0.9443808651865415,
+            "mean_excess_placebo": -0.005141668840393218,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          },
+          "C=100": {
+            "C": 100.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.6878517598801981,
+                "oof_auc": 0.9148507722057605,
+                "oof_balanced_accuracy": 0.8400386010448906
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.7228375672444055,
+                "oof_auc": 0.6455013690457344,
+                "oof_balanced_accuracy": 0.5892877834352976
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.5933972642430773,
+                "oof_auc": 0.8295578801574635,
+                "oof_balanced_accuracy": 0.760695598645737
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.6352041700233585,
+                "oof_auc": 0.812389517929151,
+                "oof_balanced_accuracy": 0.7535112747215822
+              },
+              "udiat": {
+                "cos_with_primary": 0.6861894805042222,
+                "oof_auc": 0.8182151365218994,
+                "oof_balanced_accuracy": 0.735660619387942
+              },
+              "breast": {
+                "cos_with_primary": 0.5723825758483558,
+                "oof_auc": 0.8383912006360957,
+                "oof_balanced_accuracy": 0.75417439703154
+              }
+            },
+            "min_cos_with_primary": 0.5723825758483558,
+            "median_oof_auc": 0.8238865083396814,
+            "T_clin": 0.008020339761492431,
+            "p_random": 0.7033148342582871,
+            "placebo_tail_fraction": 0.5049210345616846,
+            "mean_excess_placebo": -0.00016808856778287654,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          }
+        }
+      },
+      "clip": {
+        "m": 5,
+        "embed_dim": 512,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_C": {
+          "C=0.01": {
+            "C": 0.01,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9042384127737038,
+                "oof_auc": 0.7239540004214994,
+                "oof_balanced_accuracy": 0.6681890785664371
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9242778497717465,
+                "oof_auc": 0.6186911182459993,
+                "oof_balanced_accuracy": 0.5850563879084842
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9175269150767367,
+                "oof_auc": 0.6732982618133516,
+                "oof_balanced_accuracy": 0.6130732533087102
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.8209357516148323,
+                "oof_auc": 0.6799074765785044,
+                "oof_balanced_accuracy": 0.6346087149577573
+              },
+              "udiat": {
+                "cos_with_primary": 0.972540598532729,
+                "oof_auc": 0.6600696353307679,
+                "oof_balanced_accuracy": 0.6314824995418726
+              },
+              "breast": {
+                "cos_with_primary": 0.9246512683534548,
+                "oof_auc": 0.6423270606944056,
+                "oof_balanced_accuracy": 0.6307977736549166
+              }
+            },
+            "min_cos_with_primary": 0.8209357516148323,
+            "median_oof_auc": 0.6666839485720597,
+            "T_clin": 0.004654623465051553,
+            "p_random": 0.9761011949402529,
+            "placebo_tail_fraction": 0.9924467841611353,
+            "mean_excess_placebo": -0.003978763851234935,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          },
+          "C=0.1": {
+            "C": 0.1,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9430781663527701,
+                "oof_auc": 0.7416849688862202,
+                "oof_balanced_accuracy": 0.6789457921533394
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.943988629740541,
+                "oof_auc": 0.621123360260752,
+                "oof_balanced_accuracy": 0.5892921633642513
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9506012011062115,
+                "oof_auc": 0.7022008796228809,
+                "oof_balanced_accuracy": 0.6445060018467219
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.8838448730304236,
+                "oof_auc": 0.6888794827313424,
+                "oof_balanced_accuracy": 0.6403393317172299
+              },
+              "udiat": {
+                "cos_with_primary": 0.9797202821290049,
+                "oof_auc": 0.6754627084478655,
+                "oof_balanced_accuracy": 0.6501740883269194
+              },
+              "breast": {
+                "cos_with_primary": 0.9473438315689595,
+                "oof_auc": 0.648224224754835,
+                "oof_balanced_accuracy": 0.6345083487940631
+              }
+            },
+            "min_cos_with_primary": 0.8838448730304236,
+            "median_oof_auc": 0.6821710955896039,
+            "T_clin": 0.004859398575676475,
+            "p_random": 0.9713514324283786,
+            "placebo_tail_fraction": 0.9906157015335317,
+            "mean_excess_placebo": -0.0038368023782732836,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          },
+          "C=1": {
+            "C": 1.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9999999999999823,
+                "oof_auc": 0.8173591006400159,
+                "oof_balanced_accuracy": 0.762266646700609
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9999999999999015,
+                "oof_auc": 0.625167534487889,
+                "oof_balanced_accuracy": 0.6022331422233853
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9999999999999926,
+                "oof_auc": 0.7520239020913346,
+                "oof_balanced_accuracy": 0.6927516158818097
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.9999999999999791,
+                "oof_auc": 0.7283534451760504,
+                "oof_balanced_accuracy": 0.6763536116311444
+              },
+              "udiat": {
+                "cos_with_primary": 0.9999999999998452,
+                "oof_auc": 0.7092724940443469,
+                "oof_balanced_accuracy": 0.6987355689939525
+              },
+              "breast": {
+                "cos_with_primary": 0.9999999999999074,
+                "oof_auc": 0.6897031539888661,
+                "oof_balanced_accuracy": 0.6345083487940631
+              }
+            },
+            "min_cos_with_primary": 0.9999999999998452,
+            "median_oof_auc": 0.7188129696101986,
+            "T_clin": 0.00582286053578791,
+            "p_random": 0.9228038598070096,
+            "placebo_tail_fraction": 0.9571984435797666,
+            "mean_excess_placebo": -0.0027515062274652176,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          },
+          "C=10": {
+            "C": 10.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9117643607544779,
+                "oof_auc": 0.8897152618326544,
+                "oof_balanced_accuracy": 0.8046446041729061
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9031856928343692,
+                "oof_auc": 0.6786752588185048,
+                "oof_balanced_accuracy": 0.6039844951247402
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.8737759064726186,
+                "oof_auc": 0.7850097600881285,
+                "oof_balanced_accuracy": 0.7199522930132347
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.8682903733701381,
+                "oof_auc": 0.7833701023532207,
+                "oof_balanced_accuracy": 0.7139077400953662
+              },
+              "udiat": {
+                "cos_with_primary": 0.9273794645514968,
+                "oof_auc": 0.7731354223932559,
+                "oof_balanced_accuracy": 0.708081363386476
+              },
+              "breast": {
+                "cos_with_primary": 0.9131458252266245,
+                "oof_auc": 0.7739862178637663,
+                "oof_balanced_accuracy": 0.7026901669758814
+              }
+            },
+            "min_cos_with_primary": 0.8682903733701381,
+            "median_oof_auc": 0.7786781601084936,
+            "T_clin": 0.005477330432863612,
+            "p_random": 0.9457027148642568,
+            "placebo_tail_fraction": 0.9814602883955138,
+            "mean_excess_placebo": -0.0027600127939790223,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          },
+          "C=100": {
+            "C": 100.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.7017986543861879,
+                "oof_auc": 0.9124922816397228,
+                "oof_balanced_accuracy": 0.825039100196333
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.7516443641867697,
+                "oof_auc": 0.7241535653129617,
+                "oof_balanced_accuracy": 0.6864745728647739
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.5955836554583275,
+                "oof_auc": 0.7831772124216394,
+                "oof_balanced_accuracy": 0.7170667897814711
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.6041421410145795,
+                "oof_auc": 0.8110283585927305,
+                "oof_balanced_accuracy": 0.7430423047075012
+              },
+              "udiat": {
+                "cos_with_primary": 0.6991172775687443,
+                "oof_auc": 0.8048378229796593,
+                "oof_balanced_accuracy": 0.7165109034267911
+              },
+              "breast": {
+                "cos_with_primary": 0.6723328492733326,
+                "oof_auc": 0.7866419294990693,
+                "oof_balanced_accuracy": 0.7077922077922079
+              }
+            },
+            "min_cos_with_primary": 0.5955836554583275,
+            "median_oof_auc": 0.7957398762393644,
+            "T_clin": 0.004412055016266192,
+            "p_random": 0.9929503524823758,
+            "placebo_tail_fraction": 0.9995422293430991,
+            "mean_excess_placebo": -0.004329655776343195,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 1.0,
+            "holm_reject": false,
+            "expressible_3crit": false
+          }
+        }
+      },
+      "siglip": {
+        "m": 5,
+        "embed_dim": 768,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_C": {
+          "C=0.01": {
+            "C": 0.01,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9860785805649923,
+                "oof_auc": 0.8663473483966074,
+                "oof_balanced_accuracy": 0.7938130178696217
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9978355562411761,
+                "oof_auc": 0.6606718259697918,
+                "oof_balanced_accuracy": 0.6082377717209384
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9476999172783384,
+                "oof_auc": 0.7349751340493464,
+                "oof_balanced_accuracy": 0.6727069867651585
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.8509927083865356,
+                "oof_auc": 0.6542057636133177,
+                "oof_balanced_accuracy": 0.600379649297555
+              },
+              "udiat": {
+                "cos_with_primary": 0.987603028760328,
+                "oof_auc": 0.7819314641744561,
+                "oof_balanced_accuracy": 0.6482499541872823
+              },
+              "breast": {
+                "cos_with_primary": 0.9740893553489461,
+                "oof_auc": 0.6932812085873291,
+                "oof_balanced_accuracy": 0.640074211502783
+              }
+            },
+            "min_cos_with_primary": 0.8509927083865356,
+            "median_oof_auc": 0.7141281713183378,
+            "T_clin": 0.01380398436696386,
+            "p_random": 0.010949452527373631,
+            "placebo_tail_fraction": 0.0022888532845044634,
+            "mean_excess_placebo": 0.00585540881792233,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 0.032848357582120895,
+            "holm_reject": true,
+            "expressible_3crit": false
+          },
+          "C=0.1": {
+            "C": 0.1,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9899314924673597,
+                "oof_auc": 0.8681600076166742,
+                "oof_balanced_accuracy": 0.7948487571129081
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9978147967423828,
+                "oof_auc": 0.6626725311620175,
+                "oof_balanced_accuracy": 0.6048939533570462
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9661901597278191,
+                "oof_auc": 0.7430950413892563,
+                "oof_balanced_accuracy": 0.6799784549092027
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.9175104422695195,
+                "oof_auc": 0.6731969012683503,
+                "oof_balanced_accuracy": 0.6116839727742576
+              },
+              "udiat": {
+                "cos_with_primary": 0.9876875111739002,
+                "oof_auc": 0.7832142202675476,
+                "oof_balanced_accuracy": 0.666941542972329
+              },
+              "breast": {
+                "cos_with_primary": 0.980826619153477,
+                "oof_auc": 0.6979856877816041,
+                "oof_balanced_accuracy": 0.6447124304267162
+              }
+            },
+            "min_cos_with_primary": 0.9175104422695195,
+            "median_oof_auc": 0.7205403645854302,
+            "T_clin": 0.014024961971853765,
+            "p_random": 0.010149492525373732,
+            "placebo_tail_fraction": 0.0018310826276035706,
+            "mean_excess_placebo": 0.006011141038520823,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 0.030448477576121194,
+            "holm_reject": true,
+            "expressible_3crit": false
+          },
+          "C=1": {
+            "C": 1.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9999999999999871,
+                "oof_auc": 0.8775001478967166,
+                "oof_balanced_accuracy": 0.8069032644504343
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.999999999999932,
+                "oof_auc": 0.68065549348159,
+                "oof_balanced_accuracy": 0.6050068791386117
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.9999999999999932,
+                "oof_auc": 0.7820209862143861,
+                "oof_balanced_accuracy": 0.7209910741766696
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.9999999999999826,
+                "oof_auc": 0.73937706457658,
+                "oof_balanced_accuracy": 0.6672464287714415
+              },
+              "udiat": {
+                "cos_with_primary": 0.9999999999999035,
+                "oof_auc": 0.7903610042147711,
+                "oof_balanced_accuracy": 0.6809602345611141
+              },
+              "breast": {
+                "cos_with_primary": 0.9999999999999151,
+                "oof_auc": 0.7303869599787944,
+                "oof_balanced_accuracy": 0.6730055658627088
+              }
+            },
+            "min_cos_with_primary": 0.9999999999999035,
+            "median_oof_auc": 0.7606990253954831,
+            "T_clin": 0.015148623899767233,
+            "p_random": 0.005149742512874356,
+            "placebo_tail_fraction": 0.016479743648432136,
+            "mean_excess_placebo": 0.005975109983263564,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 0.01544922753862307,
+            "holm_reject": true,
+            "expressible_3crit": false
+          },
+          "C=10": {
+            "C": 10.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.9196079944358688,
+                "oof_auc": 0.8969767598785693,
+                "oof_balanced_accuracy": 0.81743535988819
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.9642965534291726,
+                "oof_auc": 0.7123644595563424,
+                "oof_balanced_accuracy": 0.6493348822122798
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.8855426889567762,
+                "oof_auc": 0.8145633879250338,
+                "oof_balanced_accuracy": 0.7333795013850415
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.891765507354265,
+                "oof_auc": 0.7839015210862413,
+                "oof_balanced_accuracy": 0.6991721220158091
+              },
+              "udiat": {
+                "cos_with_primary": 0.9155191124330985,
+                "oof_auc": 0.8231629100238237,
+                "oof_balanced_accuracy": 0.7510536925050393
+              },
+              "breast": {
+                "cos_with_primary": 0.9178948924114844,
+                "oof_auc": 0.7882321759872749,
+                "oof_balanced_accuracy": 0.7518552875695734
+              }
+            },
+            "min_cos_with_primary": 0.8855426889567762,
+            "median_oof_auc": 0.8013977819561544,
+            "T_clin": 0.014776752695818718,
+            "p_random": 0.002449877506124694,
+            "placebo_tail_fraction": 0.1625085831998169,
+            "mean_excess_placebo": 0.004454188541458071,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 0.0073496325183740815,
+            "holm_reject": true,
+            "expressible_3crit": false
+          },
+          "C=100": {
+            "C": 100.0,
+            "by_site": {
+              "busi": {
+                "cos_with_primary": 0.6453682387648705,
+                "oof_auc": 0.9112337729563367,
+                "oof_balanced_accuracy": 0.8265323949286214
+              },
+              "bus_uclm": {
+                "cos_with_primary": 0.7576689816628771,
+                "oof_auc": 0.7036541290808196,
+                "oof_balanced_accuracy": 0.643939027652583
+              },
+              "bus_bra": {
+                "cos_with_primary": 0.5998188785389431,
+                "oof_auc": 0.821201057815366,
+                "oof_balanced_accuracy": 0.7500384733764234
+              },
+              "busi_whu": {
+                "cos_with_primary": 0.5746374289150525,
+                "oof_auc": 0.7801965061875099,
+                "oof_balanced_accuracy": 0.6996907552083333
+              },
+              "udiat": {
+                "cos_with_primary": 0.6618356773231591,
+                "oof_auc": 0.8541323071284592,
+                "oof_balanced_accuracy": 0.8029136888400221
+              },
+              "breast": {
+                "cos_with_primary": 0.636560759639181,
+                "oof_auc": 0.7775642724622286,
+                "oof_balanced_accuracy": 0.7203153988868276
+              }
+            },
+            "min_cos_with_primary": 0.5746374289150525,
+            "median_oof_auc": 0.800698782001438,
+            "T_clin": 0.011158999825183633,
+            "p_random": 0.013499325033748313,
+            "placebo_tail_fraction": 0.22636758983749142,
+            "mean_excess_placebo": 0.0019722959086356587,
+            "passes_gate": false,
+            "holm_adjusted_p_random": 0.040497975101244935,
+            "holm_reject": true,
+            "expressible_3crit": false
+          }
+        }
+      }
+    }
+  }
+}

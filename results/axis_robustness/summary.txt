@@ -1,0 +1,69 @@
+==============================================================================
+ROB-01/02 — leave-one-clinical-axis robustness (SENSITIVITY)
+==============================================================================
+declaration : docs/20260724-axis-robustness-declaration.md
+status      : SENSITIVITY — does not replace the five-axis primary verdict
+
+Each variant drops one axis and re-runs the global test against
+DIMENSION-MATCHED references (random + all C(16,4)=1820 placebo 4-subsets)
+with the gate at 2m/d for m=4. 'drop_orientation' is the named clinically
+important row: orientation has no external per-feature label (ROB-02).
+
+EXPRESSIBLE per variant (E = all four criteria hold):
+
+backbone             all5      -margin       -shape -orientation-echogenicity   -posterior
+------------------------------------------------------------------------------------------
+biomedclip              E            E            E            E            E            E
+unimed_clip             .            .            .            .            .            .
+pmc_clip                E            E            E            E            E            E
+pubmedclip              .            .            .            .            .            .
+clip                    .            .            .            .            .            .
+siglip                  .            .            .            .            .            .
+
+Equal-site mean placebo excess [95% CI] per variant:
+
+  biomedclip
+    all5                 m=5 exc=+0.0730    [+0.053,+0.089] r_plac=0.0002
+    drop_margin          m=4 exc=+0.0741    [+0.053,+0.087] r_plac=0.0005  d=+0.001
+    drop_shape           m=4 exc=+0.0376    [+0.024,+0.051] r_plac=0.0005  d=-0.035
+    drop_orientation     m=4 exc=+0.0666    [+0.046,+0.083] r_plac=0.0005  d=-0.006
+    drop_echogenicity    m=4 exc=+0.0760    [+0.055,+0.090] r_plac=0.0005  d=+0.003
+    drop_posterior       m=4 exc=+0.0625    [+0.043,+0.076] r_plac=0.0005  d=-0.010
+  unimed_clip
+    all5                 m=5 exc=+0.0210    [+0.004,+0.034] r_plac=0.1176  fails=placebo_extreme
+    drop_margin          m=4 exc=+0.0264    [+0.011,+0.037] r_plac=0.0533  d=+0.005  fails=placebo_extreme
+    drop_shape           m=4 exc=+0.0101    [-0.002,+0.023] r_plac=0.2235  d=-0.011  fails=placebo_extreme,ci_excludes_zero,passes_gate
+    drop_orientation     m=4 exc=+0.0141    [-0.001,+0.027] r_plac=0.1889  d=-0.007  fails=placebo_extreme,ci_excludes_zero,passes_gate
+    drop_echogenicity    m=4 exc=+0.0167    [+0.002,+0.029] r_plac=0.1604  d=-0.004  fails=placebo_extreme
+    drop_posterior       m=4 exc=+0.0242    [+0.007,+0.036] r_plac=0.0774  d=+0.003  fails=placebo_extreme
+  pmc_clip
+    all5                 m=5 exc=+0.0701    [+0.053,+0.074] r_plac=0.0002
+    drop_margin          m=4 exc=+0.0594    [+0.046,+0.063] r_plac=0.0005  d=-0.011
+    drop_shape           m=4 exc=+0.0293    [+0.020,+0.032] r_plac=0.0005  d=-0.041
+    drop_orientation     m=4 exc=+0.0718    [+0.055,+0.076] r_plac=0.0005  d=+0.002
+    drop_echogenicity    m=4 exc=+0.0696    [+0.054,+0.074] r_plac=0.0005  d=-0.000
+    drop_posterior       m=4 exc=+0.0669    [+0.051,+0.071] r_plac=0.0005  d=-0.003
+  pubmedclip
+    all5                 m=5 exc=-0.0102    [-0.013,-0.007] r_plac=1.0000  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_margin          m=4 exc=-0.0083    [-0.011,-0.005] r_plac=0.9989  d=+0.002  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_shape           m=4 exc=-0.0103    [-0.012,-0.007] r_plac=1.0000  d=-0.000  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_orientation     m=4 exc=-0.0081    [-0.010,-0.005] r_plac=0.9978  d=+0.002  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_echogenicity    m=4 exc=-0.0080    [-0.011,-0.005] r_plac=0.9978  d=+0.002  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_posterior       m=4 exc=-0.0086    [-0.011,-0.005] r_plac=0.9995  d=+0.002  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+  clip
+    all5                 m=5 exc=-0.0028    [-0.005,-0.001] r_plac=0.9572  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_margin          m=4 exc=-0.0014    [-0.003,+0.000] r_plac=0.8182  d=+0.001  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_shape           m=4 exc=-0.0034    [-0.005,-0.001] r_plac=0.9901  d=-0.001  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_orientation     m=4 exc=-0.0018    [-0.004,-0.000] r_plac=0.8874  d=+0.001  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_echogenicity    m=4 exc=-0.0013    [-0.003,+0.001] r_plac=0.7908  d=+0.001  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_posterior       m=4 exc=-0.0024    [-0.004,-0.001] r_plac=0.9533  d=+0.000  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+  siglip
+    all5                 m=5 exc=+0.0060    [+0.002,+0.009] r_plac=0.0165  fails=passes_gate
+    drop_margin          m=4 exc=+0.0066    [+0.003,+0.010] r_plac=0.0071  d=+0.001  fails=passes_gate
+    drop_shape           m=4 exc=+0.0005    [-0.002,+0.003] r_plac=0.3432  d=-0.005  fails=holm_reject_random,placebo_extreme,ci_excludes_zero,passes_gate
+    drop_orientation     m=4 exc=+0.0055    [+0.002,+0.008] r_plac=0.0395  d=-0.000  fails=passes_gate
+    drop_echogenicity    m=4 exc=+0.0064    [+0.002,+0.009] r_plac=0.0088  d=+0.000  fails=passes_gate
+    drop_posterior       m=4 exc=+0.0038    [+0.000,+0.007] r_plac=0.1647  d=-0.002  fails=holm_reject_random,placebo_extreme,passes_gate
+
+Read as sensitivity, not a new verdict: the five-axis analysis remains
+primary. A variant that flips identifies an axis the verdict leans on.

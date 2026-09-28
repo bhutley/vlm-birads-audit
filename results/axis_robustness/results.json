@@ -1,0 +1,1637 @@
+{
+  "metadata": {
+    "experiment": "axis_robustness",
+    "author": "unknown",
+    "timestamp": "2026-07-23T18:04:45.428552",
+    "git_commit": "38a5c6a",
+    "config": {
+      "reproducibility": {
+        "global_seed": 42,
+        "deterministic_algorithms": true
+      },
+      "data": {
+        "busi_root": "~/var/data/busi/Dataset_BUSI_with_GT",
+        "tn3k_root": "~/var/data/tn3k",
+        "thyroid_cancer_root": "~/var/data/thyroid-cancer/Thyroid Data",
+        "test_split": 0.2,
+        "split_seed": 42,
+        "image_size": 224
+      },
+      "bus_datasets": {
+        "busi": "~/var/data/BUSdatasets/2020_BUSI/2020_BUSI",
+        "bus_uclm": "~/var/data/BUSdatasets/2025_BUS_UCLM/2025_BUS_UCLM",
+        "bus_bra": "~/var/data/BUSdatasets/2024_BUSBRA/2024_BUSBRA",
+        "busi_whu": "~/var/data/BUSdatasets/2025_BUSI_WHU/2025_BUSI_WHU",
+        "udiat": "~/var/data/BUSdatasets/2020_UDIAT/2020_UDIAT",
+        "breast": "~/var/data/BUSdatasets/2024_BrEaST_USG"
+      },
+      "few_shot": {
+        "k_values": [
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "n_trials": 10,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "models": {
+        "clip": {
+          "name": "ViT-B-32",
+          "pretrained": "openai"
+        },
+        "biomedclip": {
+          "name": "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"
+        },
+        "resnet": {
+          "name": "resnet50",
+          "epochs": 50,
+          "lr": 0.001,
+          "batch_size": 32
+        }
+      },
+      "prompts": {
+        "bus": {
+          "lesion": "a breast ultrasound image showing a mass"
+        },
+        "busi": {
+          "simple": {
+            "normal": "normal",
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "normal": "a breast ultrasound image showing normal tissue with no abnormalities",
+            "benign": "a breast ultrasound image showing a benign lesion",
+            "malignant": "a breast ultrasound image showing a malignant tumor"
+          },
+          "clinical": {
+            "normal": "breast ultrasound demonstrating homogeneous fat lobules and normal fibroglandular tissue with no focal lesions",
+            "benign": "breast ultrasound showing a well-circumscribed oval homogeneous hypoechoic mass with parallel orientation consistent with a benign fibroadenoma",
+            "malignant": "breast ultrasound demonstrating an irregular hypoechoic mass with angular margins spiculation and posterior acoustic shadowing suggestive of malignancy"
+          }
+        },
+        "thyroid": {
+          "simple": {
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "benign": "a thyroid ultrasound image showing a benign nodule",
+            "malignant": "a thyroid ultrasound image showing a malignant nodule"
+          },
+          "clinical": {
+            "benign": "thyroid ultrasound showing a well-defined isoechoic or hyperechoic nodule with smooth margins and regular shape consistent with a benign colloid nodule",
+            "malignant": "thyroid ultrasound demonstrating a solid hypoechoic nodule with irregular margins microcalcifications and taller-than-wide shape suggestive of papillary thyroid carcinoma"
+          }
+        }
+      },
+      "birads_concept_bank": {
+        "carrier_templates": [
+          "breast ultrasound showing a mass with {d}",
+          "a breast ultrasound image of a lesion with {d}",
+          "sonographic breast mass demonstrating {d}"
+        ],
+        "concepts": {
+          "margin": {
+            "pos": [
+              "spiculated margins",
+              "angular margins",
+              "microlobulated margins",
+              "indistinct margins"
+            ],
+            "neg": [
+              "circumscribed margins",
+              "well-defined smooth margins"
+            ]
+          },
+          "shape": {
+            "pos": [
+              "irregular shape"
+            ],
+            "neg": [
+              "oval shape",
+              "round shape"
+            ]
+          },
+          "orientation": {
+            "pos": [
+              "taller-than-wide non-parallel orientation",
+              "vertical orientation"
+            ],
+            "neg": [
+              "parallel wider-than-tall orientation"
+            ]
+          },
+          "echogenicity": {
+            "pos": [
+              "markedly hypoechoic echotexture"
+            ],
+            "neg": [
+              "isoechoic echotexture",
+              "hyperechoic echotexture"
+            ]
+          },
+          "posterior": {
+            "pos": [
+              "posterior acoustic shadowing"
+            ],
+            "neg": [
+              "posterior acoustic enhancement",
+              "no posterior acoustic features"
+            ]
+          }
+        },
+        "reference_axes": {
+          "malignancy": {
+            "pos": [
+              "malignant tumor",
+              "malignant breast lesion"
+            ],
+            "neg": [
+              "benign lesion",
+              "benign breast mass"
+            ]
+          }
+        },
+        "placebo_concepts": {
+          "laterality": {
+            "pos": [
+              "a left-breast annotation"
+            ],
+            "neg": [
+              "a right-breast annotation"
+            ]
+          },
+          "image_side": {
+            "pos": [
+              "a left-sided position in the image"
+            ],
+            "neg": [
+              "a right-sided position in the image"
+            ]
+          },
+          "scale_bar": {
+            "pos": [
+              "a centimeter scale bar"
+            ],
+            "neg": [
+              "no scale markings"
+            ]
+          },
+          "caliper": {
+            "pos": [
+              "caliper measurement markers"
+            ],
+            "neg": [
+              "no caliper markers"
+            ]
+          },
+          "annotation": {
+            "pos": [
+              "overlaid annotation text"
+            ],
+            "neg": [
+              "no overlaid text"
+            ]
+          },
+          "transducer": {
+            "pos": [
+              "a linear-transducer appearance"
+            ],
+            "neg": [
+              "a curved-transducer appearance"
+            ]
+          },
+          "arrow_marker": {
+            "pos": [
+              "an arrow marker"
+            ],
+            "neg": [
+              "no arrow marker"
+            ]
+          },
+          "panel_layout": {
+            "pos": [
+              "a dual-panel layout"
+            ],
+            "neg": [
+              "a single-panel layout"
+            ]
+          },
+          "timestamp": {
+            "pos": [
+              "a timestamp overlay"
+            ],
+            "neg": [
+              "no timestamp overlay"
+            ]
+          },
+          "patient_banner": {
+            "pos": [
+              "a patient information banner"
+            ],
+            "neg": [
+              "no information banner"
+            ]
+          },
+          "institution_label": {
+            "pos": [
+              "a hospital name label"
+            ],
+            "neg": [
+              "no facility label"
+            ]
+          },
+          "body_marker": {
+            "pos": [
+              "a body-position pictogram"
+            ],
+            "neg": [
+              "no body pictogram"
+            ]
+          },
+          "image_border": {
+            "pos": [
+              "a rectangular image border"
+            ],
+            "neg": [
+              "no image border"
+            ]
+          },
+          "vendor_logo": {
+            "pos": [
+              "a manufacturer logo"
+            ],
+            "neg": [
+              "no manufacturer logo"
+            ]
+          },
+          "grid_overlay": {
+            "pos": [
+              "a measurement grid overlay"
+            ],
+            "neg": [
+              "no grid overlay"
+            ]
+          },
+          "thumbnail": {
+            "pos": [
+              "a thumbnail preview strip"
+            ],
+            "neg": [
+              "no thumbnail strip"
+            ]
+          }
+        },
+        "malignancy_synonym_concepts": {
+          "diagnosis": {
+            "pos": [
+              "a malignant tumor"
+            ],
+            "neg": [
+              "a benign lesion"
+            ]
+          },
+          "cancer": {
+            "pos": [
+              "a cancerous mass"
+            ],
+            "neg": [
+              "a non-cancerous mass"
+            ]
+          },
+          "entity": {
+            "pos": [
+              "a carcinoma"
+            ],
+            "neg": [
+              "a fibroadenoma"
+            ]
+          },
+          "aggressiveness": {
+            "pos": [
+              "an aggressive tumor"
+            ],
+            "neg": [
+              "an indolent lesion"
+            ]
+          },
+          "suspicion": {
+            "pos": [
+              "a high-suspicion lesion"
+            ],
+            "neg": [
+              "a low-suspicion lesion"
+            ]
+          },
+          "biopsy": {
+            "pos": [
+              "a lesion requiring biopsy"
+            ],
+            "neg": [
+              "a lesion needing no biopsy"
+            ]
+          },
+          "probability": {
+            "pos": [
+              "a probably malignant mass"
+            ],
+            "neg": [
+              "a probably benign mass"
+            ]
+          },
+          "concern": {
+            "pos": [
+              "a worrisome breast finding"
+            ],
+            "neg": [
+              "a reassuring breast finding"
+            ]
+          },
+          "malignant_benign": {
+            "pos": [
+              "a cancer"
+            ],
+            "neg": [
+              "a cyst"
+            ]
+          },
+          "grade": {
+            "pos": [
+              "a high-grade tumor"
+            ],
+            "neg": [
+              "a low-grade lesion"
+            ]
+          }
+        }
+      },
+      "evaluation": {
+        "metrics": [
+          "accuracy",
+          "f1_macro",
+          "f1_weighted",
+          "auc_roc"
+        ],
+        "confidence_level": 0.95
+      },
+      "output": {
+        "results_dir": "results",
+        "figures_dpi": 300
+      },
+      "axis_robustness": {
+        "backbones": [
+          "biomedclip",
+          "unimed_clip",
+          "pmc_clip",
+          "pubmedclip",
+          "clip",
+          "siglip"
+        ],
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "orthonormalize_basis": true,
+        "probe_C": 1.0,
+        "batch_size": 32,
+        "embedding_cache": "results/cross_modal_probe/embeddings",
+        "cohort_manifest": "results/dataset_audit",
+        "cluster_bootstrap_trials": 2000,
+        "global_random_trials": 20000,
+        "gate_k_primary": 2.0
+      }
+    }
+  },
+  "results": {
+    "status": "SENSITIVITY \u2014 does not replace the five-axis primary verdict",
+    "declaration": "docs/20260724-axis-robustness-declaration.md",
+    "clinical_axes": [
+      "margin",
+      "shape",
+      "orientation",
+      "echogenicity",
+      "posterior"
+    ],
+    "gate_k": 2.0,
+    "by_backbone": {
+      "biomedclip": {
+        "embed_dim": 512,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_variant": {
+          "all5": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 5,
+            "T_clin": 0.11438822849514041,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "placebo_rank": 1,
+            "n_placebo_reference": 4368,
+            "mean_excess_placebo": 0.07301091072490719,
+            "mean_excess_placebo_ci": [
+              0.0525992585680249,
+              0.08921108624652122
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.00022888532845044633,
+              "ci_excludes_zero": true,
+              "delta_min": 0.01953125,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_margin": {
+            "kept_axes": [
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.10611686541930515,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.07405912277456161,
+            "mean_excess_placebo_ci": [
+              0.05254354263586675,
+              0.08717068230037613
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.015625,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_shape": {
+            "kept_axes": [
+              "margin",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.06969149779557238,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.03763375515082883,
+            "mean_excess_placebo_ci": [
+              0.024193957022661278,
+              0.051131715129647155
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.015625,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_orientation": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.09862222297767924,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.06656448033293569,
+            "mean_excess_placebo_ci": [
+              0.046117624546221946,
+              0.08281904210497683
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.015625,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_echogenicity": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.10808423584140209,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.07602649319665855,
+            "mean_excess_placebo_ci": [
+              0.05499387646118037,
+              0.09043966513378446
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.015625,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_posterior": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity"
+            ],
+            "m": 4,
+            "T_clin": 0.09460716252463904,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.06254941987989548,
+            "mean_excess_placebo_ci": [
+              0.04309004284899303,
+              0.0763125809351572
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.015625,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          }
+        }
+      },
+      "unimed_clip": {
+        "embed_dim": 512,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_variant": {
+          "all5": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 5,
+            "T_clin": 0.06899358958431916,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.11764705882352941,
+            "placebo_rank": 514,
+            "n_placebo_reference": 4368,
+            "mean_excess_placebo": 0.020975151137675202,
+            "mean_excess_placebo_ci": [
+              0.004127277011983992,
+              0.03409266396484819
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.11764705882352941,
+              "ci_excludes_zero": true,
+              "delta_min": 0.01953125,
+              "passes_gate": true,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_margin": {
+            "kept_axes": [
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.06468065695492636,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.05326743547501373,
+            "placebo_rank": 97,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.02642287650479768,
+            "mean_excess_placebo_ci": [
+              0.010629449477453529,
+              0.036785555684940456
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.05326743547501373,
+              "ci_excludes_zero": true,
+              "delta_min": 0.015625,
+              "passes_gate": true,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_shape": {
+            "kept_axes": [
+              "margin",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.04832611429904308,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.22350356946732564,
+            "placebo_rank": 407,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.010068333848914396,
+            "mean_excess_placebo_ci": [
+              -0.0020688895686427466,
+              0.023471426611805585
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.22350356946732564,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_orientation": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.05231522712209228,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.18890719384953322,
+            "placebo_rank": 344,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.014057446671963597,
+            "mean_excess_placebo_ci": [
+              -0.0010707580858761523,
+              0.02695024588106538
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.18890719384953322,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_echogenicity": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.05491599783766249,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.16035145524437122,
+            "placebo_rank": 292,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.016658217387533807,
+            "mean_excess_placebo_ci": [
+              0.0022622890791209414,
+              0.02871233888923129
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.16035145524437122,
+              "ci_excludes_zero": true,
+              "delta_min": 0.015625,
+              "passes_gate": true,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_posterior": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity"
+            ],
+            "m": 4,
+            "T_clin": 0.062478366687592955,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.07742998352553541,
+            "placebo_rank": 141,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.024220586237464273,
+            "mean_excess_placebo_ci": [
+              0.007190838209837506,
+              0.035958461952992564
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.07742998352553541,
+              "ci_excludes_zero": true,
+              "delta_min": 0.015625,
+              "passes_gate": true,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          }
+        }
+      },
+      "pmc_clip": {
+        "embed_dim": 768,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_variant": {
+          "all5": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 5,
+            "T_clin": 0.08253409842430437,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.00022888532845044633,
+            "placebo_rank": 1,
+            "n_placebo_reference": 4368,
+            "mean_excess_placebo": 0.07006141085287275,
+            "mean_excess_placebo_ci": [
+              0.053470740732686,
+              0.07429723637810907
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.00022888532845044633,
+              "ci_excludes_zero": true,
+              "delta_min": 0.013020833333333334,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_margin": {
+            "kept_axes": [
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.06920164418225504,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.059389749250092536,
+            "mean_excess_placebo_ci": [
+              0.04552451136387673,
+              0.06313409092392276
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_shape": {
+            "kept_axes": [
+              "margin",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.03907336086997663,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.02926146593781413,
+            "mean_excess_placebo_ci": [
+              0.020431353155848292,
+              0.03245536113490186
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_orientation": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.08160048945259807,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.07178859452043557,
+            "mean_excess_placebo_ci": [
+              0.05511877476303103,
+              0.07584569463548685
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_echogenicity": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.07938523997836035,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.06957334504619785,
+            "mean_excess_placebo_ci": [
+              0.053636463482429605,
+              0.07372001798204848
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_posterior": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity"
+            ],
+            "m": 4,
+            "T_clin": 0.076698085583485,
+            "p_random": 4.999750012499375e-05,
+            "placebo_tail_fraction": 0.0005491488193300384,
+            "placebo_rank": 1,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.0668861906513225,
+            "mean_excess_placebo_ci": [
+              0.05063238160219847,
+              0.07120089297844603
+            ],
+            "holm_adjusted_p_random": 0.0002999850007499625,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.0005491488193300384,
+              "ci_excludes_zero": true,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          }
+        }
+      },
+      "pubmedclip": {
+        "embed_dim": 512,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_variant": {
+          "all5": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 5,
+            "T_clin": 0.005782111123593297,
+            "p_random": 0.8751062446877657,
+            "placebo_tail_fraction": 1.0,
+            "placebo_rank": 4369,
+            "n_placebo_reference": 4368,
+            "mean_excess_placebo": -0.0102201927130167,
+            "mean_excess_placebo_ci": [
+              -0.012723366206990295,
+              -0.006594689192735481
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 1.0,
+              "ci_excludes_zero": false,
+              "delta_min": 0.01953125,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_margin": {
+            "kept_axes": [
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.00502914103060917,
+            "p_random": 0.7883105844707765,
+            "placebo_tail_fraction": 0.9989017023613399,
+            "placebo_rank": 1819,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.008260054036691812,
+            "mean_excess_placebo_ci": [
+              -0.010662020211295293,
+              -0.004874442183252816
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.9989017023613399,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_shape": {
+            "kept_axes": [
+              "margin",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.00295638206284334,
+            "p_random": 0.975851207439628,
+            "placebo_tail_fraction": 1.0,
+            "placebo_rank": 1821,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.01033281300445764,
+            "mean_excess_placebo_ci": [
+              -0.011765675955966478,
+              -0.007477146328012152
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 1.0,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_orientation": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.005205923092245575,
+            "p_random": 0.7640117994100295,
+            "placebo_tail_fraction": 0.9978034047226798,
+            "placebo_rank": 1817,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.008083271975055406,
+            "mean_excess_placebo_ci": [
+              -0.01043745934974354,
+              -0.005137185422341207
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.9978034047226798,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_echogenicity": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.005270883793472879,
+            "p_random": 0.7557622118894055,
+            "placebo_tail_fraction": 0.9978034047226798,
+            "placebo_rank": 1817,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.008018311273828103,
+            "mean_excess_placebo_ci": [
+              -0.010604476239673824,
+              -0.004762273635393293
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.9978034047226798,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_posterior": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity"
+            ],
+            "m": 4,
+            "T_clin": 0.0046720903127458096,
+            "p_random": 0.832208389580521,
+            "placebo_tail_fraction": 0.99945085118067,
+            "placebo_rank": 1820,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.008617104754555172,
+            "mean_excess_placebo_ci": [
+              -0.010980538985147831,
+              -0.005251818453866586
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.99945085118067,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          }
+        }
+      },
+      "clip": {
+        "embed_dim": 512,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_variant": {
+          "all5": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 5,
+            "T_clin": 0.00582286053578791,
+            "p_random": 0.9228038598070096,
+            "placebo_tail_fraction": 0.9571984435797666,
+            "placebo_rank": 4182,
+            "n_placebo_reference": 4368,
+            "mean_excess_placebo": -0.0027515062274652176,
+            "mean_excess_placebo_ci": [
+              -0.004735978132097401,
+              -0.00063039144241177
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.9571984435797666,
+              "ci_excludes_zero": false,
+              "delta_min": 0.01953125,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_margin": {
+            "kept_axes": [
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.005351421806014334,
+            "p_random": 0.8123093845307735,
+            "placebo_tail_fraction": 0.8182317408017573,
+            "placebo_rank": 1490,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.0014251073535497911,
+            "mean_excess_placebo_ci": [
+              -0.0032982067190512614,
+              0.00032546605852216173
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.8182317408017573,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_shape": {
+            "kept_axes": [
+              "margin",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.003403933259868775,
+            "p_random": 0.9817009149542523,
+            "placebo_tail_fraction": 0.9901153212520593,
+            "placebo_rank": 1803,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.00337259589969535,
+            "mean_excess_placebo_ci": [
+              -0.004580452204938959,
+              -0.001365182111458021
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.9901153212520593,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_orientation": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.00494585787373257,
+            "p_random": 0.864656767161642,
+            "placebo_tail_fraction": 0.8874244920373421,
+            "placebo_rank": 1616,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.0018306712858315545,
+            "mean_excess_placebo_ci": [
+              -0.0036106765073353206,
+              -9.080892186792411e-05
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.8874244920373421,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_echogenicity": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.0054886304702976806,
+            "p_random": 0.7932103394830259,
+            "placebo_tail_fraction": 0.7907742998352554,
+            "placebo_rank": 1440,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.0012878986892664443,
+            "mean_excess_placebo_ci": [
+              -0.003225787597556914,
+              0.0006742571141656933
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.7907742998352554,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_posterior": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity"
+            ],
+            "m": 4,
+            "T_clin": 0.00435115681616852,
+            "p_random": 0.9264536773161341,
+            "placebo_tail_fraction": 0.9533223503569467,
+            "placebo_rank": 1736,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": -0.0024253723433956048,
+            "mean_excess_placebo_ci": [
+              -0.004302653074256391,
+              -0.0005205447194316051
+            ],
+            "holm_adjusted_p_random": 1.0,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.9533223503569467,
+              "ci_excludes_zero": false,
+              "delta_min": 0.015625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          }
+        }
+      },
+      "siglip": {
+        "embed_dim": 768,
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "by_variant": {
+          "all5": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 5,
+            "T_clin": 0.015148623899767233,
+            "p_random": 0.005149742512874356,
+            "placebo_tail_fraction": 0.016479743648432136,
+            "placebo_rank": 72,
+            "n_placebo_reference": 4368,
+            "mean_excess_placebo": 0.005975109983263564,
+            "mean_excess_placebo_ci": [
+              0.0017831608924655888,
+              0.008990936937745556
+            ],
+            "holm_adjusted_p_random": 0.01544922753862307,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.016479743648432136,
+              "ci_excludes_zero": true,
+              "delta_min": 0.013020833333333334,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_margin": {
+            "kept_axes": [
+              "shape",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.014117824792874349,
+            "p_random": 0.0033498325083745812,
+            "placebo_tail_fraction": 0.007138934651290499,
+            "placebo_rank": 13,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.006642292473569762,
+            "mean_excess_placebo_ci": [
+              0.00258252745884069,
+              0.009516847677553515
+            ],
+            "holm_adjusted_p_random": 0.010049497525123744,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.007138934651290499,
+              "ci_excludes_zero": true,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_shape": {
+            "kept_axes": [
+              "margin",
+              "orientation",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.008025427137663715,
+            "p_random": 0.10499475026248688,
+            "placebo_tail_fraction": 0.343218012081274,
+            "placebo_rank": 625,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.0005498948183591283,
+            "mean_excess_placebo_ci": [
+              -0.0016167854290761515,
+              0.0025882358348419364
+            ],
+            "holm_adjusted_p_random": 0.3149842507874606,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.343218012081274,
+              "ci_excludes_zero": false,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_orientation": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "echogenicity",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.013001579006560638,
+            "p_random": 0.006949652517374131,
+            "placebo_tail_fraction": 0.039538714991762765,
+            "placebo_rank": 72,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.005526046687256051,
+            "mean_excess_placebo_ci": [
+              0.0015572880106067197,
+              0.008451991918873945
+            ],
+            "holm_adjusted_p_random": 0.020848957552122394,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.039538714991762765,
+              "ci_excludes_zero": true,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_echogenicity": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "posterior"
+            ],
+            "m": 4,
+            "T_clin": 0.0138704869145777,
+            "p_random": 0.003949802509874506,
+            "placebo_tail_fraction": 0.008786381109280615,
+            "placebo_rank": 16,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.0063949545952731125,
+            "mean_excess_placebo_ci": [
+              0.002467282254719077,
+              0.009032477199038774
+            ],
+            "holm_adjusted_p_random": 0.011849407529623518,
+            "verdict": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.008786381109280615,
+              "ci_excludes_zero": true,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "drop_posterior": {
+            "kept_axes": [
+              "margin",
+              "shape",
+              "orientation",
+              "echogenicity"
+            ],
+            "m": 4,
+            "T_clin": 0.011226263739502466,
+            "p_random": 0.01904904754762262,
+            "placebo_tail_fraction": 0.16474464579901152,
+            "placebo_rank": 300,
+            "n_placebo_reference": 1820,
+            "mean_excess_placebo": 0.0037507314201978793,
+            "mean_excess_placebo_ci": [
+              0.0002003041852114381,
+              0.006526710624825943
+            ],
+            "holm_adjusted_p_random": 0.05714714264286786,
+            "verdict": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.16474464579901152,
+              "ci_excludes_zero": true,
+              "delta_min": 0.010416666666666666,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            }
+          }
+        }
+      }
+    }
+  }
+}

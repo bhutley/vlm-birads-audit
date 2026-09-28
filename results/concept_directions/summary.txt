@@ -1,0 +1,29 @@
+================================================================
+E1 — concept directions & modality gap  [biomedclip]
+================================================================
+images (benign+malignant): 647   dim: 512
+concepts (5): margin, shape, orientation, echogenicity, posterior
+
+Direction sanity (entanglement preview):
+  |cos| between concept axes: mean=0.152  max=0.383  rank=5/5
+
+Modality gap (image vs concept-text centroids):
+  gap_norm=0.947   centroid_cos=0.489
+
+Text-direction retention in image PCA subspace (higher = more usable):
+  margin         0.669
+  shape          0.634
+  orientation    0.577
+  echogenicity   0.478
+  posterior      0.595
+
+Grounding preview (benign/malignant probe w vs BI-RADS subspace):
+  rho=0.1510   null=0.0097+-0.0061   excess=+0.1414  (z=+23.1)
+  vs placebo (16 non-diagnostic axes): null=0.0198+-0.0135   excess=+0.1312  (z=+9.7)
+  reference-axis alignment cos(text malignancy axis, w):
+    malignancy     +0.242
+
+Reading: excess>0 (z>>0) over BOTH the random subspace AND the placebo
+text-direction null => the decision is BI-RADS-grounded in content, not just
+in prompt-difference geometry; low retention/centroid_cos warns the modality
+gap is degrading text directions (fall back to image CAVs).

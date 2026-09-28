@@ -1,0 +1,220 @@
+{
+  "gate_k_sweep": {
+    "by_backbone": {
+      "biomedclip": {
+        "k=1.5": true,
+        "k=2.0": true,
+        "k=3.0": true
+      },
+      "unimed_clip": {
+        "k=1.5": false,
+        "k=2.0": false,
+        "k=3.0": false
+      },
+      "pmc_clip": {
+        "k=1.5": true,
+        "k=2.0": true,
+        "k=3.0": true
+      },
+      "pubmedclip": {
+        "k=1.5": false,
+        "k=2.0": false,
+        "k=3.0": false
+      },
+      "clip": {
+        "k=1.5": false,
+        "k=2.0": false,
+        "k=3.0": false
+      },
+      "siglip": {
+        "k=1.5": false,
+        "k=2.0": false,
+        "k=3.0": false
+      }
+    },
+    "flips": []
+  },
+  "loo_placebo": {
+    "backbone": "biomedclip",
+    "m": 5,
+    "embed_dim": 512,
+    "P": 16,
+    "placebo_axes": [
+      "laterality",
+      "image_side",
+      "scale_bar",
+      "caliper",
+      "annotation",
+      "transducer",
+      "arrow_marker",
+      "panel_layout",
+      "timestamp",
+      "patient_banner",
+      "institution_label",
+      "body_marker",
+      "image_border",
+      "vendor_logo",
+      "grid_overlay",
+      "thumbnail"
+    ],
+    "by_site": {
+      "busi": {
+        "full": 0.13652082223383108,
+        "loo": {
+          "laterality": 0.13500854482665112,
+          "image_side": 0.13490511266570146,
+          "scale_bar": 0.1399081394075904,
+          "caliper": 0.13554665026970825,
+          "annotation": 0.13612333418086597,
+          "transducer": 0.13513561890807277,
+          "arrow_marker": 0.14642588182083904,
+          "panel_layout": 0.13489487346940013,
+          "timestamp": 0.13523153595208984,
+          "patient_banner": 0.13508770202592527,
+          "institution_label": 0.13547505904457507,
+          "body_marker": 0.13534160466562087,
+          "image_border": 0.13676524118307265,
+          "vendor_logo": 0.1357297747460055,
+          "grid_overlay": 0.13734546980113474,
+          "thumbnail": 0.13578907190184486
+        },
+        "loo_min": 0.13489487346940013,
+        "loo_max": 0.14642588182083904,
+        "delta_min": 0.01953125,
+        "grounded_full": true,
+        "grounded_all_loo": true
+      },
+      "bus_uclm": {
+        "full": 0.008656718396185425,
+        "loo": {
+          "laterality": 0.007444035282663949,
+          "image_side": 0.007042820595882522,
+          "scale_bar": 0.013080004604196942,
+          "caliper": 0.008622808720697546,
+          "annotation": 0.014052748569165233,
+          "transducer": 0.013071608595984288,
+          "arrow_marker": 0.008075124315871603,
+          "panel_layout": 0.00940731461945779,
+          "timestamp": 0.0066163736400780965,
+          "patient_banner": 0.006604285250716643,
+          "institution_label": 0.005932844230869878,
+          "body_marker": 0.006567229722282179,
+          "image_border": 0.005762149000523235,
+          "vendor_logo": 0.009984435797013497,
+          "grid_overlay": 0.011352622477452584,
+          "thumbnail": 0.011348815298966322
+        },
+        "loo_min": 0.005762149000523235,
+        "loo_max": 0.014052748569165233,
+        "delta_min": 0.01953125,
+        "grounded_full": false,
+        "grounded_all_loo": false
+      },
+      "bus_bra": {
+        "full": 0.047281880102835565,
+        "loo": {
+          "laterality": 0.048880557536531165,
+          "image_side": 0.051688758572770416,
+          "scale_bar": 0.04836371590479826,
+          "caliper": 0.04590633790436199,
+          "annotation": 0.04788395165711213,
+          "transducer": 0.047676145554863034,
+          "arrow_marker": 0.045328817842894276,
+          "panel_layout": 0.04901932174863054,
+          "timestamp": 0.04586860837862671,
+          "patient_banner": 0.0461356626518571,
+          "institution_label": 0.04603950188868994,
+          "body_marker": 0.046354832225662855,
+          "image_border": 0.04584970016010387,
+          "vendor_logo": 0.048101699683585596,
+          "grid_overlay": 0.050630766994843916,
+          "thumbnail": 0.05039416413936389
+        },
+        "loo_min": 0.045328817842894276,
+        "loo_max": 0.051688758572770416,
+        "delta_min": 0.01953125,
+        "grounded_full": true,
+        "grounded_all_loo": true
+      },
+      "busi_whu": {
+        "full": 0.051645870705587155,
+        "loo": {
+          "laterality": 0.05248953306834821,
+          "image_side": 0.05625919372280098,
+          "scale_bar": 0.04660001399473562,
+          "caliper": 0.06092342794194047,
+          "annotation": 0.052224653669580734,
+          "transducer": 0.049239727546966996,
+          "arrow_marker": 0.0482367741186248,
+          "panel_layout": 0.05155801084545507,
+          "timestamp": 0.04885679394431733,
+          "patient_banner": 0.0547963539524047,
+          "institution_label": 0.04878705157907878,
+          "body_marker": 0.053426661628189986,
+          "image_border": 0.05042268391478831,
+          "vendor_logo": 0.048556062426346594,
+          "grid_overlay": 0.05405608225631033,
+          "thumbnail": 0.05256086492780104
+        },
+        "loo_min": 0.04660001399473562,
+        "loo_max": 0.06092342794194047,
+        "delta_min": 0.01953125,
+        "grounded_full": true,
+        "grounded_all_loo": true
+      },
+      "udiat": {
+        "full": 0.11219728121442413,
+        "loo": {
+          "laterality": 0.11020127019564865,
+          "image_side": 0.10995011372951888,
+          "scale_bar": 0.11206686749746501,
+          "caliper": 0.11033070487419212,
+          "annotation": 0.11022908150896277,
+          "transducer": 0.11531161417990865,
+          "arrow_marker": 0.12404158968202526,
+          "panel_layout": 0.11068188660802264,
+          "timestamp": 0.10926949511077019,
+          "patient_banner": 0.10891852468367058,
+          "institution_label": 0.10919744549436275,
+          "body_marker": 0.11067352973882788,
+          "image_border": 0.10923150284074293,
+          "vendor_logo": 0.11722191605698307,
+          "grid_overlay": 0.10819580721031669,
+          "thumbnail": 0.11390520247553215
+        },
+        "loo_min": 0.10819580721031669,
+        "loo_max": 0.12404158968202526,
+        "delta_min": 0.01953125,
+        "grounded_full": true,
+        "grounded_all_loo": true
+      },
+      "breast": {
+        "full": 0.08166312809753484,
+        "loo": {
+          "laterality": 0.0834729826411213,
+          "image_side": 0.08274827729502268,
+          "scale_bar": 0.08226284118095613,
+          "caliper": 0.08184408442038275,
+          "annotation": 0.08114205128087945,
+          "transducer": 0.08010196359152869,
+          "arrow_marker": 0.08386735731217955,
+          "panel_layout": 0.08690821010481022,
+          "timestamp": 0.07996412708190265,
+          "patient_banner": 0.08170273380550203,
+          "institution_label": 0.07997177707785554,
+          "body_marker": 0.08534873710692079,
+          "image_border": 0.08137253008580402,
+          "vendor_logo": 0.08062851278952894,
+          "grid_overlay": 0.08291150427213687,
+          "thumbnail": 0.08253062121149853
+        },
+        "loo_min": 0.07996412708190265,
+        "loo_max": 0.08690821010481022,
+        "delta_min": 0.01953125,
+        "grounded_full": true,
+        "grounded_all_loo": true
+      }
+    },
+    "note": "group-weighted probe on the manifest-aligned cohort (WP4)"
+  }
+}

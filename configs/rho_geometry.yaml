@@ -1,0 +1,31 @@
+# E3 — grounding geometry: rho-excess across backbones and sites (RQ2, RQ3, RQ4).
+# Overlays configs/default.yaml. Concept bank = default.yaml:birads_concept_bank.
+#
+# WP4 (2026-07-22): patient/audit-unit-aware reanalysis. LOCKED per the WP0 freeze
+# (docs/20260722-wp0-protocol-freeze.md §6.2, §7). Do not tune to recover a prior
+# narrative.
+
+rho_geometry:
+  backbones: [biomedclip, unimed_clip, pmc_clip, pubmedclip, clip, siglip]   # heterogeneous checkpoints (RQ3, observational)
+  sites: [busi, bus_uclm, bus_bra, busi_whu, udiat, breast]
+  orthonormalize_basis: true
+  probe_C: 1.0
+  batch_size: 32
+  embedding_cache: results/cross_modal_probe/embeddings
+
+  # --- WP4: cohort manifest + group-aware inference ---
+  cohort_manifest: results/dataset_audit          # fold_manifest.csv + exclusions.csv
+  probe_weighting: equal_group_with_class_balance # primary probe; image-weighted = sensitivity
+  cluster_bootstrap_trials: 2000                  # bootstrap GROUPS (not images) -> excess CIs
+  n_folds_w: 5                                    # group-disjoint fold-refit direction stability
+  null_trials: 1000                               # per-site random-subspace null (descriptive)
+
+  # --- WP4: global backbone-level core test (the confirmatory family) ---
+  global_random_trials: 20000                     # equal-site mean-rho random null draws
+  global_placebo: exhaustive                      # all C(16,5)=4368 full-rank placebo m-subsets
+  holm_family: six_backbone_p_core                # Holm-Bonferroni across the 6 p_core
+  gate_k_sweep: [1.5, 2.0, 3.0]                    # magnitude-gate sensitivity (2.0 primary)
+
+  # Pilot subset for Checkpoint B (computational validation before the full grid).
+  # Empty -> run all `backbones`. Override on the CLI/config to pilot.
+  pilot_backbones: []

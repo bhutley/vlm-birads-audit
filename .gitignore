@@ -1,0 +1,49 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Datasets never enter the repo (live at ~/var/data/...)
+data/
+
+# WP1 dataset-audit private per-image manifests: contain absolute dataset paths
+# and filenames, so they stay local. Only the aggregate results.json/summary.txt
+# (counts, grouping sources, exclusion counts, manifest SHA-256s) are committed.
+results/dataset_audit/image_inventory.csv
+results/dataset_audit/exclusions.csv
+results/dataset_audit/fold_manifest.csv
+
+# LaTeX -> PDF build artifacts (regenerable via the paper/ + ajcai/ Makefiles).
+# Keep .tex/.bib/.cls/.bst and figures/ under version control; ignore everything
+# latexmk/pdflatex/bibtex/pandoc emit.
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.synctex.gz
+*.synctex
+*.fot
+*.bcf
+*.run.xml
+*.idx
+*.ind
+*.ilg
+*.glo
+*.gls
+*.acn
+*.acr
+*.alg
+# Compiled PDF and the pandoc-generated Markdown (both regenerable; remove these
+# two lines if you'd rather track the built PDF/MD for sharing).
+main.pdf
+main.md

@@ -1,0 +1,479 @@
+{
+  "metadata": {
+    "experiment": "prototype_counterfactuals",
+    "author": "unknown",
+    "timestamp": "2026-06-10T15:53:04.998943",
+    "git_commit": "2bf67fc",
+    "config": {
+      "reproducibility": {
+        "global_seed": 42,
+        "deterministic_algorithms": true
+      },
+      "data": {
+        "busi_root": "~/var/data/busi/Dataset_BUSI_with_GT",
+        "tn3k_root": "~/var/data/tn3k",
+        "thyroid_cancer_root": "~/var/data/thyroid-cancer/Thyroid Data",
+        "test_split": 0.2,
+        "split_seed": 42,
+        "image_size": 224
+      },
+      "bus_datasets": {
+        "busi": "~/var/data/BUSdatasets/2020_BUSI/2020_BUSI",
+        "bus_uclm": "~/var/data/BUSdatasets/2025_BUS_UCLM/2025_BUS_UCLM",
+        "bus_bra": "~/var/data/BUSdatasets/2024_BUSBRA/2024_BUSBRA",
+        "busi_whu": "~/var/data/BUSdatasets/2025_BUSI_WHU/2025_BUSI_WHU",
+        "udiat": "~/var/data/BUSdatasets/2020_UDIAT/2020_UDIAT"
+      },
+      "few_shot": {
+        "k_values": [
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "n_trials": 10,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "models": {
+        "clip": {
+          "name": "ViT-B-32",
+          "pretrained": "openai"
+        },
+        "biomedclip": {
+          "name": "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"
+        },
+        "resnet": {
+          "name": "resnet50",
+          "epochs": 50,
+          "lr": 0.001,
+          "batch_size": 32
+        }
+      },
+      "prompts": {
+        "bus": {
+          "lesion": "a breast ultrasound image showing a mass"
+        },
+        "busi": {
+          "simple": {
+            "normal": "normal",
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "normal": "a breast ultrasound image showing normal tissue with no abnormalities",
+            "benign": "a breast ultrasound image showing a benign lesion",
+            "malignant": "a breast ultrasound image showing a malignant tumor"
+          },
+          "clinical": {
+            "normal": "breast ultrasound demonstrating homogeneous fat lobules and normal fibroglandular tissue with no focal lesions",
+            "benign": "breast ultrasound showing a well-circumscribed oval homogeneous hypoechoic mass with parallel orientation consistent with a benign fibroadenoma",
+            "malignant": "breast ultrasound demonstrating an irregular hypoechoic mass with angular margins spiculation and posterior acoustic shadowing suggestive of malignancy"
+          }
+        },
+        "thyroid": {
+          "simple": {
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "benign": "a thyroid ultrasound image showing a benign nodule",
+            "malignant": "a thyroid ultrasound image showing a malignant nodule"
+          },
+          "clinical": {
+            "benign": "thyroid ultrasound showing a well-defined isoechoic or hyperechoic nodule with smooth margins and regular shape consistent with a benign colloid nodule",
+            "malignant": "thyroid ultrasound demonstrating a solid hypoechoic nodule with irregular margins microcalcifications and taller-than-wide shape suggestive of papillary thyroid carcinoma"
+          }
+        }
+      },
+      "birads_concept_bank": {
+        "carrier_templates": [
+          "breast ultrasound showing a mass with {d}",
+          "a breast ultrasound image of a lesion with {d}",
+          "sonographic breast mass demonstrating {d}"
+        ],
+        "concepts": {
+          "margin": {
+            "pos": [
+              "spiculated margins",
+              "angular margins",
+              "microlobulated margins",
+              "indistinct margins"
+            ],
+            "neg": [
+              "circumscribed margins",
+              "well-defined smooth margins"
+            ]
+          },
+          "shape": {
+            "pos": [
+              "irregular shape"
+            ],
+            "neg": [
+              "oval shape",
+              "round shape"
+            ]
+          },
+          "orientation": {
+            "pos": [
+              "taller-than-wide non-parallel orientation",
+              "vertical orientation"
+            ],
+            "neg": [
+              "parallel wider-than-tall orientation"
+            ]
+          },
+          "echogenicity": {
+            "pos": [
+              "markedly hypoechoic echotexture"
+            ],
+            "neg": [
+              "isoechoic echotexture",
+              "hyperechoic echotexture"
+            ]
+          },
+          "posterior": {
+            "pos": [
+              "posterior acoustic shadowing"
+            ],
+            "neg": [
+              "posterior acoustic enhancement",
+              "no posterior acoustic features"
+            ]
+          }
+        },
+        "reference_axes": {
+          "malignancy": {
+            "pos": [
+              "malignant tumor",
+              "malignant breast lesion"
+            ],
+            "neg": [
+              "benign lesion",
+              "benign breast mass"
+            ]
+          }
+        },
+        "placebo_concepts": {
+          "laterality": {
+            "pos": [
+              "a left-breast annotation"
+            ],
+            "neg": [
+              "a right-breast annotation"
+            ]
+          },
+          "image_side": {
+            "pos": [
+              "a left-sided position in the image"
+            ],
+            "neg": [
+              "a right-sided position in the image"
+            ]
+          },
+          "scale_bar": {
+            "pos": [
+              "a centimeter scale bar"
+            ],
+            "neg": [
+              "no scale markings"
+            ]
+          },
+          "caliper": {
+            "pos": [
+              "caliper measurement markers"
+            ],
+            "neg": [
+              "no caliper markers"
+            ]
+          },
+          "annotation": {
+            "pos": [
+              "overlaid annotation text"
+            ],
+            "neg": [
+              "no overlaid text"
+            ]
+          },
+          "transducer": {
+            "pos": [
+              "a linear-transducer appearance"
+            ],
+            "neg": [
+              "a curved-transducer appearance"
+            ]
+          },
+          "arrow_marker": {
+            "pos": [
+              "an arrow marker"
+            ],
+            "neg": [
+              "no arrow marker"
+            ]
+          },
+          "panel_layout": {
+            "pos": [
+              "a dual-panel layout"
+            ],
+            "neg": [
+              "a single-panel layout"
+            ]
+          }
+        }
+      },
+      "evaluation": {
+        "metrics": [
+          "accuracy",
+          "f1_macro",
+          "f1_weighted",
+          "auc_roc"
+        ],
+        "confidence_level": 0.95
+      },
+      "output": {
+        "results_dir": "results",
+        "figures_dpi": 300
+      },
+      "prototype_counterfactuals": {
+        "backbone": "biomedclip",
+        "probe_C": 1.0,
+        "max_alpha": 2.0,
+        "n_examples": 8,
+        "birads_site": "bus_bra",
+        "birads_split": 0.5,
+        "render_figure": true,
+        "embedding_cache": "results/cross_modal_probe/embeddings"
+      }
+    }
+  },
+  "results": {
+    "backbone": "biomedclip",
+    "n_lesions": 647,
+    "concepts": [
+      "margin",
+      "shape",
+      "orientation",
+      "echogenicity",
+      "posterior"
+    ],
+    "prototype": {
+      "mean_retrieval_dist": 0.06726408009575895,
+      "median_retrieval_dist": 0.05960645999873404,
+      "mean_concept_fraction": 0.07332569155850231,
+      "oriented_axis_profile": {
+        "margin": 0.008309181635366196,
+        "shape": 0.020778330872472932,
+        "orientation": 0.015536682783227212,
+        "echogenicity": -0.009736451694590904,
+        "posterior": 0.014737226948003248
+      }
+    },
+    "directional": {
+      "opposite_class_rate": 0.2472952086553323,
+      "flip_rate": 0.9984544049459042,
+      "mean_retrieval_dist": 0.1386482119461464
+    },
+    "counterfactual_faithfulness": {
+      "site": "bus_bra",
+      "n": 1875,
+      "n_benign": 1268,
+      "n_malignant": 607,
+      "mean_retrieval_dist": 0.059070579877081336,
+      "mean_concept_fraction": 0.06308871135298826,
+      "oriented_axis_profile": {
+        "margin": 0.005851871007587973,
+        "shape": 0.009172078013267403,
+        "orientation": 0.0038740373981846006,
+        "echogenicity": 0.00309238684775772,
+        "posterior": 0.008938672987605895
+      },
+      "nearest": {
+        "mean_oriented_delta": 1.1882666666666666,
+        "concordance_rate": 0.7909333333333334,
+        "mean_delta_benign_to_malignant": 1.2011041009463723,
+        "mean_delta_malignant_to_benign": -1.1614497528830312
+      },
+      "random": {
+        "mean_oriented_delta": 1.3653333333333333,
+        "concordance_rate": 0.88,
+        "mean_delta_benign_to_malignant": 1.3801261829652998,
+        "mean_delta_malignant_to_benign": -1.3344316309719935
+      },
+      "wilcoxon_p_positive": 5.32985410493058e-235,
+      "wilcoxon_p_vs_random": 1.5117500968864805e-15
+    },
+    "figure": "/Users/brett/Dropbox/uts/research/vlm_busi/results/prototype_counterfactuals/figures/counterfactuals.png",
+    "examples": [
+      {
+        "query_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/benign/benign (433).png",
+        "query_label": "benign",
+        "proto_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/malignant/malignant (145).png",
+        "proto_label": "malignant",
+        "proto_dist": -7.423200032441457e-08,
+        "top_axes": [
+          [
+            "margin",
+            0.0
+          ],
+          [
+            "shape",
+            0.0
+          ]
+        ]
+      },
+      {
+        "query_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/benign/benign (399).png",
+        "query_label": "benign",
+        "proto_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/malignant/malignant (93).png",
+        "proto_label": "malignant",
+        "proto_dist": 0.0009379170654087998,
+        "top_axes": [
+          [
+            "margin",
+            0.00586992249728547
+          ],
+          [
+            "shape",
+            0.0016948757252985122
+          ]
+        ]
+      },
+      {
+        "query_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/benign/benign (42).png",
+        "query_label": "benign",
+        "proto_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/malignant/malignant (51).png",
+        "proto_label": "malignant",
+        "proto_dist": 0.0017680339376267007,
+        "top_axes": [
+          [
+            "orientation",
+            0.014166972066442704
+          ],
+          [
+            "posterior",
+            -0.006722357275173452
+          ]
+        ]
+      },
+      {
+        "query_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/benign/benign (131).png",
+        "query_label": "benign",
+        "proto_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/malignant/malignant (51).png",
+        "proto_label": "malignant",
+        "proto_dist": 0.003136399117031674,
+        "top_axes": [
+          [
+            "margin",
+            0.01384282856836987
+          ],
+          [
+            "orientation",
+            -0.008982743025092188
+          ]
+        ]
+      },
+      {
+        "query_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/malignant/malignant (145).png",
+        "query_label": "malignant",
+        "proto_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/benign/benign (433).png",
+        "proto_label": "benign",
+        "proto_dist": -7.423200032441457e-08,
+        "top_axes": [
+          [
+            "margin",
+            -0.0
+          ],
+          [
+            "shape",
+            -0.0
+          ]
+        ]
+      },
+      {
+        "query_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/malignant/malignant (93).png",
+        "query_label": "malignant",
+        "proto_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/benign/benign (399).png",
+        "proto_label": "benign",
+        "proto_dist": 0.0009379170654087998,
+        "top_axes": [
+          [
+            "margin",
+            0.00586992249728547
+          ],
+          [
+            "shape",
+            0.0016948757252985122
+          ]
+        ]
+      },
+      {
+        "query_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/malignant/malignant (51).png",
+        "query_label": "malignant",
+        "proto_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/benign/benign (42).png",
+        "proto_label": "benign",
+        "proto_dist": 0.0017680339376267007,
+        "top_axes": [
+          [
+            "orientation",
+            0.014166972066442704
+          ],
+          [
+            "posterior",
+            -0.006722357275173452
+          ]
+        ]
+      },
+      {
+        "query_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/malignant/malignant (94).png",
+        "query_label": "malignant",
+        "proto_path": "/Users/brett/var/data/busi/Dataset_BUSI_with_GT/benign/benign (406).png",
+        "proto_label": "benign",
+        "proto_dist": 0.0040426408617280085,
+        "top_axes": [
+          [
+            "margin",
+            -0.02527442343759638
+          ],
+          [
+            "shape",
+            -0.017575639253356427
+          ]
+        ]
+      }
+    ],
+    "birads_concordance": {
+      "n_test": 938,
+      "n_borderline": 562,
+      "n_clear": 376,
+      "mean_s_borderline": 0.3082295141442312,
+      "mean_s_clear": 0.2624672647260562,
+      "mean_conf_borderline": 0.11854060339892761,
+      "mean_conf_clear": 0.15391028341065463,
+      "s_by_category": {
+        "2": 0.24719557030078695,
+        "3": 0.28676736328651165,
+        "4": 0.32132819074220914,
+        "5": 0.32375766501947
+      },
+      "conf_by_category": {
+        "2": 0.1504898188420448,
+        "3": 0.1175972584913854,
+        "4": 0.11911634112186884,
+        "5": 0.167637747879342
+      },
+      "mwu_s_p": 0.009282353807198792,
+      "mwu_conf_p": 5.812720717359022e-09
+    }
+  }
+}

@@ -1,0 +1,18 @@
+====================================================================
+Grad-CAM spatial plausibility — frozen BiomedCLIP benign/malignant probe
+====================================================================
+
+site            n  coverage    area cov/area    IoU  point.g    acc
+-------------------------------------------------------------------
+busi          199     0.406   0.121     5.79  0.151    0.563  0.834
+bus_uclm      189     0.446   0.114     6.26  0.201    0.672  0.799
+bus_bra       200     0.357   0.128     3.77  0.135    0.460  0.710
+busi_whu      200     0.382   0.085     5.45  0.148    0.520  0.695
+udiat         163     0.421   0.059    15.39  0.266    0.693  0.785
+breast        198     0.342   0.090     4.71  0.164    0.444  0.707
+-------------------------------------------------------------------
+
+coverage = fraction of Grad-CAM energy inside the lesion mask; area = lesion area fraction;
+cov/area = concentration vs a uniform map (>1 = on-lesion). Spatial sanity check only;
+clinical grounding is quantified by rho_geometry, NOT by these maps.
+figure: /Users/brett/Dropbox/uts/research/vlm_busi/results/gradcam/figures/gradcam_examples.png

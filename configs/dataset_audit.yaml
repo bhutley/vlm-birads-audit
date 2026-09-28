@@ -1,0 +1,48 @@
+# WP1 — dataset audit, exclusions, and canonical folds (six BUS sites).
+# Overlays configs/default.yaml. Ported from the SII 2027 audit
+# (~/src/research/2027_sii/experiments/src/audit); see SOURCE_MANIFEST.md.
+#
+# LOCKED (WP0 freeze, 2026-07-22): every parameter below is fixed BEFORE the
+# audit is run and before any revised result is inspected. Do not tune these to
+# recover a prior narrative. Changes require a dated protocol addendum.
+
+dataset_audit:
+  sites: [busi, bus_uclm, bus_bra, busi_whu, udiat, breast]   # +breast vs SII
+
+  # Perceptual-hash near-duplicate screen (inherited verbatim from SII audit).
+  phash:
+    side: 32              # resize to 32x32 before DCT
+    lowfreq: 8            # top-left 8x8 low-frequency DCT block -> 64-bit hash
+    hamming_threshold: 6  # <= 6 Hamming distance = near-duplicate
+
+  # Adjudication rule: exclude every label-conflict connected component IN FULL;
+  # never pick a winning label. Consistent-label clusters are RETAINED and made
+  # fold-indivisible. (SII rule, 2026-07-21 adjudication; preserved.)
+  exclusions:
+    rule: full_cluster_on_label_conflict
+    pick_winning_label: false
+
+  # Group source per dataset. `native` = verified id from official metadata;
+  # `documented_heuristic` = filename-derived, must be verified before it is
+  # called patient-level; `image_level` = no id, audit groups = near-dup clusters
+  # or singletons. UCLM stays documented_heuristic until §7.2 verification.
+  group_sources:
+    busi:     {kind: image_level}
+    udiat:    {kind: image_level}
+    bus_uclm: {kind: documented_heuristic, key: filename_prefix_before_last_underscore, status: unverified}
+    bus_bra:  {kind: native, file: bus_data.csv, column: Case}
+    busi_whu: {kind: native, file: Patient_infos_BUSI-WHU.xlsx, column: patient_index}
+    breast:   {kind: native, file: BrEaST-Lesions-USG-clinical-data-Dec-15-2023.xlsx, column: CaseID}
+
+  # Canonical fold assignment (StratifiedGroupKFold). Fold-indivisible unit =
+  # native/heuristic subject group UNION consistent near-duplicate cluster.
+  folds:
+    n_folds: 5
+    seed: 42
+    stratify: {busi: 3class, _default: binary}   # BUSI keeps normal for 3-class
+
+  # Private per-image manifest stays out of git; only aggregate counts, group
+  # sources, exclusion counts, and manifest SHA-256 are committed.
+  outputs:
+    dir: results/dataset_audit
+    commit_private_manifest: false

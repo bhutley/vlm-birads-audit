@@ -1,0 +1,24 @@
+# ROB-01/02 — leave-one-clinical-axis robustness of the expressibility verdict.
+# Overlays configs/default.yaml. Concept bank = default.yaml:birads_concept_bank.
+#
+# SENSITIVITY ANALYSIS, declared before running in
+# docs/20260724-axis-robustness-declaration.md. It does NOT replace the five-axis
+# primary verdict and its Holm families are descriptive.
+
+axis_robustness:
+  backbones: [biomedclip, unimed_clip, pmc_clip, pubmedclip, clip, siglip]
+  sites: [busi, bus_uclm, bus_bra, busi_whu, udiat, breast]
+
+  orthonormalize_basis: true
+  probe_C: 1.0                     # identical to E3, so w is the same direction
+  batch_size: 32
+  embedding_cache: results/cross_modal_probe/embeddings
+  cohort_manifest: results/dataset_audit
+
+  # Each variant drops one clinical axis -> m=4. References are DIMENSION-MATCHED:
+  # random subspaces at m=4 and all C(16,4)=1820 full-rank placebo 4-subsets, with
+  # the gate at 2m/d for m=4. Comparing an m=4 subspace against an m=5 null would
+  # be the exact mistake the fixed-m rule in CLAUDE.md exists to prevent.
+  cluster_bootstrap_trials: 2000   # GROUPS; one refit per replicate scores all variants
+  global_random_trials: 20000
+  gate_k_primary: 2.0

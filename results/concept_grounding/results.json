@@ -1,0 +1,2050 @@
+{
+  "metadata": {
+    "experiment": "concept_grounding",
+    "author": "unknown",
+    "timestamp": "2026-07-06T17:27:18.175507",
+    "git_commit": "20fd16f",
+    "config": {
+      "reproducibility": {
+        "global_seed": 42,
+        "deterministic_algorithms": true
+      },
+      "data": {
+        "busi_root": "~/var/data/busi/Dataset_BUSI_with_GT",
+        "tn3k_root": "~/var/data/tn3k",
+        "thyroid_cancer_root": "~/var/data/thyroid-cancer/Thyroid Data",
+        "test_split": 0.2,
+        "split_seed": 42,
+        "image_size": 224
+      },
+      "bus_datasets": {
+        "busi": "~/var/data/BUSdatasets/2020_BUSI/2020_BUSI",
+        "bus_uclm": "~/var/data/BUSdatasets/2025_BUS_UCLM/2025_BUS_UCLM",
+        "bus_bra": "~/var/data/BUSdatasets/2024_BUSBRA/2024_BUSBRA",
+        "busi_whu": "~/var/data/BUSdatasets/2025_BUSI_WHU/2025_BUSI_WHU",
+        "udiat": "~/var/data/BUSdatasets/2020_UDIAT/2020_UDIAT",
+        "breast": "~/var/data/BUSdatasets/2024_BrEaST_USG"
+      },
+      "few_shot": {
+        "k_values": [
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "n_trials": 10,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "models": {
+        "clip": {
+          "name": "ViT-B-32",
+          "pretrained": "openai"
+        },
+        "biomedclip": {
+          "name": "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"
+        },
+        "resnet": {
+          "name": "resnet50",
+          "epochs": 50,
+          "lr": 0.001,
+          "batch_size": 32
+        }
+      },
+      "prompts": {
+        "bus": {
+          "lesion": "a breast ultrasound image showing a mass"
+        },
+        "busi": {
+          "simple": {
+            "normal": "normal",
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "normal": "a breast ultrasound image showing normal tissue with no abnormalities",
+            "benign": "a breast ultrasound image showing a benign lesion",
+            "malignant": "a breast ultrasound image showing a malignant tumor"
+          },
+          "clinical": {
+            "normal": "breast ultrasound demonstrating homogeneous fat lobules and normal fibroglandular tissue with no focal lesions",
+            "benign": "breast ultrasound showing a well-circumscribed oval homogeneous hypoechoic mass with parallel orientation consistent with a benign fibroadenoma",
+            "malignant": "breast ultrasound demonstrating an irregular hypoechoic mass with angular margins spiculation and posterior acoustic shadowing suggestive of malignancy"
+          }
+        },
+        "thyroid": {
+          "simple": {
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "benign": "a thyroid ultrasound image showing a benign nodule",
+            "malignant": "a thyroid ultrasound image showing a malignant nodule"
+          },
+          "clinical": {
+            "benign": "thyroid ultrasound showing a well-defined isoechoic or hyperechoic nodule with smooth margins and regular shape consistent with a benign colloid nodule",
+            "malignant": "thyroid ultrasound demonstrating a solid hypoechoic nodule with irregular margins microcalcifications and taller-than-wide shape suggestive of papillary thyroid carcinoma"
+          }
+        }
+      },
+      "birads_concept_bank": {
+        "carrier_templates": [
+          "breast ultrasound showing a mass with {d}",
+          "a breast ultrasound image of a lesion with {d}",
+          "sonographic breast mass demonstrating {d}"
+        ],
+        "concepts": {
+          "margin": {
+            "pos": [
+              "spiculated margins",
+              "angular margins",
+              "microlobulated margins",
+              "indistinct margins"
+            ],
+            "neg": [
+              "circumscribed margins",
+              "well-defined smooth margins"
+            ]
+          },
+          "shape": {
+            "pos": [
+              "irregular shape"
+            ],
+            "neg": [
+              "oval shape",
+              "round shape"
+            ]
+          },
+          "orientation": {
+            "pos": [
+              "taller-than-wide non-parallel orientation",
+              "vertical orientation"
+            ],
+            "neg": [
+              "parallel wider-than-tall orientation"
+            ]
+          },
+          "echogenicity": {
+            "pos": [
+              "markedly hypoechoic echotexture"
+            ],
+            "neg": [
+              "isoechoic echotexture",
+              "hyperechoic echotexture"
+            ]
+          },
+          "posterior": {
+            "pos": [
+              "posterior acoustic shadowing"
+            ],
+            "neg": [
+              "posterior acoustic enhancement",
+              "no posterior acoustic features"
+            ]
+          }
+        },
+        "reference_axes": {
+          "malignancy": {
+            "pos": [
+              "malignant tumor",
+              "malignant breast lesion"
+            ],
+            "neg": [
+              "benign lesion",
+              "benign breast mass"
+            ]
+          }
+        },
+        "placebo_concepts": {
+          "laterality": {
+            "pos": [
+              "a left-breast annotation"
+            ],
+            "neg": [
+              "a right-breast annotation"
+            ]
+          },
+          "image_side": {
+            "pos": [
+              "a left-sided position in the image"
+            ],
+            "neg": [
+              "a right-sided position in the image"
+            ]
+          },
+          "scale_bar": {
+            "pos": [
+              "a centimeter scale bar"
+            ],
+            "neg": [
+              "no scale markings"
+            ]
+          },
+          "caliper": {
+            "pos": [
+              "caliper measurement markers"
+            ],
+            "neg": [
+              "no caliper markers"
+            ]
+          },
+          "annotation": {
+            "pos": [
+              "overlaid annotation text"
+            ],
+            "neg": [
+              "no overlaid text"
+            ]
+          },
+          "transducer": {
+            "pos": [
+              "a linear-transducer appearance"
+            ],
+            "neg": [
+              "a curved-transducer appearance"
+            ]
+          },
+          "arrow_marker": {
+            "pos": [
+              "an arrow marker"
+            ],
+            "neg": [
+              "no arrow marker"
+            ]
+          },
+          "panel_layout": {
+            "pos": [
+              "a dual-panel layout"
+            ],
+            "neg": [
+              "a single-panel layout"
+            ]
+          },
+          "timestamp": {
+            "pos": [
+              "a timestamp overlay"
+            ],
+            "neg": [
+              "no timestamp overlay"
+            ]
+          },
+          "patient_banner": {
+            "pos": [
+              "a patient information banner"
+            ],
+            "neg": [
+              "no information banner"
+            ]
+          },
+          "institution_label": {
+            "pos": [
+              "a hospital name label"
+            ],
+            "neg": [
+              "no facility label"
+            ]
+          },
+          "body_marker": {
+            "pos": [
+              "a body-position pictogram"
+            ],
+            "neg": [
+              "no body pictogram"
+            ]
+          },
+          "image_border": {
+            "pos": [
+              "a rectangular image border"
+            ],
+            "neg": [
+              "no image border"
+            ]
+          },
+          "vendor_logo": {
+            "pos": [
+              "a manufacturer logo"
+            ],
+            "neg": [
+              "no manufacturer logo"
+            ]
+          },
+          "grid_overlay": {
+            "pos": [
+              "a measurement grid overlay"
+            ],
+            "neg": [
+              "no grid overlay"
+            ]
+          },
+          "thumbnail": {
+            "pos": [
+              "a thumbnail preview strip"
+            ],
+            "neg": [
+              "no thumbnail strip"
+            ]
+          }
+        },
+        "malignancy_synonym_concepts": {
+          "diagnosis": {
+            "pos": [
+              "a malignant tumor"
+            ],
+            "neg": [
+              "a benign lesion"
+            ]
+          },
+          "cancer": {
+            "pos": [
+              "a cancerous mass"
+            ],
+            "neg": [
+              "a non-cancerous mass"
+            ]
+          },
+          "entity": {
+            "pos": [
+              "a carcinoma"
+            ],
+            "neg": [
+              "a fibroadenoma"
+            ]
+          },
+          "aggressiveness": {
+            "pos": [
+              "an aggressive tumor"
+            ],
+            "neg": [
+              "an indolent lesion"
+            ]
+          },
+          "suspicion": {
+            "pos": [
+              "a high-suspicion lesion"
+            ],
+            "neg": [
+              "a low-suspicion lesion"
+            ]
+          },
+          "biopsy": {
+            "pos": [
+              "a lesion requiring biopsy"
+            ],
+            "neg": [
+              "a lesion needing no biopsy"
+            ]
+          },
+          "probability": {
+            "pos": [
+              "a probably malignant mass"
+            ],
+            "neg": [
+              "a probably benign mass"
+            ]
+          },
+          "concern": {
+            "pos": [
+              "a worrisome breast finding"
+            ],
+            "neg": [
+              "a reassuring breast finding"
+            ]
+          },
+          "malignant_benign": {
+            "pos": [
+              "a cancer"
+            ],
+            "neg": [
+              "a cyst"
+            ]
+          },
+          "grade": {
+            "pos": [
+              "a high-grade tumor"
+            ],
+            "neg": [
+              "a low-grade lesion"
+            ]
+          }
+        }
+      },
+      "evaluation": {
+        "metrics": [
+          "accuracy",
+          "f1_macro",
+          "f1_weighted",
+          "auc_roc"
+        ],
+        "confidence_level": 0.95
+      },
+      "output": {
+        "results_dir": "results",
+        "figures_dpi": 300
+      },
+      "concept_grounding": {
+        "backbones": [
+          "biomedclip",
+          "unimed_clip",
+          "pmc_clip",
+          "pubmedclip",
+          "clip",
+          "siglip"
+        ],
+        "site": "busi",
+        "alpha_min": -0.6,
+        "alpha_max": 0.6,
+        "alpha_steps": 13,
+        "n_random": 200,
+        "max_images": 600,
+        "probe_C": 1.0,
+        "embedding_cache": "results/cross_modal_probe/embeddings"
+      }
+    }
+  },
+  "results": {
+    "concepts": [
+      "margin",
+      "shape",
+      "orientation",
+      "echogenicity",
+      "posterior"
+    ],
+    "placebo_axes": [
+      "laterality",
+      "image_side",
+      "scale_bar",
+      "caliper",
+      "annotation",
+      "transducer",
+      "arrow_marker",
+      "panel_layout",
+      "timestamp",
+      "patient_banner",
+      "institution_label",
+      "body_marker",
+      "image_border",
+      "vendor_logo",
+      "grid_overlay",
+      "thumbnail"
+    ],
+    "alphas": [
+      -0.6,
+      -0.5,
+      -0.4,
+      -0.3,
+      -0.2,
+      -0.10000000000000003,
+      0.0,
+      0.09999999999999998,
+      0.19999999999999996,
+      0.29999999999999993,
+      0.3999999999999999,
+      0.4999999999999999,
+      0.6
+    ],
+    "site": "busi",
+    "by_backbone": {
+      "biomedclip": {
+        "n_images": 600,
+        "n_placebo": 16,
+        "holm_alpha": 0.05,
+        "holm_family": "concepts within backbone (random-direction null)",
+        "null": {
+          "zs_mean": -0.0029928442054201376,
+          "zs_std": 0.04528848001360039,
+          "probe_mean": -0.00433434166350121,
+          "probe_std": 0.08536419531980718
+        },
+        "placebo_null": {
+          "zs_mean": 0.06965915623650026,
+          "zs_std": 0.10978148877812291,
+          "probe_mean": 0.02446949605115191,
+          "probe_std": 0.09500682582181887
+        },
+        "by_concept": {
+          "margin": {
+            "zs_curve": [
+              -0.098388509675563,
+              -0.07797943400922376,
+              -0.05544311521793016,
+              -0.03100400853171029,
+              -0.005080431855179906,
+              0.021724201004483665,
+              0.04867471361428495,
+              0.07499585723129545,
+              0.09997833104770815,
+              0.12306739159975649,
+              0.14391047617694228,
+              0.16235858893835625,
+              0.17843285890529073
+            ],
+            "probe_curve": [
+              0.36841437123355636,
+              0.38193217292948095,
+              0.39584715355583766,
+              0.40986692126274454,
+              0.423658232321816,
+              0.43687854380200597,
+              0.44921279398459907,
+              0.4604073224714034,
+              0.47029314457464105,
+              0.47879398951513774,
+              0.48591924584626467,
+              0.49174608160229627,
+              0.4963968677670543
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.2768213685808537,
+            "zs_effect_z": 6.178485405168026,
+            "zs_effect_pct": 1.0,
+            "zs_p_value": 0.004975124378109453,
+            "probe_effect": 0.1279824965334979,
+            "probe_effect_z": 1.550027358675253,
+            "zs_effect_z_placebo": 1.887041382386831,
+            "zs_effect_pct_placebo": 1.0,
+            "probe_effect_z_placebo": 1.089532247677447,
+            "holm_zs": {
+              "p_value": 0.004975124378109453,
+              "holm_threshold": 0.01,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "shape": {
+            "zs_curve": [
+              -0.1406949452011378,
+              -0.1139916398464518,
+              -0.08458390866045792,
+              -0.05287128603858955,
+              -0.019502459704671175,
+              0.01466776002526494,
+              0.04867471361428495,
+              0.08157139345166596,
+              0.11255068637362439,
+              0.1410287243720265,
+              0.16667358987762912,
+              0.18938481664968196,
+              0.2092424801415849
+            ],
+            "probe_curve": [
+              0.17644104934758825,
+              0.20964016392395435,
+              0.24882989278312248,
+              0.29361212804470843,
+              0.34299151711508225,
+              0.39546698826326815,
+              0.44921279398459907,
+              0.5023046051857634,
+              0.552961347113547,
+              0.5997619892322049,
+              0.6417809896548751,
+              0.6786089468693596,
+              0.7102742360641846
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.34993742534272265,
+            "zs_effect_z": 7.7929369553174626,
+            "zs_effect_pct": 1.0,
+            "zs_p_value": 0.004975124378109453,
+            "probe_effect": 0.5338331867165964,
+            "probe_effect_z": 6.304370659899207,
+            "zs_effect_z_placebo": 2.553055822304314,
+            "zs_effect_pct_placebo": 1.0,
+            "probe_effect_z_placebo": 5.361337843459098,
+            "holm_zs": {
+              "p_value": 0.004975124378109453,
+              "holm_threshold": 0.0125,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "orientation": {
+            "zs_curve": [
+              0.03687233930334608,
+              0.039269202044071305,
+              0.04161801768302739,
+              0.04383124945857928,
+              0.04580936547492652,
+              0.04745226358097229,
+              0.04867471361428495,
+              0.049421781605599714,
+              0.049678952295098465,
+              0.049473171165940674,
+              0.04886477698074592,
+              0.04793391731905855,
+              0.04676635675678264
+            ],
+            "probe_curve": [
+              0.29973619283467723,
+              0.32124433544979336,
+              0.3446696638936194,
+              0.3697056745210307,
+              0.39588664927480777,
+              0.4226142575736623,
+              0.44921279398459907,
+              0.4750034890697296,
+              0.49938129236318607,
+              0.5218760820007812,
+              0.54218544029089,
+              0.5601758441861873,
+              0.575858711589587
+            ],
+            "zs_monotonicity": 0.7252747252747254,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.009894017453436557,
+            "zs_effect_z": 0.28455054475192576,
+            "zs_effect_pct": 0.58,
+            "zs_p_value": 0.4228855721393035,
+            "probe_effect": 0.2761225187549098,
+            "probe_effect_z": 3.2854156167900546,
+            "zs_effect_z_placebo": -0.5444008771265053,
+            "zs_effect_pct_placebo": 0.25,
+            "probe_effect_z_placebo": 2.648788868872665,
+            "holm_zs": {
+              "p_value": 0.4228855721393035,
+              "holm_threshold": 0.025,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "echogenicity": {
+            "zs_curve": [
+              -0.017056676743913705,
+              -0.0072736509250647344,
+              0.0032895293059388127,
+              0.014455136308996716,
+              0.025961830599102134,
+              0.037484675593406847,
+              0.04867471361428495,
+              0.0592086476520155,
+              0.06883329734476033,
+              0.07739145655869432,
+              0.08482444519711618,
+              0.09115604026945262,
+              0.09646727840481678
+            ],
+            "probe_curve": [
+              0.46888059414020045,
+              0.46838514908968043,
+              0.4669198234465002,
+              0.4643377641916201,
+              0.4605360964994013,
+              0.45547884840152864,
+              0.44921279398459907,
+              0.44187033792848507,
+              0.43365696293269274,
+              0.42482579907600637,
+              0.41564604247828635,
+              0.4063731722038916,
+              0.39722697231102083
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -1.0,
+            "zs_effect": 0.11352395514873048,
+            "zs_effect_z": 2.572769042351608,
+            "zs_effect_pct": 0.995,
+            "zs_p_value": 0.009950248756218905,
+            "probe_effect": -0.07165362182917961,
+            "probe_effect_z": -0.7886126017292664,
+            "zs_effect_z_placebo": 0.39956462059723435,
+            "zs_effect_pct_placebo": 0.625,
+            "probe_effect_z_placebo": -1.0117495985036509,
+            "holm_zs": {
+              "p_value": 0.009950248756218905,
+              "holm_threshold": 0.016666666666666666,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "posterior": {
+            "zs_curve": [
+              0.05107257117785813,
+              0.05174226483251601,
+              0.05207515584572138,
+              0.051985880556895896,
+              0.05140602553660341,
+              0.05029964224994715,
+              0.04867471361428495,
+              0.046585568434910025,
+              0.04412442493920781,
+              0.04140489282113261,
+              0.03854335461127485,
+              0.035643884368732844,
+              0.03278958724989679
+            ],
+            "probe_curve": [
+              0.24204248148613866,
+              0.27000385422337747,
+              0.301389178657465,
+              0.3358010558709526,
+              0.3725520669200573,
+              0.41071385747987327,
+              0.44921279398459907,
+              0.4869530026794624,
+              0.5229421248561371,
+              0.5563935970572476,
+              0.5867844637011527,
+              0.613861514242755,
+              0.6376049347929451
+            ],
+            "zs_monotonicity": -0.9285714285714285,
+            "probe_monotonicity": 1.0,
+            "zs_effect": -0.018282983927961335,
+            "zs_effect_z": -0.33761653555053034,
+            "zs_effect_pct": 0.385,
+            "zs_p_value": 0.6169154228855721,
+            "probe_effect": 0.39556245330680645,
+            "probe_effect_z": 4.684596316665789,
+            "zs_effect_z_placebo": -0.8010652901802018,
+            "zs_effect_pct_placebo": 0.25,
+            "probe_effect_z_placebo": 3.905961009071318,
+            "holm_zs": {
+              "p_value": 0.6169154228855721,
+              "holm_threshold": 0.05,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          }
+        }
+      },
+      "unimed_clip": {
+        "n_images": 600,
+        "n_placebo": 16,
+        "holm_alpha": 0.05,
+        "holm_family": "concepts within backbone (random-direction null)",
+        "null": {
+          "zs_mean": -0.007679341463302842,
+          "zs_std": 0.044377254988970875,
+          "probe_mean": -0.008211033639062332,
+          "probe_std": 0.08434074968617318
+        },
+        "placebo_null": {
+          "zs_mean": 0.02080832907290122,
+          "zs_std": 0.17413954117974506,
+          "probe_mean": -0.11818785120614805,
+          "probe_std": 0.18758334697846646
+        },
+        "by_concept": {
+          "margin": {
+            "zs_curve": [
+              -0.07868385411891546,
+              -0.07073979010053262,
+              -0.06167889914381374,
+              -0.05153641544229089,
+              -0.04043976012768175,
+              -0.028614845041457143,
+              -0.016370962902928898,
+              -0.004063883054784028,
+              0.007953650922431731,
+              0.019378854586520167,
+              0.029989927629471367,
+              0.03965583119241432,
+              0.04832800816237202
+            ],
+            "probe_curve": [
+              0.43660449491089204,
+              0.43937674694556195,
+              0.44201875844254923,
+              0.4444268976001223,
+              0.44649510536286185,
+              0.44812865455493467,
+              0.44925867978582384,
+              0.449853364352348,
+              0.44992220131764343,
+              0.4495120815486045,
+              0.4486969054575267,
+              0.4475643428013501,
+              0.44620345967068137
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 0.6153846153846153,
+            "zs_effect": 0.12701186228128747,
+            "zs_effect_z": 3.035140496591447,
+            "zs_effect_pct": 1.0,
+            "zs_p_value": 0.004975124378109453,
+            "probe_effect": 0.00959896475978933,
+            "probe_effect_z": 0.2111671815240152,
+            "zs_effect_z_placebo": 0.6098760367053226,
+            "zs_effect_pct_placebo": 0.6875,
+            "probe_effect_z_placebo": 0.6812268680791084,
+            "holm_zs": {
+              "p_value": 0.004975124378109453,
+              "holm_threshold": 0.01,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "shape": {
+            "zs_curve": [
+              -0.256060812724535,
+              -0.22500078679707022,
+              -0.189893811152793,
+              -0.15085726097850846,
+              -0.10833426547020521,
+              -0.06312931189816397,
+              -0.016370962902928898,
+              0.030608723790382524,
+              0.07645400086151924,
+              0.11997151123320524,
+              0.16026678186086504,
+              0.19680032232771286,
+              0.22936733261353268
+            ],
+            "probe_curve": [
+              0.3128324079731847,
+              0.3315586422817852,
+              0.3522924735640443,
+              0.3748472080666383,
+              0.398876237095458,
+              0.4238824934379758,
+              0.44925867978582384,
+              0.4743528032375924,
+              0.49854426613172137,
+              0.5213117936109868,
+              0.5422778989193048,
+              0.5612234661656088,
+              0.578075716484372
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.48542814533806766,
+            "zs_effect_z": 11.111716732455015,
+            "zs_effect_pct": 1.0,
+            "zs_p_value": 0.004975124378109453,
+            "probe_effect": 0.26524330851118727,
+            "probe_effect_z": 3.2422564794332116,
+            "zs_effect_z_placebo": 2.668089126211666,
+            "zs_effect_pct_placebo": 1.0,
+            "probe_effect_z_placebo": 2.0440575663752876,
+            "holm_zs": {
+              "p_value": 0.004975124378109453,
+              "holm_threshold": 0.0125,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "orientation": {
+            "zs_curve": [
+              -0.04102255649307109,
+              -0.03808485206741669,
+              -0.034669270657993065,
+              -0.030757663835856923,
+              -0.026362554290610178,
+              -0.021535711504906158,
+              -0.016370962902928898,
+              -0.010998220019115842,
+              -0.005568535953336898,
+              -0.0002337885064247064,
+              0.004873000040105777,
+              0.009651260364946459,
+              0.014037966733972519
+            ],
+            "probe_curve": [
+              0.24254153522750055,
+              0.26802074523301245,
+              0.2974790599052796,
+              0.33089142911517105,
+              0.3678881887603122,
+              0.40771288172153075,
+              0.44925867978582384,
+              0.49118999910171407,
+              0.5321245951435128,
+              0.5708272496299542,
+              0.6063611322669622,
+              0.6381606861595704,
+              0.666021558598367
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.05506052322704361,
+            "zs_effect_z": 1.413784261913885,
+            "zs_effect_pct": 0.94,
+            "zs_p_value": 0.06467661691542288,
+            "probe_effect": 0.42348002337086643,
+            "probe_effect_z": 5.118416170311801,
+            "zs_effect_z_placebo": 0.19669394970317297,
+            "zs_effect_pct_placebo": 0.5625,
+            "probe_effect_z_placebo": 2.887611737939589,
+            "holm_zs": {
+              "p_value": 0.06467661691542288,
+              "holm_threshold": 0.025,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "echogenicity": {
+            "zs_curve": [
+              -0.06573811870905837,
+              -0.05954691487395268,
+              -0.05244954394525592,
+              -0.04445889026217214,
+              -0.03565992818827893,
+              -0.026218050880797768,
+              -0.016370962902928898,
+              -0.006402242343073451,
+              0.003397614482800932,
+              0.012770927892587415,
+              0.021521599910805603,
+              0.029526884385591062,
+              0.03673341283762697
+            ],
+            "probe_curve": [
+              0.5874161867162034,
+              0.5694224715612582,
+              0.5491345295707176,
+              0.5266321985493558,
+              0.5021660883559679,
+              0.47617320905209376,
+              0.44925867978582384,
+              0.42213858423985823,
+              0.39555322992288783,
+              0.37017313669696167,
+              0.3465237443717685,
+              0.3249464677808683,
+              0.3055988090865914
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -1.0,
+            "zs_effect": 0.10247153154668534,
+            "zs_effect_z": 2.4821470601857665,
+            "zs_effect_pct": 0.995,
+            "zs_p_value": 0.009950248756218905,
+            "probe_effect": -0.281817377629612,
+            "probe_effect_z": -3.24405871430622,
+            "zs_effect_z_placebo": 0.46895266819092046,
+            "zs_effect_pct_placebo": 0.625,
+            "probe_effect_z_placebo": -0.8723030538646255,
+            "holm_zs": {
+              "p_value": 0.009950248756218905,
+              "holm_threshold": 0.016666666666666666,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "posterior": {
+            "zs_curve": [
+              0.04373221477143759,
+              0.035465847844746046,
+              0.02630905965399698,
+              0.016345811890449955,
+              0.0057401950412420645,
+              -0.0052654555971453475,
+              -0.016370962902928898,
+              -0.02725542456796297,
+              -0.03762150857902924,
+              -0.04723350186255208,
+              -0.05593860392697703,
+              -0.06366865759871555,
+              -0.07042685870640862
+            ],
+            "probe_curve": [
+              0.5470393977722582,
+              0.5344509084701081,
+              0.5202096606488819,
+              0.5043548050887927,
+              0.48703970334440244,
+              0.4685431137359785,
+              0.44925867978582384,
+              0.42965982504802513,
+              0.4102457386682506,
+              0.39148176690718833,
+              0.37374972030245157,
+              0.3573190698205248,
+              0.3423416694197357
+            ],
+            "zs_monotonicity": -1.0,
+            "probe_monotonicity": -1.0,
+            "zs_effect": -0.1141590734778462,
+            "zs_effect_z": -2.399421326105161,
+            "zs_effect_pct": 0.01,
+            "zs_p_value": 0.9900497512437811,
+            "probe_effect": -0.20469772835252248,
+            "probe_effect_z": -2.3296768815142768,
+            "zs_effect_z_placebo": -0.7750531650444368,
+            "zs_effect_pct_placebo": 0.1875,
+            "probe_effect_z_placebo": -0.46118100854819105,
+            "holm_zs": {
+              "p_value": 0.9900497512437811,
+              "holm_threshold": 0.05,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          }
+        }
+      },
+      "pmc_clip": {
+        "n_images": 600,
+        "n_placebo": 16,
+        "holm_alpha": 0.05,
+        "holm_family": "concepts within backbone (random-direction null)",
+        "null": {
+          "zs_mean": 0.0009676305911934174,
+          "zs_std": 0.03884406255269919,
+          "probe_mean": -0.00540326517723723,
+          "probe_std": 0.06943318742124945
+        },
+        "placebo_null": {
+          "zs_mean": 0.028137351786661748,
+          "zs_std": 0.06278001514606016,
+          "probe_mean": 0.04350407268146201,
+          "probe_std": 0.0731625822719534
+        },
+        "by_concept": {
+          "margin": {
+            "zs_curve": [
+              -0.05436569966992574,
+              -0.05721664499855817,
+              -0.05992663848952141,
+              -0.062373876130760904,
+              -0.06442705374390544,
+              -0.06596270563134615,
+              -0.06688619173896752,
+              -0.06715018828906658,
+              -0.0667639497666917,
+              -0.0657897534418899,
+              -0.06432827134515309,
+              -0.06249873939468704,
+              -0.06042042303642533
+            ],
+            "probe_curve": [
+              0.2779674948389632,
+              0.2989026301122875,
+              0.3221138532699877,
+              0.3474561746626433,
+              0.374652939135229,
+              0.403295893442753,
+              0.43285875416016334,
+              0.4627269837336384,
+              0.49224558800154244,
+              0.520780991902779,
+              0.5477846742289625,
+              0.5728422334718344,
+              0.5956962388679468
+            ],
+            "zs_monotonicity": -0.41208791208791207,
+            "probe_monotonicity": 1.0,
+            "zs_effect": -0.006054723366499586,
+            "zs_effect_z": -0.18078320073153714,
+            "zs_effect_pct": 0.41,
+            "zs_p_value": 0.5920398009950248,
+            "probe_effect": 0.31772874402898355,
+            "probe_effect_z": 4.653855327795724,
+            "zs_effect_z_placebo": -0.5446331141146132,
+            "zs_effect_pct_placebo": 0.25,
+            "probe_effect_z_placebo": 3.7481546281157514,
+            "holm_zs": {
+              "p_value": 0.5920398009950248,
+              "holm_threshold": 0.025,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "shape": {
+            "zs_curve": [
+              -0.11214683797142826,
+              -0.10741569169636937,
+              -0.10155631130834483,
+              -0.09450612086532506,
+              -0.08628293644792542,
+              -0.07700392378827023,
+              -0.06688619173896752,
+              -0.05622436616197792,
+              -0.045349636852016706,
+              -0.03458276531631095,
+              -0.024195171965977508,
+              -0.014386963841960124,
+              -0.005282837139129877
+            ],
+            "probe_curve": [
+              0.2303775096178783,
+              0.2565830319239,
+              0.28627132533875643,
+              0.31925394605141916,
+              0.35512516137734823,
+              0.3932651674467036,
+              0.43285875416016334,
+              0.47293769050307966,
+              0.5124594175120136,
+              0.5504196700043607,
+              0.5859716614977208,
+              0.6185135307062325,
+              0.6477197368116115
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.10686400083229838,
+            "zs_effect_z": 2.7261919398218675,
+            "zs_effect_pct": 0.995,
+            "zs_p_value": 0.009950248756218905,
+            "probe_effect": 0.41734222719373326,
+            "probe_effect_z": 6.08852204647014,
+            "zs_effect_z_placebo": 1.2540081244401744,
+            "zs_effect_pct_placebo": 0.875,
+            "probe_effect_z_placebo": 5.10969053993575,
+            "holm_zs": {
+              "p_value": 0.009950248756218905,
+              "holm_threshold": 0.0125,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "orientation": {
+            "zs_curve": [
+              -0.07184278430550176,
+              -0.0724264530221084,
+              -0.07257131399426744,
+              -0.07216570989435757,
+              -0.07111391637641305,
+              -0.06935614620386374,
+              -0.06688619173896752,
+              -0.06375974651110994,
+              -0.06008885514467817,
+              -0.0560235330537674,
+              -0.05172698295492688,
+              -0.0473525423062656,
+              -0.04302804741877311
+            ],
+            "probe_curve": [
+              0.35428910288136,
+              0.365766323709108,
+              0.37809298243057154,
+              0.39115122248349876,
+              0.4047750458098263,
+              0.4187567178576794,
+              0.43285875416016334,
+              0.4468305854758064,
+              0.46042810737570666,
+              0.47343327749384534,
+              0.4856702670775043,
+              0.497015178026578,
+              0.5073980829869303
+            ],
+            "zs_monotonicity": 0.9615384615384615,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.028814736886728642,
+            "zs_effect_z": 0.7168947958971966,
+            "zs_effect_pct": 0.765,
+            "zs_p_value": 0.23880597014925373,
+            "probe_effect": 0.15310898010557034,
+            "probe_effect_z": 2.2829464002727926,
+            "zs_effect_z_placebo": 0.010789820590054525,
+            "zs_effect_pct_placebo": 0.5,
+            "probe_effect_z_placebo": 1.4981005866727721,
+            "holm_zs": {
+              "p_value": 0.23880597014925373,
+              "holm_threshold": 0.016666666666666666,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "echogenicity": {
+            "zs_curve": [
+              -0.1394664273490793,
+              -0.13118285570113528,
+              -0.12134313950561472,
+              -0.10988160136815345,
+              -0.09684149822854476,
+              -0.08240279110166299,
+              -0.06688619173896752,
+              -0.05072454366989033,
+              -0.03440511919259078,
+              -0.01839972533846532,
+              -0.0031045506512745787,
+              0.011194751260712338,
+              0.024329699618318046
+            ],
+            "probe_curve": [
+              0.44253325456252846,
+              0.44157380535481894,
+              0.44037177450359155,
+              0.43890453926464507,
+              0.4371596707174887,
+              0.4351385732792318,
+              0.43285875416016334,
+              0.43035396274389465,
+              0.42767191725395104,
+              0.4248699514925133,
+              0.4220094400697788,
+              0.4191501149894384,
+              0.41634530061237457
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -1.0,
+            "zs_effect": 0.16379612696739734,
+            "zs_effect_z": 4.191850328613203,
+            "zs_effect_pct": 1.0,
+            "zs_p_value": 0.004975124378109453,
+            "probe_effect": -0.026187953950153886,
+            "probe_effect_z": -0.29934804298723117,
+            "zs_effect_z_placebo": 2.160859229885819,
+            "zs_effect_pct_placebo": 1.0,
+            "probe_effect_z_placebo": -0.9525637896782119,
+            "holm_zs": {
+              "p_value": 0.004975124378109453,
+              "holm_threshold": 0.01,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "posterior": {
+            "zs_curve": [
+              -0.04984144647805497,
+              -0.05327357642379916,
+              -0.05664411965480563,
+              -0.0598290377222712,
+              -0.06268772879232663,
+              -0.06507961842515077,
+              -0.06688619173896752,
+              -0.06803247765114039,
+              -0.06850048317150441,
+              -0.06832959238875297,
+              -0.06760443998861389,
+              -0.06643568668824931,
+              -0.06494056472992725
+            ],
+            "probe_curve": [
+              0.32883630710904704,
+              0.3435692996448234,
+              0.35957941456580783,
+              0.3767426453786104,
+              0.39486293135342765,
+              0.41367553633238896,
+              0.43285875416016334,
+              0.4520543539907828,
+              0.47089573979349475,
+              0.4890401626646325,
+              0.5061987041304318,
+              0.5221573543350011,
+              0.5367852228629905
+            ],
+            "zs_monotonicity": -0.7252747252747254,
+            "probe_monotonicity": 1.0,
+            "zs_effect": -0.015099118251872282,
+            "zs_effect_z": -0.41362174260913537,
+            "zs_effect_pct": 0.335,
+            "zs_p_value": 0.6666666666666666,
+            "probe_effect": 0.20794891575394342,
+            "probe_effect_z": 3.07276950483028,
+            "zs_effect_z_placebo": -0.6886979867389756,
+            "zs_effect_pct_placebo": 0.25,
+            "probe_effect_z_placebo": 2.2476631901977133,
+            "holm_zs": {
+              "p_value": 0.6666666666666666,
+              "holm_threshold": 0.05,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          }
+        }
+      },
+      "pubmedclip": {
+        "n_images": 600,
+        "n_placebo": 16,
+        "holm_alpha": 0.05,
+        "holm_family": "concepts within backbone (random-direction null)",
+        "null": {
+          "zs_mean": -0.0007426516762215811,
+          "zs_std": 0.04286886334486183,
+          "probe_mean": 0.001937931418730448,
+          "probe_std": 0.08583318600611375
+        },
+        "placebo_null": {
+          "zs_mean": 0.020242098735233662,
+          "zs_std": 0.04674074611304033,
+          "probe_mean": -0.0848532220893919,
+          "probe_std": 0.09167627055880596
+        },
+        "by_concept": {
+          "margin": {
+            "zs_curve": [
+              0.02283287312939113,
+              0.017488577835259537,
+              0.011587402260390922,
+              0.005182400842417364,
+              -0.001621740500280208,
+              -0.008668704070984462,
+              -0.01576284772800679,
+              -0.022693376564655508,
+              -0.029264336589513645,
+              -0.035321043352627486,
+              -0.04076513374012227,
+              -0.04555585831182673,
+              -0.049700705620681414
+            ],
+            "probe_curve": [
+              0.4284432225530253,
+              0.434413224313681,
+              0.44086018975024405,
+              0.44770210156313356,
+              0.4548123147405041,
+              0.4620248687393116,
+              0.46914956041158745,
+              0.4759947153674424,
+              0.482391950543553,
+              0.4882158468740492,
+              0.4933934936643658,
+              0.49790306680103763,
+              0.5017643664488047
+            ],
+            "zs_monotonicity": -1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": -0.07253357875007255,
+            "zs_effect_z": -1.6746636479797332,
+            "zs_effect_pct": 0.05,
+            "zs_p_value": 0.9502487562189055,
+            "probe_effect": 0.07332114389577943,
+            "probe_effect_z": 0.8316505048754043,
+            "zs_effect_z_placebo": -1.9848993694052837,
+            "zs_effect_pct_placebo": 0.0,
+            "probe_effect_z_placebo": 1.7253577727478562,
+            "holm_zs": {
+              "p_value": 0.9502487562189055,
+              "holm_threshold": 0.05,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "shape": {
+            "zs_curve": [
+              -0.06775271210981067,
+              -0.0611944396517919,
+              -0.05368876650089495,
+              -0.045254884465970424,
+              -0.03598916299744231,
+              -0.026073039461200487,
+              -0.01576284772800679,
+              -0.005359994766127225,
+              0.004831486316988688,
+              0.014546787995133101,
+              0.023589101249921952,
+              0.03183971350235942,
+              0.03925176767086505
+            ],
+            "probe_curve": [
+              0.46920781333374234,
+              0.46973556024851765,
+              0.4701042699780404,
+              0.47026636806043426,
+              0.47017879693260795,
+              0.4698105281195357,
+              0.46914956041158745,
+              0.46820699771983887,
+              0.46701644005977005,
+              0.46562863811811295,
+              0.46410320463485005,
+              0.4625000368433093,
+              0.4608726414432334
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -0.8461538461538461,
+            "zs_effect": 0.10700447978067572,
+            "zs_effect_z": 2.513412370888337,
+            "zs_effect_pct": 0.995,
+            "zs_p_value": 0.009950248756218905,
+            "probe_effect": -0.008335171890508919,
+            "probe_effect_z": -0.11968684593051959,
+            "zs_effect_z_placebo": 1.8562472416595845,
+            "zs_effect_pct_placebo": 0.9375,
+            "probe_effect_z_placebo": 0.8346549192334378,
+            "holm_zs": {
+              "p_value": 0.009950248756218905,
+              "holm_threshold": 0.01,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "orientation": {
+            "zs_curve": [
+              -0.038859205516587905,
+              -0.036133265046131985,
+              -0.0329412875113214,
+              -0.029268797326323964,
+              -0.025134553554486738,
+              -0.020598554863950208,
+              -0.01576284772800679,
+              -0.01076242600971337,
+              -0.005747305530541719,
+              -0.0008609745826061118,
+              0.0037779719892378633,
+              0.008086201621409798,
+              0.012017131728435305
+            ],
+            "probe_curve": [
+              0.4856806107083643,
+              0.4839688888960198,
+              0.4818596062409756,
+              0.4793194948923547,
+              0.4763367757599791,
+              0.4729293909658648,
+              0.46914956041158745,
+              0.4650820513220618,
+              0.46083537786024503,
+              0.45652785942335056,
+              0.452272513238066,
+              0.44816488592775044,
+              0.4442762392992834
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -1.0,
+            "zs_effect": 0.05087633724502321,
+            "zs_effect_z": 1.2041137761454488,
+            "zs_effect_pct": 0.88,
+            "zs_p_value": 0.12437810945273632,
+            "probe_effect": -0.04140437140908093,
+            "probe_effect_z": -0.5049597346267,
+            "zs_effect_z_placebo": 0.6554075631506194,
+            "zs_effect_pct_placebo": 0.8125,
+            "probe_effect_z_placebo": 0.4739378076297356,
+            "holm_zs": {
+              "p_value": 0.12437810945273632,
+              "holm_threshold": 0.0125,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "echogenicity": {
+            "zs_curve": [
+              -0.02137551691844507,
+              -0.020934666325456916,
+              -0.020313628270312904,
+              -0.01948969756419541,
+              -0.018450889519269726,
+              -0.017201080796780288,
+              -0.01576284772800679,
+              -0.014176321872214919,
+              -0.012493805705726049,
+              -0.01077174392622564,
+              -0.009062703535103286,
+              -0.007409629538029948,
+              -0.0058432862993883375
+            ],
+            "probe_curve": [
+              0.4529032610982359,
+              0.45565397876138697,
+              0.4584855600207851,
+              0.4613321785625256,
+              0.4641144204732617,
+              0.4667470030148337,
+              0.46914956041158745,
+              0.4712578430424164,
+              0.4730320077582241,
+              0.47445962210229425,
+              0.4755531043192885,
+              0.47634329507527146,
+              0.47687168047368433
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.015532230619056734,
+            "zs_effect_z": 0.3796434294129469,
+            "zs_effect_pct": 0.635,
+            "zs_p_value": 0.3681592039800995,
+            "probe_effect": 0.023968419375448413,
+            "probe_effect_z": 0.25666631965809555,
+            "zs_effect_z_placebo": -0.10076578805110065,
+            "zs_effect_pct_placebo": 0.5,
+            "probe_effect_z_placebo": 1.187020815763185,
+            "holm_zs": {
+              "p_value": 0.3681592039800995,
+              "holm_threshold": 0.025,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "posterior": {
+            "zs_curve": [
+              -0.026322014513032697,
+              -0.025229600459347603,
+              -0.02387623635650822,
+              -0.022242851953206987,
+              -0.020327775550048013,
+              -0.018152370115733164,
+              -0.01576284772800679,
+              -0.013226462414108003,
+              -0.010622413330856012,
+              -0.008030174240392315,
+              -0.0055189867251920635,
+              -0.003141291126779061,
+              -0.0009308119945516956
+            ],
+            "probe_curve": [
+              0.4086146183263576,
+              0.4172184554533348,
+              0.42662017904287325,
+              0.43671761333910886,
+              0.4473379481177426,
+              0.4582429432635072,
+              0.46914956041158745,
+              0.4797635442164752,
+              0.4898175714379118,
+              0.49910301530042017,
+              0.50748710883445,
+              0.5149135566756096,
+              0.5213904854258057
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.025391202518481003,
+            "zs_effect_z": 0.6096232126442638,
+            "zs_effect_pct": 0.705,
+            "zs_p_value": 0.29850746268656714,
+            "probe_effect": 0.11277586709944809,
+            "probe_effect_z": 1.2913179719650958,
+            "zs_effect_z_placebo": 0.11016306352479852,
+            "zs_effect_pct_placebo": 0.625,
+            "probe_effect_z_placebo": 2.1557278452123585,
+            "holm_zs": {
+              "p_value": 0.29850746268656714,
+              "holm_threshold": 0.016666666666666666,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          }
+        }
+      },
+      "clip": {
+        "n_images": 600,
+        "n_placebo": 16,
+        "holm_alpha": 0.05,
+        "holm_family": "concepts within backbone (random-direction null)",
+        "null": {
+          "zs_mean": -0.0022241316858037184,
+          "zs_std": 0.045707856179507324,
+          "probe_mean": -0.0004692163488482959,
+          "probe_std": 0.08069529377889048
+        },
+        "placebo_null": {
+          "zs_mean": -0.062157381897308676,
+          "zs_std": 0.07756797363229852,
+          "probe_mean": 0.0030369384642738653,
+          "probe_std": 0.07336516221791715
+        },
+        "by_concept": {
+          "margin": {
+            "zs_curve": [
+              -0.08179182366860822,
+              -0.07464451928655062,
+              -0.06641062156207991,
+              -0.05707484761547832,
+              -0.04670135617404529,
+              -0.03545073698612943,
+              -0.023579975347246405,
+              -0.011419353046293627,
+              0.000670953824122042,
+              0.012352209342653457,
+              0.02335022365402964,
+              0.03347882918101473,
+              0.04264180161413302
+            ],
+            "probe_curve": [
+              0.46270593247892283,
+              0.4651654411774145,
+              0.4674681563340643,
+              0.46950601615878684,
+              0.47116447042889,
+              0.4723371298596845,
+              0.47294322296003133,
+              0.47294302973122304,
+              0.47234592904694056,
+              0.47120797706985373,
+              0.4696200485028733,
+              0.46769102999867546,
+              0.4655314352616042
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 0.30769230769230765,
+            "zs_effect": 0.12443362528274124,
+            "zs_effect_z": 2.771028167917679,
+            "zs_effect_pct": 0.995,
+            "zs_p_value": 0.009950248756218905,
+            "probe_effect": 0.002825502782681344,
+            "probe_effect_z": 0.04082913609010893,
+            "zs_effect_z_placebo": 2.4055160711631034,
+            "zs_effect_pct_placebo": 1.0,
+            "probe_effect_z_placebo": -0.002881962980801327,
+            "holm_zs": {
+              "p_value": 0.009950248756218905,
+              "holm_threshold": 0.016666666666666666,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "shape": {
+            "zs_curve": [
+              -0.09843614356783215,
+              -0.08904715434229703,
+              -0.07829034487418116,
+              -0.06618098442612938,
+              -0.05284290324520865,
+              -0.038522861529165064,
+              -0.023579975347246405,
+              -0.008446271224266782,
+              0.006433303718768652,
+              0.020663042419169213,
+              0.03394183764847059,
+              0.04608181205038334,
+              0.057002109770451476
+            ],
+            "probe_curve": [
+              0.4868715692427497,
+              0.48613250082734805,
+              0.4848461662445812,
+              0.48292430786511803,
+              0.4803043082088187,
+              0.4769658497023468,
+              0.47294322296003133,
+              0.4683279914076552,
+              0.4632594222787891,
+              0.4579047869701772,
+              0.4524356035080143,
+              0.4470067425796615,
+              0.44174296540660807
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -1.0,
+            "zs_effect": 0.15543825333828362,
+            "zs_effect_z": 3.4493498099080337,
+            "zs_effect_pct": 1.0,
+            "zs_p_value": 0.004975124378109453,
+            "probe_effect": -0.045128603836141645,
+            "probe_effect_z": -0.5534323675636216,
+            "zs_effect_z_placebo": 2.805225211465208,
+            "zs_effect_pct_placebo": 1.0,
+            "probe_effect_z_placebo": -0.656517900926178,
+            "holm_zs": {
+              "p_value": 0.004975124378109453,
+              "holm_threshold": 0.01,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "orientation": {
+            "zs_curve": [
+              -0.030873393569521176,
+              -0.03033944857155877,
+              -0.029569315132494615,
+              -0.02852542001249328,
+              -0.027180752272629213,
+              -0.025526798347618826,
+              -0.023579975347246405,
+              -0.021383697897306455,
+              -0.019004266781315816,
+              -0.016521232358591532,
+              -0.014015326903417998,
+              -0.011557832086414109,
+              -0.00920401099737853
+            ],
+            "probe_curve": [
+              0.4962216252601698,
+              0.49419563443029346,
+              0.4915061357616845,
+              0.4880668328270868,
+              0.4838215458841563,
+              0.47876229846906826,
+              0.47294322296003133,
+              0.4664842335948564,
+              0.45956076753713776,
+              0.45238100650129903,
+              0.44515713411619,
+              0.43807913558771094,
+              0.4312974562729653
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -1.0,
+            "zs_effect": 0.021669382572142647,
+            "zs_effect_z": 0.5227441463040831,
+            "zs_effect_pct": 0.69,
+            "zs_p_value": 0.31343283582089554,
+            "probe_effect": -0.06492416898720449,
+            "probe_effect_z": -0.7987448786662367,
+            "zs_effect_z_placebo": 1.0806878218428373,
+            "zs_effect_pct_placebo": 0.8125,
+            "probe_effect_z_placebo": -0.9263403146252563,
+            "holm_zs": {
+              "p_value": 0.31343283582089554,
+              "holm_threshold": 0.025,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "echogenicity": {
+            "zs_curve": [
+              -0.1529975651741015,
+              -0.136600388967224,
+              -0.11793136116349193,
+              -0.09700473250926193,
+              -0.07400921532045804,
+              -0.049337899659601385,
+              -0.023579975347246405,
+              0.0025363954201375206,
+              0.028241382695470444,
+              0.052832728639829414,
+              0.07576266926066505,
+              0.09668032971882025,
+              0.11542816758039248
+            ],
+            "probe_curve": [
+              0.4841216633518758,
+              0.4837251610011751,
+              0.4828416893179239,
+              0.48137797022458984,
+              0.479258889769398,
+              0.4764442199460983,
+              0.47294322296003133,
+              0.4688216245270174,
+              0.4641970029083093,
+              0.4592228114031688,
+              0.4540658280948417,
+              0.4488839794663044,
+              0.4438101698480646
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -1.0,
+            "zs_effect": 0.268425732754494,
+            "zs_effect_z": 5.921298592027183,
+            "zs_effect_pct": 1.0,
+            "zs_p_value": 0.004975124378109453,
+            "probe_effect": -0.04031149350381119,
+            "probe_effect_z": -0.4937373084498944,
+            "zs_effect_z_placebo": 4.261850595954607,
+            "zs_effect_pct_placebo": 1.0,
+            "probe_effect_z_placebo": -0.5908585309104456,
+            "holm_zs": {
+              "p_value": 0.004975124378109453,
+              "holm_threshold": 0.0125,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "posterior": {
+            "zs_curve": [
+              0.07022630412012977,
+              0.05739727150467305,
+              0.04315039787077136,
+              0.027612166118779296,
+              0.01103887002469602,
+              -0.006185089757512613,
+              -0.023579975347246405,
+              -0.040631839375418144,
+              -0.056865698369343166,
+              -0.07190771202444299,
+              -0.08551880455340327,
+              -0.09759578281566754,
+              -0.10814836388259802
+            ],
+            "probe_curve": [
+              0.3920958520384879,
+              0.4039403022134058,
+              0.4167697597265749,
+              0.43040203914175273,
+              0.44455722711080436,
+              0.45887316527581,
+              0.47294322296003133,
+              0.4863694113679414,
+              0.49881600778940405,
+              0.5100477466329231,
+              0.5199435046838893,
+              0.5284866523620573,
+              0.5357406243119349
+            ],
+            "zs_monotonicity": -1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": -0.17837466800272778,
+            "zs_effect_z": -3.8538350086937454,
+            "zs_effect_pct": 0.0,
+            "zs_p_value": 1.0,
+            "probe_effect": 0.14364477227344702,
+            "probe_effect_z": 1.785903264906322,
+            "zs_effect_z_placebo": -1.498263789335698,
+            "zs_effect_pct_placebo": 0.0625,
+            "probe_effect_z_placebo": 1.916547712271453,
+            "holm_zs": {
+              "p_value": 1.0,
+              "holm_threshold": 0.05,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          }
+        }
+      },
+      "siglip": {
+        "n_images": 600,
+        "n_placebo": 16,
+        "holm_alpha": 0.05,
+        "holm_family": "concepts within backbone (random-direction null)",
+        "null": {
+          "zs_mean": -0.0020394794579070663,
+          "zs_std": 0.039214817537465335,
+          "probe_mean": -0.005172510924195434,
+          "probe_std": 0.0717107653740019
+        },
+        "placebo_null": {
+          "zs_mean": -0.013501816707800684,
+          "zs_std": 0.052955804154534346,
+          "probe_mean": -0.07681330024775149,
+          "probe_std": 0.09129001564239715
+        },
+        "by_concept": {
+          "margin": {
+            "zs_curve": [
+              0.0023166885693410334,
+              0.004252037463661203,
+              0.006315444277525177,
+              0.008471213069261484,
+              0.0106681003440202,
+              0.012842578554834928,
+              0.014926018542740642,
+              0.01685443317908369,
+              0.01857789624216448,
+              0.020066585764745105,
+              0.021311891001106826,
+              0.022323159869373506,
+              0.023122076585310614
+            ],
+            "probe_curve": [
+              0.49452460922116626,
+              0.49241834067598017,
+              0.4894885321033753,
+              0.4856358784381619,
+              0.4808053248447639,
+              0.4750068635577973,
+              0.46832811893334525,
+              0.4609322803013086,
+              0.45303949172946273,
+              0.44489632042197713,
+              0.43674252584446777,
+              0.42878430503965975,
+              0.4211791468685759
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -1.0,
+            "zs_effect": 0.02080538801596958,
+            "zs_effect_z": 0.5825570258500108,
+            "zs_effect_pct": 0.725,
+            "zs_p_value": 0.27860696517412936,
+            "probe_effect": -0.07334546235259037,
+            "probe_effect_z": -0.9506655112777592,
+            "zs_effect_z_placebo": 0.6478459778205957,
+            "zs_effect_pct_placebo": 0.8125,
+            "probe_effect_z_placebo": 0.037987044593632106,
+            "holm_zs": {
+              "p_value": 0.27860696517412936,
+              "holm_threshold": 0.016666666666666666,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "shape": {
+            "zs_curve": [
+              -0.041078224003133434,
+              -0.033469481117223886,
+              -0.025011170375640088,
+              -0.015766288692374637,
+              -0.005873528209997564,
+              0.004450360149853267,
+              0.014926018542740642,
+              0.025244961612627053,
+              0.03511305588014719,
+              0.044290524304630034,
+              0.05261654646639927,
+              0.06001401136697561,
+              0.06647808441761685
+            ],
+            "probe_curve": [
+              0.39138106913654547,
+              0.4029172440416023,
+              0.415298766607454,
+              0.4283377686600547,
+              0.4417593037506537,
+              0.4552169716036727,
+              0.46832811893334525,
+              0.48072255925931395,
+              0.49209181218440373,
+              0.5022244802872535,
+              0.5110190542183385,
+              0.5184746274350167,
+              0.5246671601659008
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.10755630842075029,
+            "zs_effect_z": 2.7947545025283094,
+            "zs_effect_pct": 0.995,
+            "zs_p_value": 0.009950248756218905,
+            "probe_effect": 0.1332860910293553,
+            "probe_effect_z": 1.9307924163328993,
+            "zs_effect_z_placebo": 2.286021845221764,
+            "zs_effect_pct_placebo": 1.0,
+            "probe_effect_z_placebo": 2.3014498332447637,
+            "holm_zs": {
+              "p_value": 0.009950248756218905,
+              "holm_threshold": 0.0125,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "orientation": {
+            "zs_curve": [
+              0.006032340430604529,
+              0.007497563413086909,
+              0.009024338212254656,
+              0.010577546223534722,
+              0.012112295593890795,
+              0.013578181355335209,
+              0.014926018542740642,
+              0.016115345541933227,
+              0.017120276046651974,
+              0.017931828752393405,
+              0.018556420118031276,
+              0.019011718968942423,
+              0.01932166455519388
+            ],
+            "probe_curve": [
+              0.4266442703900744,
+              0.4337418958227561,
+              0.44104012420298316,
+              0.44836251441723635,
+              0.45549805825812445,
+              0.46222264492580944,
+              0.46832811893334525,
+              0.4736515121873951,
+              0.47809568985720524,
+              0.4816356195133693,
+              0.4843101930944308,
+              0.4862045265717688,
+              0.4874294399670392
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": 0.013289324124589351,
+            "zs_effect_z": 0.3908931507293506,
+            "zs_effect_pct": 0.665,
+            "zs_p_value": 0.3383084577114428,
+            "probe_effect": 0.06078516957696478,
+            "probe_effect_z": 0.91977376279786,
+            "zs_effect_z_placebo": 0.505915097695595,
+            "zs_effect_pct_placebo": 0.75,
+            "probe_effect_z_placebo": 1.507267458072517,
+            "holm_zs": {
+              "p_value": 0.3383084577114428,
+              "holm_threshold": 0.025,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          },
+          "echogenicity": {
+            "zs_curve": [
+              -0.09507558203826508,
+              -0.08049779910917064,
+              -0.0641658456481381,
+              -0.046155933305675516,
+              -0.026690921499297873,
+              -0.0061548251573507505,
+              0.014926018542740642,
+              0.03594007031837087,
+              0.056274705717340424,
+              0.07540210578206105,
+              0.0929403312081388,
+              0.10867545574351607,
+              0.12254775631934504
+            ],
+            "probe_curve": [
+              0.47845992052153613,
+              0.47846403209363453,
+              0.47791914081690096,
+              0.4767092019451155,
+              0.4747370349606475,
+              0.47194407605501776,
+              0.46832811893334525,
+              0.4639526739619233,
+              0.45894320685289147,
+              0.45347013306078593,
+              0.44772364662642633,
+              0.44188811028496694,
+              0.4361225570037823
+            ],
+            "zs_monotonicity": 1.0,
+            "probe_monotonicity": -0.9945054945054945,
+            "zs_effect": 0.2176233383576101,
+            "zs_effect_z": 5.601525943749556,
+            "zs_effect_pct": 1.0,
+            "zs_p_value": 0.004975124378109453,
+            "probe_effect": -0.04233736351775386,
+            "probe_effect_z": -0.5182604369055056,
+            "zs_effect_z_placebo": 4.364491461425965,
+            "zs_effect_pct_placebo": 1.0,
+            "probe_effect_z_placebo": 0.37765287350861426,
+            "holm_zs": {
+              "p_value": 0.004975124378109453,
+              "holm_threshold": 0.01,
+              "holm_family_size": 5,
+              "reject": true
+            }
+          },
+          "posterior": {
+            "zs_curve": [
+              0.04209251004531076,
+              0.03882554158978363,
+              0.035031575684977105,
+              0.03069720774745486,
+              0.025846547216159952,
+              0.02055015459949971,
+              0.014926018542740642,
+              0.00912941469096515,
+              0.0033326560927450584,
+              -0.0022995379065758317,
+              -0.007631282457811374,
+              -0.012567679538765534,
+              -0.017056656679553854
+            ],
+            "probe_curve": [
+              0.37509906801845727,
+              0.3885358832469357,
+              0.4031546779784623,
+              0.4187810363740566,
+              0.4351266322657862,
+              0.4517974885970426,
+              0.46832811893334525,
+              0.4842381432994877,
+              0.49909746197150145,
+              0.5125807364513849,
+              0.5244960637518079,
+              0.5347839128864246,
+              0.5434934031216536
+            ],
+            "zs_monotonicity": -1.0,
+            "probe_monotonicity": 1.0,
+            "zs_effect": -0.059149166724864616,
+            "zs_effect_z": -1.4563292870710336,
+            "zs_effect_pct": 0.075,
+            "zs_p_value": 0.9253731343283582,
+            "probe_effect": 0.16839433510319635,
+            "probe_effect_z": 2.420373637377421,
+            "zs_effect_z_placebo": -0.8619895542301074,
+            "zs_effect_pct_placebo": 0.25,
+            "probe_effect_z_placebo": 2.6860290649032144,
+            "holm_zs": {
+              "p_value": 0.9253731343283582,
+              "holm_threshold": 0.05,
+              "holm_family_size": 5,
+              "reject": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

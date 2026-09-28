@@ -1,0 +1,11 @@
+# E1 — BI-RADS concept directions, sanity & modality-gap report.
+# Overlays configs/default.yaml. The concept bank lives in default.yaml
+# (birads_concept_bank), shared with E3 (rho_geometry).
+
+concept_directions:
+  backbone: biomedclip            # biomedclip | clip  (E2/E3 sweep all backbones)
+  # Reuse the cross-modal cache if image_busi.npz is present; else embed on the fly.
+  embedding_cache: results/cross_modal_probe/embeddings
+  pca_components: 50              # image-embedding PCA subspace for the modality-gap projection
+  null_trials: 500               # random-subspace null for rho
+  orthonormalize_basis: true

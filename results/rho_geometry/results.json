@@ -1,0 +1,3628 @@
+{
+  "metadata": {
+    "experiment": "rho_geometry",
+    "author": "unknown",
+    "timestamp": "2026-07-23T15:59:30.606431",
+    "git_commit": "38a5c6a",
+    "config": {
+      "reproducibility": {
+        "global_seed": 42,
+        "deterministic_algorithms": true
+      },
+      "data": {
+        "busi_root": "~/var/data/busi/Dataset_BUSI_with_GT",
+        "tn3k_root": "~/var/data/tn3k",
+        "thyroid_cancer_root": "~/var/data/thyroid-cancer/Thyroid Data",
+        "test_split": 0.2,
+        "split_seed": 42,
+        "image_size": 224
+      },
+      "bus_datasets": {
+        "busi": "~/var/data/BUSdatasets/2020_BUSI/2020_BUSI",
+        "bus_uclm": "~/var/data/BUSdatasets/2025_BUS_UCLM/2025_BUS_UCLM",
+        "bus_bra": "~/var/data/BUSdatasets/2024_BUSBRA/2024_BUSBRA",
+        "busi_whu": "~/var/data/BUSdatasets/2025_BUSI_WHU/2025_BUSI_WHU",
+        "udiat": "~/var/data/BUSdatasets/2020_UDIAT/2020_UDIAT",
+        "breast": "~/var/data/BUSdatasets/2024_BrEaST_USG"
+      },
+      "few_shot": {
+        "k_values": [
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "n_trials": 10,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "models": {
+        "clip": {
+          "name": "ViT-B-32",
+          "pretrained": "openai"
+        },
+        "biomedclip": {
+          "name": "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"
+        },
+        "resnet": {
+          "name": "resnet50",
+          "epochs": 50,
+          "lr": 0.001,
+          "batch_size": 32
+        }
+      },
+      "prompts": {
+        "bus": {
+          "lesion": "a breast ultrasound image showing a mass"
+        },
+        "busi": {
+          "simple": {
+            "normal": "normal",
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "normal": "a breast ultrasound image showing normal tissue with no abnormalities",
+            "benign": "a breast ultrasound image showing a benign lesion",
+            "malignant": "a breast ultrasound image showing a malignant tumor"
+          },
+          "clinical": {
+            "normal": "breast ultrasound demonstrating homogeneous fat lobules and normal fibroglandular tissue with no focal lesions",
+            "benign": "breast ultrasound showing a well-circumscribed oval homogeneous hypoechoic mass with parallel orientation consistent with a benign fibroadenoma",
+            "malignant": "breast ultrasound demonstrating an irregular hypoechoic mass with angular margins spiculation and posterior acoustic shadowing suggestive of malignancy"
+          }
+        },
+        "thyroid": {
+          "simple": {
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "benign": "a thyroid ultrasound image showing a benign nodule",
+            "malignant": "a thyroid ultrasound image showing a malignant nodule"
+          },
+          "clinical": {
+            "benign": "thyroid ultrasound showing a well-defined isoechoic or hyperechoic nodule with smooth margins and regular shape consistent with a benign colloid nodule",
+            "malignant": "thyroid ultrasound demonstrating a solid hypoechoic nodule with irregular margins microcalcifications and taller-than-wide shape suggestive of papillary thyroid carcinoma"
+          }
+        }
+      },
+      "birads_concept_bank": {
+        "carrier_templates": [
+          "breast ultrasound showing a mass with {d}",
+          "a breast ultrasound image of a lesion with {d}",
+          "sonographic breast mass demonstrating {d}"
+        ],
+        "concepts": {
+          "margin": {
+            "pos": [
+              "spiculated margins",
+              "angular margins",
+              "microlobulated margins",
+              "indistinct margins"
+            ],
+            "neg": [
+              "circumscribed margins",
+              "well-defined smooth margins"
+            ]
+          },
+          "shape": {
+            "pos": [
+              "irregular shape"
+            ],
+            "neg": [
+              "oval shape",
+              "round shape"
+            ]
+          },
+          "orientation": {
+            "pos": [
+              "taller-than-wide non-parallel orientation",
+              "vertical orientation"
+            ],
+            "neg": [
+              "parallel wider-than-tall orientation"
+            ]
+          },
+          "echogenicity": {
+            "pos": [
+              "markedly hypoechoic echotexture"
+            ],
+            "neg": [
+              "isoechoic echotexture",
+              "hyperechoic echotexture"
+            ]
+          },
+          "posterior": {
+            "pos": [
+              "posterior acoustic shadowing"
+            ],
+            "neg": [
+              "posterior acoustic enhancement",
+              "no posterior acoustic features"
+            ]
+          }
+        },
+        "reference_axes": {
+          "malignancy": {
+            "pos": [
+              "malignant tumor",
+              "malignant breast lesion"
+            ],
+            "neg": [
+              "benign lesion",
+              "benign breast mass"
+            ]
+          }
+        },
+        "placebo_concepts": {
+          "laterality": {
+            "pos": [
+              "a left-breast annotation"
+            ],
+            "neg": [
+              "a right-breast annotation"
+            ]
+          },
+          "image_side": {
+            "pos": [
+              "a left-sided position in the image"
+            ],
+            "neg": [
+              "a right-sided position in the image"
+            ]
+          },
+          "scale_bar": {
+            "pos": [
+              "a centimeter scale bar"
+            ],
+            "neg": [
+              "no scale markings"
+            ]
+          },
+          "caliper": {
+            "pos": [
+              "caliper measurement markers"
+            ],
+            "neg": [
+              "no caliper markers"
+            ]
+          },
+          "annotation": {
+            "pos": [
+              "overlaid annotation text"
+            ],
+            "neg": [
+              "no overlaid text"
+            ]
+          },
+          "transducer": {
+            "pos": [
+              "a linear-transducer appearance"
+            ],
+            "neg": [
+              "a curved-transducer appearance"
+            ]
+          },
+          "arrow_marker": {
+            "pos": [
+              "an arrow marker"
+            ],
+            "neg": [
+              "no arrow marker"
+            ]
+          },
+          "panel_layout": {
+            "pos": [
+              "a dual-panel layout"
+            ],
+            "neg": [
+              "a single-panel layout"
+            ]
+          },
+          "timestamp": {
+            "pos": [
+              "a timestamp overlay"
+            ],
+            "neg": [
+              "no timestamp overlay"
+            ]
+          },
+          "patient_banner": {
+            "pos": [
+              "a patient information banner"
+            ],
+            "neg": [
+              "no information banner"
+            ]
+          },
+          "institution_label": {
+            "pos": [
+              "a hospital name label"
+            ],
+            "neg": [
+              "no facility label"
+            ]
+          },
+          "body_marker": {
+            "pos": [
+              "a body-position pictogram"
+            ],
+            "neg": [
+              "no body pictogram"
+            ]
+          },
+          "image_border": {
+            "pos": [
+              "a rectangular image border"
+            ],
+            "neg": [
+              "no image border"
+            ]
+          },
+          "vendor_logo": {
+            "pos": [
+              "a manufacturer logo"
+            ],
+            "neg": [
+              "no manufacturer logo"
+            ]
+          },
+          "grid_overlay": {
+            "pos": [
+              "a measurement grid overlay"
+            ],
+            "neg": [
+              "no grid overlay"
+            ]
+          },
+          "thumbnail": {
+            "pos": [
+              "a thumbnail preview strip"
+            ],
+            "neg": [
+              "no thumbnail strip"
+            ]
+          }
+        },
+        "malignancy_synonym_concepts": {
+          "diagnosis": {
+            "pos": [
+              "a malignant tumor"
+            ],
+            "neg": [
+              "a benign lesion"
+            ]
+          },
+          "cancer": {
+            "pos": [
+              "a cancerous mass"
+            ],
+            "neg": [
+              "a non-cancerous mass"
+            ]
+          },
+          "entity": {
+            "pos": [
+              "a carcinoma"
+            ],
+            "neg": [
+              "a fibroadenoma"
+            ]
+          },
+          "aggressiveness": {
+            "pos": [
+              "an aggressive tumor"
+            ],
+            "neg": [
+              "an indolent lesion"
+            ]
+          },
+          "suspicion": {
+            "pos": [
+              "a high-suspicion lesion"
+            ],
+            "neg": [
+              "a low-suspicion lesion"
+            ]
+          },
+          "biopsy": {
+            "pos": [
+              "a lesion requiring biopsy"
+            ],
+            "neg": [
+              "a lesion needing no biopsy"
+            ]
+          },
+          "probability": {
+            "pos": [
+              "a probably malignant mass"
+            ],
+            "neg": [
+              "a probably benign mass"
+            ]
+          },
+          "concern": {
+            "pos": [
+              "a worrisome breast finding"
+            ],
+            "neg": [
+              "a reassuring breast finding"
+            ]
+          },
+          "malignant_benign": {
+            "pos": [
+              "a cancer"
+            ],
+            "neg": [
+              "a cyst"
+            ]
+          },
+          "grade": {
+            "pos": [
+              "a high-grade tumor"
+            ],
+            "neg": [
+              "a low-grade lesion"
+            ]
+          }
+        }
+      },
+      "evaluation": {
+        "metrics": [
+          "accuracy",
+          "f1_macro",
+          "f1_weighted",
+          "auc_roc"
+        ],
+        "confidence_level": 0.95
+      },
+      "output": {
+        "results_dir": "results",
+        "figures_dpi": 300
+      },
+      "rho_geometry": {
+        "backbones": [
+          "biomedclip",
+          "unimed_clip",
+          "pmc_clip",
+          "pubmedclip",
+          "clip",
+          "siglip"
+        ],
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "orthonormalize_basis": true,
+        "probe_C": 1.0,
+        "batch_size": 32,
+        "embedding_cache": "results/cross_modal_probe/embeddings",
+        "cohort_manifest": "results/dataset_audit",
+        "probe_weighting": "equal_group_with_class_balance",
+        "cluster_bootstrap_trials": 2000,
+        "n_folds_w": 5,
+        "null_trials": 1000,
+        "global_random_trials": 20000,
+        "global_placebo": "exhaustive",
+        "holm_family": "six_backbone_p_core",
+        "gate_k_sweep": [
+          1.5,
+          2.0,
+          3.0
+        ],
+        "pilot_backbones": []
+      }
+    }
+  },
+  "results": {
+    "concepts": [
+      "margin",
+      "shape",
+      "orientation",
+      "echogenicity",
+      "posterior"
+    ],
+    "placebo_axes": [
+      "laterality",
+      "image_side",
+      "scale_bar",
+      "caliper",
+      "annotation",
+      "transducer",
+      "arrow_marker",
+      "panel_layout",
+      "timestamp",
+      "patient_banner",
+      "institution_label",
+      "body_marker",
+      "image_border",
+      "vendor_logo",
+      "grid_overlay",
+      "thumbnail"
+    ],
+    "malignancy_synonym_axes": [
+      "diagnosis",
+      "cancer",
+      "entity",
+      "aggressiveness",
+      "suspicion",
+      "biopsy",
+      "probability",
+      "concern",
+      "malignant_benign",
+      "grade"
+    ],
+    "backbones_run": [
+      "biomedclip",
+      "unimed_clip",
+      "pmc_clip",
+      "pubmedclip",
+      "clip",
+      "siglip"
+    ],
+    "by_backbone": {
+      "biomedclip": {
+        "m": 5,
+        "embed_dim": 512,
+        "oof_summary": {
+          "n_sites_scored": 6,
+          "auc_min": 0.7235718907135117,
+          "auc_median": 0.7863586451344315,
+          "auc_max": 0.886608044102795,
+          "bacc_min": 0.6485996467294286,
+          "bacc_median": 0.7093216494186023,
+          "bacc_max": 0.8077143855445743,
+          "weak_sites": []
+        },
+        "n_placebo": 16,
+        "n_malignancy": 10,
+        "n_distinct_placebo_subsets": 4368,
+        "n_distinct_malignancy_subsets": 252,
+        "by_site": {
+          "busi": {
+            "n_images": 631,
+            "n_groups": 507,
+            "rho": 0.15969940424307838,
+            "excess_random": 0.15024163474706845,
+            "excess_random_ci": [
+              0.11201432294280671,
+              0.1823721729251532
+            ],
+            "excess_placebo": 0.136861716020441,
+            "excess_placebo_ci": [
+              0.09474314351824582,
+              0.16821221443126988
+            ],
+            "excess_malignancy": 0.013846618151970858,
+            "excess_malignancy_ci": [
+              -0.016871526547757806,
+              0.04421889699139826
+            ],
+            "excess_placebo_image_weighted": 0.13755625180943665,
+            "excess_placebo_group_minus_image": -0.0006945357889956427,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.16251390934864737,
+              "rho_min": 0.15112802908125705,
+              "plac_excess_mean": 0.13733095069720697,
+              "plac_excess_min": 0.12058713318673095,
+              "plac_excess_all": [
+                0.12058713318673095,
+                0.13739736590478738,
+                0.140424213752846,
+                0.1430326800700055,
+                0.14521336057166506
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.886608044102795,
+              "balanced_accuracy": 0.8077143855445743,
+              "auc_ci": [
+                0.8639468103831631,
+                0.91040642011816
+              ],
+              "balanced_accuracy_ci": [
+                0.7820766672637862,
+                0.8356423112214902
+              ],
+              "n_scored": 631,
+              "n_unscored": 0,
+              "n_groups": 507,
+              "n_pos": 204,
+              "n_neg": 427,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.07771759844250871,
+              "shape": 0.3275616002802854,
+              "orientation": 0.146804436711654,
+              "echogenicity": -0.041446978141612564,
+              "posterior": 0.23878796720651316
+            },
+            "malignancy_axis_cosine": 0.2302630346894491
+          },
+          "bus_uclm": {
+            "n_images": 264,
+            "n_groups": 35,
+            "rho": 0.06414793457426116,
+            "excess_random": 0.05433507862175649,
+            "excess_random_ci": [
+              0.013635970061123928,
+              0.11372036740072052
+            ],
+            "excess_placebo": 0.008731937890941878,
+            "excess_placebo_ci": [
+              -0.03285844092675904,
+              0.07244696397590723
+            ],
+            "excess_malignancy": -0.046522813459034515,
+            "excess_malignancy_ci": [
+              -0.07331279737616515,
+              0.009800104392028388
+            ],
+            "excess_placebo_image_weighted": 0.026732511349626557,
+            "excess_placebo_group_minus_image": -0.01800057345868468,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.06696387736291338,
+              "rho_min": 0.041554253417452655,
+              "plac_excess_mean": 0.013254444661956128,
+              "plac_excess_min": -0.01774796245453269,
+              "plac_excess_all": [
+                0.04536446300035249,
+                -0.01774796245453269,
+                0.0015898148404204435,
+                0.0006654682565785455,
+                0.036400439666961854
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7235718907135117,
+              "balanced_accuracy": 0.6485996467294286,
+              "auc_ci": [
+                0.6355001171041451,
+                0.8105200545134102
+              ],
+              "balanced_accuracy_ci": [
+                0.5735982686494525,
+                0.7280692690940528
+              ],
+              "n_scored": 264,
+              "n_unscored": 0,
+              "n_groups": 35,
+              "n_pos": 90,
+              "n_neg": 174,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.1501364697964446,
+              "shape": 0.2161935980529068,
+              "orientation": 0.06624133448328552,
+              "echogenicity": -0.08569790890616513,
+              "posterior": 0.09756438398803366
+            },
+            "malignancy_axis_cosine": -0.01387974500318195
+          },
+          "bus_bra": {
+            "n_images": 1875,
+            "n_groups": 1064,
+            "rho": 0.08511280449659939,
+            "excess_random": 0.07562386990950105,
+            "excess_random_ci": [
+              0.045293999255812845,
+              0.10658287651287188
+            ],
+            "excess_placebo": 0.047088523738906644,
+            "excess_placebo_ci": [
+              0.013177666176310636,
+              0.07990715045869744
+            ],
+            "excess_malignancy": 0.038505657864999425,
+            "excess_malignancy_ci": [
+              0.005198194651398649,
+              0.06839896275807122
+            ],
+            "excess_placebo_image_weighted": 0.06198493295635963,
+            "excess_placebo_group_minus_image": -0.014896409217452986,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.08651161167463675,
+              "rho_min": 0.07056495247543992,
+              "plac_excess_mean": 0.04898911790732009,
+              "plac_excess_min": 0.026964664281652846,
+              "plac_excess_all": [
+                0.026964664281652846,
+                0.052413861596072926,
+                0.060628139690978404,
+                0.06433522960520108,
+                0.04060369436269521
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7938940726701373,
+              "balanced_accuracy": 0.7238381040320098,
+              "auc_ci": [
+                0.7733701113600308,
+                0.8151915819096194
+              ],
+              "balanced_accuracy_ci": [
+                0.7036978771800585,
+                0.74418525819507
+              ],
+              "n_scored": 1875,
+              "n_unscored": 0,
+              "n_groups": 1064,
+              "n_pos": 607,
+              "n_neg": 1268,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.11709181482577868,
+              "shape": 0.15308574950323875,
+              "orientation": 0.028927074574849117,
+              "echogenicity": 0.08622123528803358,
+              "posterior": 0.23246610065357215
+            },
+            "malignancy_axis_cosine": 0.07570052463326644
+          },
+          "busi_whu": {
+            "n_images": 925,
+            "n_groups": 814,
+            "rho": 0.11524478925109702,
+            "excess_random": 0.10531180277879623,
+            "excess_random_ci": [
+              0.05731208442461464,
+              0.15212512326700456
+            ],
+            "excess_placebo": 0.051891116076817886,
+            "excess_placebo_ci": [
+              0.0016836393350420874,
+              0.10156994389412757
+            ],
+            "excess_malignancy": -4.4836888666938135e-05,
+            "excess_malignancy_ci": [
+              -0.0397333237180998,
+              0.04465485205517684
+            ],
+            "excess_placebo_image_weighted": 0.07433140226913029,
+            "excess_placebo_group_minus_image": -0.022440286192312406,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.1114042056816786,
+              "rho_min": 0.0831399048671372,
+              "plac_excess_mean": 0.0505280344362968,
+              "plac_excess_min": 0.02064985822375704,
+              "plac_excess_all": [
+                0.0687933976319123,
+                0.06517270341222749,
+                0.02064985822375704,
+                0.042782184264045356,
+                0.05524202864954181
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7316634778514746,
+              "balanced_accuracy": 0.6794043318772401,
+              "auc_ci": [
+                0.7038357778702687,
+                0.758169501808577
+              ],
+              "balanced_accuracy_ci": [
+                0.6532195912792621,
+                0.704699367315442
+              ],
+              "n_scored": 925,
+              "n_unscored": 0,
+              "n_groups": 814,
+              "n_pos": 366,
+              "n_neg": 559,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.18789559530957423,
+              "shape": 0.3191764606589903,
+              "orientation": -0.029344014441983673,
+              "echogenicity": 0.026303005089815118,
+              "posterior": 0.17059234912505367
+            },
+            "malignancy_axis_cosine": 0.13514752825142312
+          },
+          "udiat": {
+            "n_images": 163,
+            "n_groups": 158,
+            "rho": 0.14870576739728736,
+            "excess_random": 0.13917321394966436,
+            "excess_random_ci": [
+              0.08903838368470965,
+              0.18010266728654867
+            ],
+            "excess_placebo": 0.1113347898056008,
+            "excess_placebo_ci": [
+              0.058199551771708914,
+              0.15294719787071126
+            ],
+            "excess_malignancy": 0.009578658841170262,
+            "excess_malignancy_ci": [
+              -0.05128990332720324,
+              0.07161215720553539
+            ],
+            "excess_placebo_image_weighted": 0.10488370908507985,
+            "excess_placebo_group_minus_image": 0.006451080720520946,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.144533595762115,
+              "rho_min": 0.13487052760157064,
+              "plac_excess_mean": 0.10748559281997858,
+              "plac_excess_min": 0.09357179179784089,
+              "plac_excess_all": [
+                0.10239856599626726,
+                0.09357179179784089,
+                0.1097651108138544,
+                0.10538789192083355,
+                0.1263046035710969
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.8100604727872462,
+              "balanced_accuracy": 0.7412497709364118,
+              "auc_ci": [
+                0.7520253066743957,
+                0.870364709870912
+              ],
+              "balanced_accuracy_ci": [
+                0.6848800627587991,
+                0.7997389980366324
+              ],
+              "n_scored": 163,
+              "n_unscored": 0,
+              "n_groups": 158,
+              "n_pos": 54,
+              "n_neg": 109,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.04108465352464105,
+              "shape": 0.26017820525045904,
+              "orientation": 0.1589170289590982,
+              "echogenicity": 0.04397974467758622,
+              "posterior": 0.21554063797493567
+            },
+            "malignancy_axis_cosine": 0.08410608359985373
+          },
+          "breast": {
+            "n_images": 252,
+            "n_groups": 252,
+            "rho": 0.11341867100851906,
+            "excess_random": 0.10372583673185656,
+            "excess_random_ci": [
+              0.06515470837195936,
+              0.13932725580323485
+            ],
+            "excess_placebo": 0.08215738081673479,
+            "excess_placebo_ci": [
+              0.04287299850792638,
+              0.11543479894559452
+            ],
+            "excess_malignancy": 0.022394998650547115,
+            "excess_malignancy_ci": [
+              -0.019553266521816035,
+              0.06126733655807804
+            ],
+            "excess_placebo_image_weighted": 0.08215738081673804,
+            "excess_placebo_group_minus_image": -3.247402347028583e-15,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.11298489545810364,
+              "rho_min": 0.10336563587468774,
+              "plac_excess_mean": 0.08081943767155901,
+              "plac_excess_min": 0.07087201510723434,
+              "plac_excess_all": [
+                0.08362425236755536,
+                0.08637756558694873,
+                0.07445593832212799,
+                0.07087201510723434,
+                0.08876741697392862
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7788232175987257,
+              "balanced_accuracy": 0.6948051948051949,
+              "auc_ci": [
+                0.7342564593301433,
+                0.8236405746509131
+              ],
+              "balanced_accuracy_ci": [
+                0.6497431766733548,
+                0.7412218614757572
+              ],
+              "n_scored": 252,
+              "n_unscored": 0,
+              "n_groups": 252,
+              "n_pos": 98,
+              "n_neg": 154,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.02123320061529395,
+              "shape": 0.2354913528868254,
+              "orientation": 0.19457256819219976,
+              "echogenicity": 0.09007078365229831,
+              "posterior": 0.05375532077886452
+            },
+            "malignancy_axis_cosine": 0.18358932023900798
+          }
+        },
+        "global": {
+          "sites": [
+            "busi",
+            "bus_uclm",
+            "bus_bra",
+            "busi_whu",
+            "udiat",
+            "breast"
+          ],
+          "T_clin": 0.11438822849514041,
+          "p_random": 4.999750012499375e-05,
+          "placebo_tail_fraction": 0.00022888532845044633,
+          "placebo_rank": 1,
+          "n_placebo_reference": 4368,
+          "mean_excess_random": 0.10464624666594254,
+          "mean_excess_placebo": 0.07301091072490719,
+          "mean_excess_placebo_ci": [
+            0.0525992585680249,
+            0.08921108624652122
+          ],
+          "mean_excess_malignancy": 0.006293047193497701,
+          "placebo_meta": {
+            "n_subsets_total": 4368,
+            "n_full_rank": 4368,
+            "n_dropped": 0
+          }
+        }
+      },
+      "unimed_clip": {
+        "m": 5,
+        "embed_dim": 512,
+        "oof_summary": {
+          "n_sites_scored": 6,
+          "auc_min": 0.6546999906555118,
+          "auc_median": 0.7820975155446322,
+          "auc_max": 0.8647479839827777,
+          "bacc_min": 0.6151541396623436,
+          "bacc_median": 0.6942423953438639,
+          "bacc_max": 0.7928771089148448,
+          "weak_sites": []
+        },
+        "n_placebo": 16,
+        "n_malignancy": 10,
+        "n_distinct_placebo_subsets": 4368,
+        "n_distinct_malignancy_subsets": 252,
+        "by_site": {
+          "busi": {
+            "n_images": 631,
+            "n_groups": 507,
+            "rho": 0.10469846988473305,
+            "excess_random": 0.09520167612692677,
+            "excess_random_ci": [
+              0.06690632850039253,
+              0.1185636787689072
+            ],
+            "excess_placebo": 0.04009791203417268,
+            "excess_placebo_ci": [
+              0.01003702937893418,
+              0.06486064386781318
+            ],
+            "excess_malignancy": 0.027051194051138566,
+            "excess_malignancy_ci": [
+              -0.001132102937405988,
+              0.05219326292459638
+            ],
+            "excess_placebo_image_weighted": 0.03934330524347965,
+            "excess_placebo_group_minus_image": 0.0007546067906930298,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.10308851608657303,
+              "rho_min": 0.08888347810837617,
+              "plac_excess_mean": 0.03900142027609752,
+              "plac_excess_min": 0.020222701775644045,
+              "plac_excess_all": [
+                0.05553967398650733,
+                0.038978708003397075,
+                0.05358057360697847,
+                0.020222701775644045,
+                0.026685444007960704
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.8647479839827777,
+              "balanced_accuracy": 0.7928771089148448,
+              "auc_ci": [
+                0.8394959431393493,
+                0.8897861886087213
+              ],
+              "balanced_accuracy_ci": [
+                0.7667397072974353,
+                0.820209730934463
+              ],
+              "n_scored": 631,
+              "n_unscored": 0,
+              "n_groups": 507,
+              "n_pos": 204,
+              "n_neg": 427,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.005254261931380087,
+              "shape": 0.14923840678595185,
+              "orientation": 0.2320523467865352,
+              "echogenicity": -0.1407980085887353,
+              "posterior": -0.06551692523580854
+            },
+            "malignancy_axis_cosine": 0.15286617272910097
+          },
+          "bus_uclm": {
+            "n_images": 264,
+            "n_groups": 35,
+            "rho": 0.08502947618763274,
+            "excess_random": 0.07524909503977989,
+            "excess_random_ci": [
+              0.015869878009471605,
+              0.1452323442470636
+            ],
+            "excess_placebo": 0.04721214382526916,
+            "excess_placebo_ci": [
+              -0.01221752628257423,
+              0.09932318846973524
+            ],
+            "excess_malignancy": -0.0387911785654223,
+            "excess_malignancy_ci": [
+              -0.07065454694327751,
+              0.016629802352306343
+            ],
+            "excess_placebo_image_weighted": 0.03131814697229387,
+            "excess_placebo_group_minus_image": 0.015893996852975288,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.08288440625861665,
+              "rho_min": 0.07178783497117164,
+              "plac_excess_mean": 0.04345367692102061,
+              "plac_excess_min": 0.030388877158807656,
+              "plac_excess_all": [
+                0.030388877158807656,
+                0.037639369995069984,
+                0.05259378217481641,
+                0.04826254910683882,
+                0.04838380616957017
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.6546999906555118,
+              "balanced_accuracy": 0.6151541396623436,
+              "auc_ci": [
+                0.5531134919623523,
+                0.756735096300839
+              ],
+              "balanced_accuracy_ci": [
+                0.52825233124322,
+                0.7037483371940374
+              ],
+              "n_scored": 264,
+              "n_unscored": 0,
+              "n_groups": 35,
+              "n_pos": 90,
+              "n_neg": 174,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.17152183064493537,
+              "shape": 0.20389977130377987,
+              "orientation": 0.02558126141801876,
+              "echogenicity": -0.10778475162011394,
+              "posterior": -0.08197100781229895
+            },
+            "malignancy_axis_cosine": 0.08230889242151022
+          },
+          "bus_bra": {
+            "n_images": 1875,
+            "n_groups": 1064,
+            "rho": 0.01822019112688585,
+            "excess_random": 0.008006864187953898,
+            "excess_random_ci": [
+              -0.0016291523868432573,
+              0.02666214451733439
+            ],
+            "excess_placebo": -0.03515339677904816,
+            "excess_placebo_ci": [
+              -0.049759901383609355,
+              -0.011344523561246581
+            ],
+            "excess_malignancy": -0.03772702423410945,
+            "excess_malignancy_ci": [
+              -0.05524708003750875,
+              -0.012306593126968038
+            ],
+            "excess_placebo_image_weighted": -0.030643925927643038,
+            "excess_placebo_group_minus_image": -0.004509470851405125,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.020868768038114768,
+              "rho_min": 0.01667529689398985,
+              "plac_excess_mean": -0.03356817984531814,
+              "plac_excess_min": -0.043022840690821906,
+              "plac_excess_all": [
+                -0.022541164634223947,
+                -0.043022840690821906,
+                -0.03166167504471855,
+                -0.03976608662877747,
+                -0.030849132228048824
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7942737441480029,
+              "balanced_accuracy": 0.717951677439212,
+              "auc_ci": [
+                0.7742989781169715,
+                0.8136063532601885
+              ],
+              "balanced_accuracy_ci": [
+                0.6988893187742784,
+                0.7370290220438007
+              ],
+              "n_scored": 1875,
+              "n_unscored": 0,
+              "n_groups": 1064,
+              "n_pos": 607,
+              "n_neg": 1268,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.03547217744222098,
+              "shape": 0.08361014085440246,
+              "orientation": 0.09636712628278027,
+              "echogenicity": 0.006120880001936566,
+              "posterior": 0.01974081713971397
+            },
+            "malignancy_axis_cosine": 0.15029717270387322
+          },
+          "busi_whu": {
+            "n_images": 925,
+            "n_groups": 814,
+            "rho": 0.05477272953963982,
+            "excess_random": 0.04524040770729586,
+            "excess_random_ci": [
+              0.020928602250593797,
+              0.07686301622835301
+            ],
+            "excess_placebo": -0.0035773704751976693,
+            "excess_placebo_ci": [
+              -0.030069858803311315,
+              0.029240669845702172
+            ],
+            "excess_malignancy": -0.025434603322637105,
+            "excess_malignancy_ci": [
+              -0.0556054115535897,
+              0.011076819236350482
+            ],
+            "excess_placebo_image_weighted": 0.014997548388334947,
+            "excess_placebo_group_minus_image": -0.018574918863532616,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.05617314599903791,
+              "rho_min": 0.04564954405893603,
+              "plac_excess_mean": -0.003382619643578888,
+              "plac_excess_min": -0.016146215362852462,
+              "plac_excess_all": [
+                0.0077924137439440155,
+                -0.008307149518113087,
+                -0.016146215362852462,
+                -0.005598021780744082,
+                0.005345874699871175
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7422155295716736,
+              "balanced_accuracy": 0.6696794594854071,
+              "auc_ci": [
+                0.7142445336786584,
+                0.7690627728870522
+              ],
+              "balanced_accuracy_ci": [
+                0.6443312788790527,
+                0.6943608206433696
+              ],
+              "n_scored": 925,
+              "n_unscored": 0,
+              "n_groups": 814,
+              "n_pos": 366,
+              "n_neg": 559,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.06755771340480102,
+              "shape": 0.13465000629785198,
+              "orientation": 0.08419434919411106,
+              "echogenicity": 0.10963147644502483,
+              "posterior": -0.16807402131688698
+            },
+            "malignancy_axis_cosine": 0.09565383717659759
+          },
+          "udiat": {
+            "n_images": 163,
+            "n_groups": 158,
+            "rho": 0.058790356942261465,
+            "excess_random": 0.049037989875328196,
+            "excess_random_ci": [
+              0.01646165856784694,
+              0.08839411705006377
+            ],
+            "excess_placebo": 0.02083274706317899,
+            "excess_placebo_ci": [
+              -0.010363754007177524,
+              0.0559232979072335
+            ],
+            "excess_malignancy": -0.014340510386953775,
+            "excess_malignancy_ci": [
+              -0.04427220741043232,
+              0.01792666080881083
+            ],
+            "excess_placebo_image_weighted": 0.0227637298045928,
+            "excess_placebo_group_minus_image": -0.00193098274141381,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.06177669504545609,
+              "rho_min": 0.043119765277406435,
+              "plac_excess_mean": 0.022873804133114416,
+              "plac_excess_min": 0.006888491454952683,
+              "plac_excess_all": [
+                0.006888491454952683,
+                0.016974227208238067,
+                0.0073571978450744716,
+                0.044981318671072086,
+                0.03816778548623479
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7898112516034461,
+              "balanced_accuracy": 0.7024922118380061,
+              "auc_ci": [
+                0.7263390951771234,
+                0.8517992424242418
+              ],
+              "balanced_accuracy_ci": [
+                0.6434545370225729,
+                0.761016449012336
+              ],
+              "n_scored": 163,
+              "n_unscored": 0,
+              "n_groups": 158,
+              "n_pos": 54,
+              "n_neg": 109,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.040544099744957304,
+              "shape": 0.12818928555295117,
+              "orientation": 0.12105438088073558,
+              "echogenicity": -0.1200101763159616,
+              "posterior": -0.09531774039932919
+            },
+            "malignancy_axis_cosine": 0.07879122833060234
+          },
+          "breast": {
+            "n_images": 252,
+            "n_groups": 252,
+            "rho": 0.09245031382476196,
+            "excess_random": 0.08269181159520216,
+            "excess_random_ci": [
+              0.04431983978175214,
+              0.1182943045508476
+            ],
+            "excess_placebo": 0.056438871157676165,
+            "excess_placebo_ci": [
+              0.011234293191992806,
+              0.09321354559962504
+            ],
+            "excess_malignancy": -0.0033066156284496245,
+            "excess_malignancy_ci": [
+              -0.06027011439746678,
+              0.05402002100365996
+            ],
+            "excess_placebo_image_weighted": 0.056438871157676186,
+            "excess_placebo_group_minus_image": -2.0816681711721685e-17,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.08999101184645035,
+              "rho_min": 0.07600433921868513,
+              "plac_excess_mean": 0.0527003627667282,
+              "plac_excess_min": 0.03468281429602034,
+              "plac_excess_all": [
+                0.04725824691411427,
+                0.05647119785571898,
+                0.06823809426222119,
+                0.03468281429602034,
+                0.056851460505566206
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7743837794858184,
+              "balanced_accuracy": 0.6859925788497218,
+              "auc_ci": [
+                0.7281912505766713,
+                0.8198836901527623
+              ],
+              "balanced_accuracy_ci": [
+                0.6418312389014174,
+                0.7323319011005579
+              ],
+              "n_scored": 252,
+              "n_unscored": 0,
+              "n_groups": 252,
+              "n_pos": 98,
+              "n_neg": 154,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.12390416553924452,
+              "shape": 0.16895988075524632,
+              "orientation": 0.22518854650448744,
+              "echogenicity": 0.007252008980375424,
+              "posterior": 0.102248626593214
+            },
+            "malignancy_axis_cosine": 0.18217256957375844
+          }
+        },
+        "global": {
+          "sites": [
+            "busi",
+            "bus_uclm",
+            "bus_bra",
+            "busi_whu",
+            "udiat",
+            "breast"
+          ],
+          "T_clin": 0.06899358958431916,
+          "p_random": 4.999750012499375e-05,
+          "placebo_tail_fraction": 0.11764705882352941,
+          "placebo_rank": 514,
+          "n_placebo_reference": 4368,
+          "mean_excess_random": 0.059266050258494726,
+          "mean_excess_placebo": 0.020975151137675202,
+          "mean_excess_placebo_ci": [
+            0.004127277011983992,
+            0.03409266396484819
+          ],
+          "mean_excess_malignancy": -0.015424789681072283,
+          "placebo_meta": {
+            "n_subsets_total": 4368,
+            "n_full_rank": 4368,
+            "n_dropped": 0
+          }
+        }
+      },
+      "pmc_clip": {
+        "m": 5,
+        "embed_dim": 768,
+        "oof_summary": {
+          "n_sites_scored": 6,
+          "auc_min": 0.7585434147830704,
+          "auc_median": 0.8312328307855026,
+          "auc_max": 0.9188273453647237,
+          "bacc_min": 0.6930092618489907,
+          "bacc_median": 0.7604989490129973,
+          "bacc_max": 0.8445143256464012,
+          "weak_sites": []
+        },
+        "n_placebo": 16,
+        "n_malignancy": 10,
+        "n_distinct_placebo_subsets": 4368,
+        "n_distinct_malignancy_subsets": 252,
+        "by_site": {
+          "busi": {
+            "n_images": 631,
+            "n_groups": 507,
+            "rho": 0.08120351064815402,
+            "excess_random": 0.07464786801214697,
+            "excess_random_ci": [
+              0.05396559038891596,
+              0.09208489541568297
+            ],
+            "excess_placebo": 0.07138300944495023,
+            "excess_placebo_ci": [
+              0.05070511521571679,
+              0.08860155254504916
+            ],
+            "excess_malignancy": 0.020238256760332175,
+            "excess_malignancy_ci": [
+              0.0027243061394044686,
+              0.039570240944035065
+            ],
+            "excess_placebo_image_weighted": 0.06640361468528128,
+            "excess_placebo_group_minus_image": 0.004979394759668951,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.08590524349904409,
+              "rho_min": 0.07968723320688115,
+              "plac_excess_mean": 0.07571858727612645,
+              "plac_excess_min": 0.06947458155979763,
+              "plac_excess_all": [
+                0.07378817618890308,
+                0.07566398630910158,
+                0.06947458155979763,
+                0.08479516876796016,
+                0.07487102355486978
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.9188273453647237,
+              "balanced_accuracy": 0.8445143256464012,
+              "auc_ci": [
+                0.8993939947427377,
+                0.9384349201119763
+              ],
+              "balanced_accuracy_ci": [
+                0.8177138658569049,
+                0.8694664919315288
+              ],
+              "n_scored": 631,
+              "n_unscored": 0,
+              "n_groups": 507,
+              "n_pos": 204,
+              "n_neg": 427,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.16739374002080445,
+              "shape": 0.23241476522305624,
+              "orientation": 0.07538052124042258,
+              "echogenicity": -0.01884144249649047,
+              "posterior": 0.10792403418443049
+            },
+            "malignancy_axis_cosine": 0.10197371357116072
+          },
+          "bus_uclm": {
+            "n_images": 264,
+            "n_groups": 35,
+            "rho": 0.09051106330787569,
+            "excess_random": 0.08396621747022318,
+            "excess_random_ci": [
+              0.028392222704858916,
+              0.10986059243187045
+            ],
+            "excess_placebo": 0.07736929314643047,
+            "excess_placebo_ci": [
+              0.021945247444107398,
+              0.10284136354665888
+            ],
+            "excess_malignancy": 0.04521681034043716,
+            "excess_malignancy_ci": [
+              -0.0010565739635090758,
+              0.07647302717727232
+            ],
+            "excess_placebo_image_weighted": 0.06519396531290965,
+            "excess_placebo_group_minus_image": 0.012175327833520821,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.08633067915764378,
+              "rho_min": 0.06405529980039663,
+              "plac_excess_mean": 0.07282907358224291,
+              "plac_excess_min": 0.050064276932748064,
+              "plac_excess_all": [
+                0.10293507359176095,
+                0.07283108729511492,
+                0.08332145803322791,
+                0.054993472058362664,
+                0.050064276932748064
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7585434147830704,
+              "balanced_accuracy": 0.6930092618489907,
+              "auc_ci": [
+                0.6709411971746458,
+                0.842841939340117
+              ],
+              "balanced_accuracy_ci": [
+                0.6170300171933927,
+                0.7679186542831734
+              ],
+              "n_scored": 264,
+              "n_unscored": 0,
+              "n_groups": 35,
+              "n_pos": 90,
+              "n_neg": 174,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.21493126162279652,
+              "shape": 0.23213877469174576,
+              "orientation": 0.07470702342551941,
+              "echogenicity": -0.06272679794920011,
+              "posterior": 0.026521496938113603
+            },
+            "malignancy_axis_cosine": 0.028238719577768672
+          },
+          "bus_bra": {
+            "n_images": 1875,
+            "n_groups": 1064,
+            "rho": 0.08255230882077576,
+            "excess_random": 0.0759871419064931,
+            "excess_random_ci": [
+              0.05468360023764686,
+              0.088948509410811
+            ],
+            "excess_placebo": 0.06712883012402865,
+            "excess_placebo_ci": [
+              0.045463566152013496,
+              0.08074352318724871
+            ],
+            "excess_malignancy": 0.05412349498690828,
+            "excess_malignancy_ci": [
+              0.034192529398479735,
+              0.06684985610637961
+            ],
+            "excess_placebo_image_weighted": 0.06328797400359126,
+            "excess_placebo_group_minus_image": 0.003840856120437386,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.08407587103463954,
+              "rho_min": 0.07258204558261963,
+              "plac_excess_mean": 0.06895162063805102,
+              "plac_excess_min": 0.05761593478952866,
+              "plac_excess_all": [
+                0.0652279361543229,
+                0.06374484483509947,
+                0.08332913378370051,
+                0.07484025362760363,
+                0.05761593478952866
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.8446151447408996,
+              "balanced_accuracy": 0.7728531855955678,
+              "auc_ci": [
+                0.8269316541379313,
+                0.862177111782992
+              ],
+              "balanced_accuracy_ci": [
+                0.7538328671564025,
+                0.7907381971910169
+              ],
+              "n_scored": 1875,
+              "n_unscored": 0,
+              "n_groups": 1064,
+              "n_pos": 607,
+              "n_neg": 1268,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.16974113363868873,
+              "shape": 0.21213499730983934,
+              "orientation": 0.09305363777460207,
+              "echogenicity": -0.08086040368991616,
+              "posterior": 0.10398477341899792
+            },
+            "malignancy_axis_cosine": 0.04612868615390328
+          },
+          "busi_whu": {
+            "n_images": 925,
+            "n_groups": 814,
+            "rho": 0.05573999263035452,
+            "excess_random": 0.04909057548915222,
+            "excess_random_ci": [
+              0.029761439217182366,
+              0.06511664964246924
+            ],
+            "excess_placebo": 0.04778398470572604,
+            "excess_placebo_ci": [
+              0.026775739089273724,
+              0.06356896591818273
+            ],
+            "excess_malignancy": 0.015483932160244927,
+            "excess_malignancy_ci": [
+              -0.0035422117146110357,
+              0.03334096967002774
+            ],
+            "excess_placebo_image_weighted": 0.03896150439927081,
+            "excess_placebo_group_minus_image": 0.00882248030645523,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.05779599268375546,
+              "rho_min": 0.04484201650851429,
+              "plac_excess_mean": 0.048905537306144234,
+              "plac_excess_min": 0.035677780959383565,
+              "plac_excess_all": [
+                0.05223798159214512,
+                0.04075667837478558,
+                0.035677780959383565,
+                0.06009056839123001,
+                0.055764677213176905
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.8030010337328286,
+              "balanced_accuracy": 0.7244131124391961,
+              "auc_ci": [
+                0.7797389764154082,
+                0.8258282499059929
+              ],
+              "balanced_accuracy_ci": [
+                0.7002365362284366,
+                0.7476738925469513
+              ],
+              "n_scored": 925,
+              "n_unscored": 0,
+              "n_groups": 814,
+              "n_pos": 366,
+              "n_neg": 559,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.09337681829287187,
+              "shape": 0.2293528478349962,
+              "orientation": 0.04485917876640557,
+              "echogenicity": 0.012427391579655894,
+              "posterior": 0.01980805736846752
+            },
+            "malignancy_axis_cosine": 0.08260132011820176
+          },
+          "udiat": {
+            "n_images": 163,
+            "n_groups": 158,
+            "rho": 0.1339583951558522,
+            "excess_random": 0.1274077564174922,
+            "excess_random_ci": [
+              0.0927845052980721,
+              0.14623441927994849
+            ],
+            "excess_placebo": 0.11672845470328469,
+            "excess_placebo_ci": [
+              0.08230103995097121,
+              0.1360929876727046
+            ],
+            "excess_malignancy": 0.08396083006971988,
+            "excess_malignancy_ci": [
+              0.050998819654338626,
+              0.10290802868591738
+            ],
+            "excess_placebo_image_weighted": 0.1185766590374231,
+            "excess_placebo_group_minus_image": -0.0018482043341384036,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.13093223147842342,
+              "rho_min": 0.12135407432136841,
+              "plac_excess_mean": 0.11412769196687869,
+              "plac_excess_min": 0.10179527656686385,
+              "plac_excess_all": [
+                0.10179527656686385,
+                0.1290244397611886,
+                0.11287843084561916,
+                0.10415636771353146,
+                0.12278394494719032
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.8905992303463444,
+              "balanced_accuracy": 0.8080447132123878,
+              "auc_ci": [
+                0.8516040630253066,
+                0.9323706261013416
+              ],
+              "balanced_accuracy_ci": [
+                0.757609898798229,
+                0.8628860903814262
+              ],
+              "n_scored": 163,
+              "n_unscored": 0,
+              "n_groups": 158,
+              "n_pos": 54,
+              "n_neg": 109,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.2544810682588212,
+              "shape": 0.2858671769636379,
+              "orientation": 0.08002255139847658,
+              "echogenicity": -0.013790973917463992,
+              "posterior": 0.1224667454596006
+            },
+            "malignancy_axis_cosine": 0.13354205960414048
+          },
+          "breast": {
+            "n_images": 252,
+            "n_groups": 252,
+            "rho": 0.051239319982814065,
+            "excess_random": 0.04479866250972789,
+            "excess_random_ci": [
+              0.021093675098551052,
+              0.06768556773285245
+            ],
+            "excess_placebo": 0.03997489299281645,
+            "excess_placebo_ci": [
+              0.01620307693728507,
+              0.06273241096123297
+            ],
+            "excess_malignancy": 0.004943350681575233,
+            "excess_malignancy_ci": [
+              -0.017020778547649176,
+              0.030573687164851884
+            ],
+            "excess_placebo_image_weighted": 0.03997489299281644,
+            "excess_placebo_group_minus_image": 1.3877787807814457e-17,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.05042796152400179,
+              "rho_min": 0.04347002634468988,
+              "plac_excess_mean": 0.0392445723803685,
+              "plac_excess_min": 0.03129101070785354,
+              "plac_excess_all": [
+                0.03980735382805223,
+                0.04216036833646797,
+                0.03129101070785354,
+                0.037908040046956276,
+                0.045056088982512475
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.8178505168301057,
+              "balanced_accuracy": 0.7481447124304268,
+              "auc_ci": [
+                0.7751192788451774,
+                0.8608719626450662
+              ],
+              "balanced_accuracy_ci": [
+                0.7050060153358013,
+                0.7921221859531018
+              ],
+              "n_scored": 252,
+              "n_unscored": 0,
+              "n_groups": 252,
+              "n_pos": 98,
+              "n_neg": 154,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.11445186844510147,
+              "shape": 0.19458000366940725,
+              "orientation": 0.017192010717938543,
+              "echogenicity": 0.016865978253832244,
+              "posterior": 0.088058988674409
+            },
+            "malignancy_axis_cosine": 0.10826035658413147
+          }
+        },
+        "global": {
+          "sites": [
+            "busi",
+            "bus_uclm",
+            "bus_bra",
+            "busi_whu",
+            "udiat",
+            "breast"
+          ],
+          "T_clin": 0.08253409842430437,
+          "p_random": 4.999750012499375e-05,
+          "placebo_tail_fraction": 0.00022888532845044633,
+          "placebo_rank": 1,
+          "n_placebo_reference": 4368,
+          "mean_excess_random": 0.07600051815737659,
+          "mean_excess_placebo": 0.07006141085287275,
+          "mean_excess_placebo_ci": [
+            0.053470740732686,
+            0.07429723637810907
+          ],
+          "mean_excess_malignancy": 0.037327779166536276,
+          "placebo_meta": {
+            "n_subsets_total": 4368,
+            "n_full_rank": 4368,
+            "n_dropped": 0
+          }
+        }
+      },
+      "pubmedclip": {
+        "m": 5,
+        "embed_dim": 512,
+        "oof_summary": {
+          "n_sites_scored": 6,
+          "auc_min": 0.6285900776191993,
+          "auc_median": 0.7553825289151259,
+          "auc_max": 0.8569244783867348,
+          "bacc_min": 0.6012902829215891,
+          "bacc_median": 0.6837455882947912,
+          "bacc_max": 0.7932514724967555,
+          "weak_sites": []
+        },
+        "n_placebo": 16,
+        "n_malignancy": 10,
+        "n_distinct_placebo_subsets": 4368,
+        "n_distinct_malignancy_subsets": 252,
+        "by_site": {
+          "busi": {
+            "n_images": 631,
+            "n_groups": 507,
+            "rho": 0.005894737862687008,
+            "excess_random": -0.0040011669021340944,
+            "excess_random_ci": [
+              -0.006102760941988933,
+              -0.0010163090393922282
+            ],
+            "excess_placebo": -0.007485146392557406,
+            "excess_placebo_ci": [
+              -0.012465524071829472,
+              -0.002553364364412684
+            ],
+            "excess_malignancy": -0.003083259076548844,
+            "excess_malignancy_ci": [
+              -0.007256501519032398,
+              0.0012761523229303218
+            ],
+            "excess_placebo_image_weighted": -0.008580174165555277,
+            "excess_placebo_group_minus_image": 0.0010950277729978716,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.0055118633788423825,
+              "rho_min": 0.004508900316907231,
+              "plac_excess_mean": -0.008333300526600678,
+              "plac_excess_min": -0.011076678894236535,
+              "plac_excess_all": [
+                -0.005365713743122879,
+                -0.009033097746992118,
+                -0.007827785168657016,
+                -0.00836322707999485,
+                -0.011076678894236535
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.8569244783867348,
+              "balanced_accuracy": 0.7932514724967555,
+              "auc_ci": [
+                0.8306209844875411,
+                0.8837343580306087
+              ],
+              "balanced_accuracy_ci": [
+                0.7662220097236354,
+                0.8215175262237762
+              ],
+              "n_scored": 631,
+              "n_unscored": 0,
+              "n_groups": 507,
+              "n_pos": 204,
+              "n_neg": 427,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.03216660392136729,
+              "shape": -0.0017260823099780496,
+              "orientation": -0.010349253837129025,
+              "echogenicity": 0.005118112347927769,
+              "posterior": 0.06422960480549902
+            },
+            "malignancy_axis_cosine": -0.01621787227040497
+          },
+          "bus_uclm": {
+            "n_images": 264,
+            "n_groups": 35,
+            "rho": 0.013163703655994547,
+            "excess_random": 0.003454123072073493,
+            "excess_random_ci": [
+              -0.007310366866851832,
+              0.017090867722428425
+            ],
+            "excess_placebo": -0.001610677678960372,
+            "excess_placebo_ci": [
+              -0.013854000659990857,
+              0.014602103122065198
+            ],
+            "excess_malignancy": -0.0036098687775148273,
+            "excess_malignancy_ci": [
+              -0.020985794873030914,
+              0.01712307044962097
+            ],
+            "excess_placebo_image_weighted": -0.0034733157357226246,
+            "excess_placebo_group_minus_image": 0.0018626380567622527,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.011717956262986145,
+              "rho_min": 0.005970178592817446,
+              "plac_excess_mean": -0.003269803232528251,
+              "plac_excess_min": -0.006795250896787843,
+              "plac_excess_all": [
+                -0.006795250896787843,
+                -0.003213712134273173,
+                0.004300221341558507,
+                -0.003971432705060982,
+                -0.006668841768077766
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.6285900776191993,
+              "balanced_accuracy": 0.6012902829215891,
+              "auc_ci": [
+                0.5254784444475946,
+                0.740397785053244
+              ],
+              "balanced_accuracy_ci": [
+                0.5235469350123034,
+                0.683620398285835
+              ],
+              "n_scored": 264,
+              "n_unscored": 0,
+              "n_groups": 35,
+              "n_pos": 90,
+              "n_neg": 174,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.0443771100093666,
+              "shape": 0.10583433045374924,
+              "orientation": -0.04834709727177024,
+              "echogenicity": 0.004694612160571577,
+              "posterior": -0.012660942974682295
+            },
+            "malignancy_axis_cosine": -0.032426966392154435
+          },
+          "bus_bra": {
+            "n_images": 1875,
+            "n_groups": 1064,
+            "rho": 0.0037320627575008663,
+            "excess_random": -0.006064131613262959,
+            "excess_random_ci": [
+              -0.008224429048433967,
+              -0.0014123929679436958
+            ],
+            "excess_placebo": -0.016215188075039133,
+            "excess_placebo_ci": [
+              -0.023244246351307552,
+              -0.008723241897641822
+            ],
+            "excess_malignancy": -0.011582339859666141,
+            "excess_malignancy_ci": [
+              -0.017495633097607596,
+              -0.004972961167968635
+            ],
+            "excess_placebo_image_weighted": -0.017652305621722597,
+            "excess_placebo_group_minus_image": 0.001437117546683464,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.0038835705568699584,
+              "rho_min": 0.0028945438587991363,
+              "plac_excess_mean": -0.01662821813005699,
+              "plac_excess_min": -0.020850720846787334,
+              "plac_excess_all": [
+                -0.01388961107688494,
+                -0.017694145704156575,
+                -0.020850720846787334,
+                -0.014358367731076647,
+                -0.016348245291379446
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7681199478382055,
+              "balanced_accuracy": 0.7072560787934749,
+              "auc_ci": [
+                0.7466378790526744,
+                0.7887643426854819
+              ],
+              "balanced_accuracy_ci": [
+                0.6874603029963848,
+                0.7259680915507796
+              ],
+              "n_scored": 1875,
+              "n_unscored": 0,
+              "n_groups": 1064,
+              "n_pos": 607,
+              "n_neg": 1268,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.04196080198581768,
+              "shape": -0.026621274257525876,
+              "orientation": 0.008219903910238247,
+              "echogenicity": -0.000758584996289207,
+              "posterior": -0.009125661747500596
+            },
+            "malignancy_axis_cosine": 0.049125095781163086
+          },
+          "busi_whu": {
+            "n_images": 925,
+            "n_groups": 814,
+            "rho": 0.007122250768522137,
+            "excess_random": -0.0023586011302796847,
+            "excess_random_ci": [
+              -0.005412923627756359,
+              0.0017304318435005174
+            ],
+            "excess_placebo": -0.004170999317786483,
+            "excess_placebo_ci": [
+              -0.009631388291840908,
+              0.0008820455371755711
+            ],
+            "excess_malignancy": -0.0007365512588074861,
+            "excess_malignancy_ci": [
+              -0.0055373345272142,
+              0.004290168439266281
+            ],
+            "excess_placebo_image_weighted": -0.0037215996016454053,
+            "excess_placebo_group_minus_image": -0.0004493997161410775,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.006884574607916152,
+              "rho_min": 0.0057225552777518795,
+              "plac_excess_mean": -0.0044974153370045105,
+              "plac_excess_min": -0.007518647005627729,
+              "plac_excess_all": [
+                -0.002750620626209368,
+                -0.0026224491812294037,
+                -0.005533137189894033,
+                -0.007518647005627729,
+                -0.0040622226820620205
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7136417730734793,
+              "balanced_accuracy": 0.6624231200796851,
+              "auc_ci": [
+                0.6848796670951813,
+                0.7418397117594884
+              ],
+              "balanced_accuracy_ci": [
+                0.637256354853707,
+                0.6894844935240241
+              ],
+              "n_scored": 925,
+              "n_unscored": 0,
+              "n_groups": 814,
+              "n_pos": 366,
+              "n_neg": 559,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.026660240813864877,
+              "shape": 0.06480183550103479,
+              "orientation": -0.029034527370275003,
+              "echogenicity": 0.023532269218961906,
+              "posterior": 0.021573195289226056
+            },
+            "malignancy_axis_cosine": 0.01683836131413375
+          },
+          "udiat": {
+            "n_images": 163,
+            "n_groups": 158,
+            "rho": 0.0029098700764179784,
+            "excess_random": -0.006641957350809271,
+            "excess_random_ci": [
+              -0.008223339027144536,
+              -0.0033897507404830954
+            ],
+            "excess_placebo": -0.01577986164567003,
+            "excess_placebo_ci": [
+              -0.019282536036802328,
+              -0.00974995883113417
+            ],
+            "excess_malignancy": -0.01986242834998636,
+            "excess_malignancy_ci": [
+              -0.026386353671846385,
+              -0.011120416648031085
+            ],
+            "excess_placebo_image_weighted": -0.016111805504535226,
+            "excess_placebo_group_minus_image": 0.00033194385886519545,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.0030838150037481703,
+              "rho_min": 0.0021821198654314697,
+              "plac_excess_mean": -0.0155650487245115,
+              "plac_excess_min": -0.017420458322803107,
+              "plac_excess_all": [
+                -0.017159966683998246,
+                -0.017420458322803107,
+                -0.013227938368279167,
+                -0.016390827540449196,
+                -0.013626052707027785
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7744181784863488,
+              "balanced_accuracy": 0.6824262415246471,
+              "auc_ci": [
+                0.7099390685328179,
+                0.8364409253874248
+              ],
+              "balanced_accuracy_ci": [
+                0.6222431489533826,
+                0.7471478444517933
+              ],
+              "n_scored": 163,
+              "n_unscored": 0,
+              "n_groups": 158,
+              "n_pos": 54,
+              "n_neg": 109,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.009842050025526971,
+              "shape": 0.02602174907494145,
+              "orientation": 0.028237712048017335,
+              "echogenicity": 0.032982115613350974,
+              "posterior": -0.001997327736584795
+            },
+            "malignancy_axis_cosine": -0.0394987798798035
+          },
+          "breast": {
+            "n_images": 252,
+            "n_groups": 252,
+            "rho": 0.0018700416204372487,
+            "excess_random": -0.007694017481539227,
+            "excess_random_ci": [
+              -0.008846226686142123,
+              -0.004935316412444398
+            ],
+            "excess_placebo": -0.01605928316808676,
+            "excess_placebo_ci": [
+              -0.02016832218704391,
+              -0.010160750697987133
+            ],
+            "excess_malignancy": -0.007894441916053027,
+            "excess_malignancy_ci": [
+              -0.010630752182315946,
+              -0.004082555825954315
+            ],
+            "excess_placebo_image_weighted": -0.016059283168086743,
+            "excess_placebo_group_minus_image": -1.734723475976807e-17,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.0021798269534737303,
+              "rho_min": 0.0010984620219683472,
+              "plac_excess_mean": -0.015042098413574304,
+              "plac_excess_min": -0.016584184884220515,
+              "plac_excess_all": [
+                -0.01464098261717838,
+                -0.014373319221968462,
+                -0.014547279822326007,
+                -0.016584184884220515,
+                -0.01506472552217815
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7426451099920465,
+              "balanced_accuracy": 0.6850649350649352,
+              "auc_ci": [
+                0.6951181888660125,
+                0.7901076780413753
+              ],
+              "balanced_accuracy_ci": [
+                0.6397823860727088,
+                0.729693639975152
+              ],
+              "n_scored": 252,
+              "n_unscored": 0,
+              "n_groups": 252,
+              "n_pos": 98,
+              "n_neg": 154,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.0002359652816833601,
+              "shape": -0.02732489830294057,
+              "orientation": -0.01773777079520037,
+              "echogenicity": 0.025607907567604893,
+              "posterior": 0.012848965926830033
+            },
+            "malignancy_axis_cosine": 0.02723631710447641
+          }
+        },
+        "global": {
+          "sites": [
+            "busi",
+            "bus_uclm",
+            "bus_bra",
+            "busi_whu",
+            "udiat",
+            "breast"
+          ],
+          "T_clin": 0.005782111123593297,
+          "p_random": 0.8751062446877657,
+          "placebo_tail_fraction": 1.0,
+          "placebo_rank": 4369,
+          "n_placebo_reference": 4368,
+          "mean_excess_random": -0.0039651931556741295,
+          "mean_excess_placebo": -0.0102201927130167,
+          "mean_excess_placebo_ci": [
+            -0.012723366206990295,
+            -0.006594689192735481
+          ],
+          "mean_excess_malignancy": -0.007794814873096114,
+          "placebo_meta": {
+            "n_subsets_total": 4368,
+            "n_full_rank": 4368,
+            "n_dropped": 0
+          }
+        }
+      },
+      "clip": {
+        "m": 5,
+        "embed_dim": 512,
+        "oof_summary": {
+          "n_sites_scored": 6,
+          "auc_min": 0.625167534487889,
+          "auc_median": 0.7188129696101986,
+          "auc_max": 0.8173591006400159,
+          "bacc_min": 0.6022331422233853,
+          "bacc_median": 0.684552613756477,
+          "bacc_max": 0.762266646700609,
+          "weak_sites": []
+        },
+        "n_placebo": 16,
+        "n_malignancy": 10,
+        "n_distinct_placebo_subsets": 4368,
+        "n_distinct_malignancy_subsets": 252,
+        "by_site": {
+          "busi": {
+            "n_images": 631,
+            "n_groups": 507,
+            "rho": 0.008711986030820145,
+            "excess_random": -0.0011061110589593547,
+            "excess_random_ci": [
+              -0.004269945607845123,
+              0.0025808277204901046
+            ],
+            "excess_placebo": -0.0007264865481362258,
+            "excess_placebo_ci": [
+              -0.004639115696873051,
+              0.003448738231456936
+            ],
+            "excess_malignancy": -0.0056118503506450545,
+            "excess_malignancy_ci": [
+              -0.009534869592435338,
+              -0.000989854704884473
+            ],
+            "excess_placebo_image_weighted": -0.0018058966671494116,
+            "excess_placebo_group_minus_image": 0.0010794101190131859,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.008481864399021771,
+              "rho_min": 0.0059867542199519876,
+              "plac_excess_mean": -0.0009832657740870975,
+              "plac_excess_min": -0.0039057716481560216,
+              "plac_excess_all": [
+                0.0016317701275210261,
+                0.002272852180918295,
+                -0.0023511918894018186,
+                -0.0039057716481560216,
+                -0.0025639876413169685
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.8173591006400159,
+              "balanced_accuracy": 0.762266646700609,
+              "auc_ci": [
+                0.7874966982779661,
+                0.8473333550677978
+              ],
+              "balanced_accuracy_ci": [
+                0.7338265778948396,
+                0.7928026258248083
+              ],
+              "n_scored": 631,
+              "n_unscored": 0,
+              "n_groups": 507,
+              "n_pos": 204,
+              "n_neg": 427,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.0012912758296673467,
+              "shape": -0.0011385951539530648,
+              "orientation": -0.024777907511535743,
+              "echogenicity": -0.028635624375628672,
+              "posterior": 0.08686432193481414
+            },
+            "malignancy_axis_cosine": -0.011977305576769395
+          },
+          "bus_uclm": {
+            "n_images": 264,
+            "n_groups": 35,
+            "rho": 0.012781308346618813,
+            "excess_random": 0.003055510688473744,
+            "excess_random_ci": [
+              -0.006580308968791038,
+              0.01180040181348243
+            ],
+            "excess_placebo": 0.004906843782568379,
+            "excess_placebo_ci": [
+              -0.0036818254451452897,
+              0.010832147056323602
+            ],
+            "excess_malignancy": 0.008845265803791665,
+            "excess_malignancy_ci": [
+              -0.0016914564865296642,
+              0.014824891433744727
+            ],
+            "excess_placebo_image_weighted": 0.007409171614728453,
+            "excess_placebo_group_minus_image": -0.002502327832160074,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.012386504328506628,
+              "rho_min": 0.00793052227062411,
+              "plac_excess_mean": 0.004600923998822928,
+              "plac_excess_min": 0.0011181795703026345,
+              "plac_excess_all": [
+                0.0028836924465105405,
+                0.006996491873485045,
+                0.0074431742853470475,
+                0.00456308181846937,
+                0.0011181795703026345
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.625167534487889,
+              "balanced_accuracy": 0.6022331422233853,
+              "auc_ci": [
+                0.549594266384595,
+                0.6999202610552887
+              ],
+              "balanced_accuracy_ci": [
+                0.5408546906957759,
+                0.6607571975287493
+              ],
+              "n_scored": 264,
+              "n_unscored": 0,
+              "n_groups": 35,
+              "n_pos": 90,
+              "n_neg": 174,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.04588194178622662,
+              "shape": 0.10457976110454476,
+              "orientation": -0.01688098068908831,
+              "echogenicity": -0.009547244746541077,
+              "posterior": -0.024525011997666255
+            },
+            "malignancy_axis_cosine": 0.020331820120338087
+          },
+          "bus_bra": {
+            "n_images": 1875,
+            "n_groups": 1064,
+            "rho": 0.0018176061195870358,
+            "excess_random": -0.008009291251183428,
+            "excess_random_ci": [
+              -0.009011423163037163,
+              -0.004289203075533137
+            ],
+            "excess_placebo": -0.006588383063802593,
+            "excess_placebo_ci": [
+              -0.009495065037852938,
+              -0.0018571075423717434
+            ],
+            "excess_malignancy": -0.00432277558306686,
+            "excess_malignancy_ci": [
+              -0.0077661635737086175,
+              -3.561494850212434e-05
+            ],
+            "excess_placebo_image_weighted": -0.006524685445241576,
+            "excess_placebo_group_minus_image": -6.369761856101722e-05,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.0025282973470559934,
+              "rho_min": 0.001655187857437841,
+              "plac_excess_mean": -0.005808603115647889,
+              "plac_excess_min": -0.006985384352729153,
+              "plac_excess_all": [
+                -0.006985384352729153,
+                -0.00623478339075915,
+                -0.005610883384710942,
+                -0.005783746971271571,
+                -0.0044282174787686306
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7520239020913346,
+              "balanced_accuracy": 0.6927516158818097,
+              "auc_ci": [
+                0.7311272639014244,
+                0.7726093422284115
+              ],
+              "balanced_accuracy_ci": [
+                0.6721731712088498,
+                0.7125985755253764
+              ],
+              "n_scored": 1875,
+              "n_unscored": 0,
+              "n_groups": 1064,
+              "n_pos": 607,
+              "n_neg": 1268,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.025104036861985524,
+              "shape": -0.0014044920868493682,
+              "orientation": 0.0038507502919005385,
+              "echogenicity": 0.0029152239767362264,
+              "posterior": 0.025857834866957294
+            },
+            "malignancy_axis_cosine": 0.0356751448559032
+          },
+          "busi_whu": {
+            "n_images": 925,
+            "n_groups": 814,
+            "rho": 0.004757977951894053,
+            "excess_random": -0.0050052625740114425,
+            "excess_random_ci": [
+              -0.007556226146709834,
+              -0.0015287256940987354
+            ],
+            "excess_placebo": -0.0026235454619664283,
+            "excess_placebo_ci": [
+              -0.006317279301572513,
+              0.001384284857388862
+            ],
+            "excess_malignancy": -0.013406548224764368,
+            "excess_malignancy_ci": [
+              -0.01906530466777979,
+              -0.0056836103618002525
+            ],
+            "excess_placebo_image_weighted": -0.003559076149833083,
+            "excess_placebo_group_minus_image": 0.0009355306878666547,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.004424950833171519,
+              "rho_min": 0.003402789706151004,
+              "plac_excess_mean": -0.003202292118928267,
+              "plac_excess_min": -0.005441898265462634,
+              "plac_excess_all": [
+                -0.005441898265462634,
+                -0.0038261585168050775,
+                -0.004008954527666106,
+                -0.0009882945763968224,
+                -0.0017461547083106928
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7283534451760504,
+              "balanced_accuracy": 0.6763536116311444,
+              "auc_ci": [
+                0.6995147983585798,
+                0.7566044819232142
+              ],
+              "balanced_accuracy_ci": [
+                0.6505978897046795,
+                0.7025168725195755
+              ],
+              "n_scored": 925,
+              "n_unscored": 0,
+              "n_groups": 814,
+              "n_pos": 366,
+              "n_neg": 559,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.010711033081645366,
+              "shape": 0.05424355274572094,
+              "orientation": -0.001805143837636882,
+              "echogenicity": -0.027394566733383995,
+              "posterior": 0.010343077047352014
+            },
+            "malignancy_axis_cosine": 0.03403686932698602
+          },
+          "udiat": {
+            "n_images": 163,
+            "n_groups": 158,
+            "rho": 0.005337059370318869,
+            "excess_random": -0.004598803199795106,
+            "excess_random_ci": [
+              -0.007861525880648297,
+              4.328613087975099e-05
+            ],
+            "excess_placebo": -0.007118331315399436,
+            "excess_placebo_ci": [
+              -0.011978760736374666,
+              0.0001302794689904998
+            ],
+            "excess_malignancy": -0.009565467151913505,
+            "excess_malignancy_ci": [
+              -0.014509123967567214,
+              -0.002352626032313258
+            ],
+            "excess_placebo_image_weighted": -0.007136293383422751,
+            "excess_placebo_group_minus_image": 1.796206802331512e-05,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.005242136735881897,
+              "rho_min": 0.0031642048050786256,
+              "plac_excess_mean": -0.006908806451932402,
+              "plac_excess_min": -0.010467505193522792,
+              "plac_excess_all": [
+                -0.010467505193522792,
+                -0.004331946358079803,
+                -0.0054428030599761226,
+                -0.005443210796290401,
+                -0.00885856685179289
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7092724940443469,
+              "balanced_accuracy": 0.6987355689939525,
+              "auc_ci": [
+                0.6429064559275579,
+                0.7815379235444105
+              ],
+              "balanced_accuracy_ci": [
+                0.6397829696394686,
+                0.760653409090909
+              ],
+              "n_scored": 163,
+              "n_unscored": 0,
+              "n_groups": 158,
+              "n_pos": 54,
+              "n_neg": 109,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.025765227225094906,
+              "shape": 0.017650822118515635,
+              "orientation": -0.06586360888987504,
+              "echogenicity": -0.00852989975756876,
+              "posterior": 0.01576749125802753
+            },
+            "malignancy_axis_cosine": -0.0423169652340028
+          },
+          "breast": {
+            "n_images": 252,
+            "n_groups": 252,
+            "rho": 0.0015312253954885438,
+            "excess_random": -0.008161653426070132,
+            "excess_random_ci": [
+              -0.009214885560199513,
+              -0.004698160844778126
+            ],
+            "excess_placebo": -0.004359134758054969,
+            "excess_placebo_ci": [
+              -0.007051420299722536,
+              -0.0009900000751937909
+            ],
+            "excess_malignancy": -0.007929835641383848,
+            "excess_malignancy_ci": [
+              -0.010812852082013297,
+              -0.003247594352323375
+            ],
+            "excess_placebo_image_weighted": -0.004359134758054965,
+            "excess_placebo_group_minus_image": -4.336808689942018e-18,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.001708493817042257,
+              "rho_min": 0.000718303960553142,
+              "plac_excess_mean": -0.004275430740963026,
+              "plac_excess_min": -0.0053076771309964075,
+              "plac_excess_all": [
+                -0.004042032699859077,
+                -0.003099466341469558,
+                -0.0053076771309964075,
+                -0.0041534340964799795,
+                -0.004774543436010107
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.6897031539888661,
+              "balanced_accuracy": 0.6345083487940631,
+              "auc_ci": [
+                0.6372985810485801,
+                0.741755457803845
+              ],
+              "balanced_accuracy_ci": [
+                0.5880821747717662,
+                0.6816372912801485
+              ],
+              "n_scored": 252,
+              "n_unscored": 0,
+              "n_groups": 252,
+              "n_pos": 98,
+              "n_neg": 154,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.015858872147587022,
+              "shape": 0.02571164918036012,
+              "orientation": -0.011273156082071937,
+              "echogenicity": 0.021355319472635685,
+              "posterior": -0.02720448948121221
+            },
+            "malignancy_axis_cosine": 0.08715512473451736
+          }
+        },
+        "global": {
+          "sites": [
+            "busi",
+            "bus_uclm",
+            "bus_bra",
+            "busi_whu",
+            "udiat",
+            "breast"
+          ],
+          "T_clin": 0.00582286053578791,
+          "p_random": 0.9228038598070096,
+          "placebo_tail_fraction": 0.9571984435797666,
+          "placebo_rank": 4182,
+          "n_placebo_reference": 4368,
+          "mean_excess_random": -0.003961825182506857,
+          "mean_excess_placebo": -0.0027515062274652176,
+          "mean_excess_placebo_ci": [
+            -0.004735978132097401,
+            -0.00063039144241177
+          ],
+          "mean_excess_malignancy": -0.005331868524663661,
+          "placebo_meta": {
+            "n_subsets_total": 4368,
+            "n_full_rank": 4368,
+            "n_dropped": 0
+          }
+        }
+      },
+      "siglip": {
+        "m": 5,
+        "embed_dim": 768,
+        "oof_summary": {
+          "n_sites_scored": 6,
+          "auc_min": 0.68065549348159,
+          "auc_median": 0.7606990253954831,
+          "auc_max": 0.8775001478967166,
+          "bacc_min": 0.6050068791386117,
+          "bacc_median": 0.6769829002119114,
+          "bacc_max": 0.8069032644504343,
+          "weak_sites": []
+        },
+        "n_placebo": 16,
+        "n_malignancy": 10,
+        "n_distinct_placebo_subsets": 4368,
+        "n_distinct_malignancy_subsets": 252,
+        "by_site": {
+          "busi": {
+            "n_images": 631,
+            "n_groups": 507,
+            "rho": 0.018267163319271355,
+            "excess_random": 0.011819193699154325,
+            "excess_random_ci": [
+              0.006324462374808763,
+              0.01636006456573076
+            ],
+            "excess_placebo": 0.009075856889855868,
+            "excess_placebo_ci": [
+              0.0015977178589473098,
+              0.014747193737138035
+            ],
+            "excess_malignancy": 0.012539974203513254,
+            "excess_malignancy_ci": [
+              0.006720261616201602,
+              0.017236560028835415
+            ],
+            "excess_placebo_image_weighted": 0.0028177920700235316,
+            "excess_placebo_group_minus_image": 0.006258064819832336,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.018817088592692273,
+              "rho_min": 0.016907972962083646,
+              "plac_excess_mean": 0.00953248104930204,
+              "plac_excess_min": 0.007414299051356505,
+              "plac_excess_all": [
+                0.008660608198654553,
+                0.007770024119735023,
+                0.014137498997015906,
+                0.007414299051356505,
+                0.009679974879748218
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.8775001478967166,
+              "balanced_accuracy": 0.8069032644504343,
+              "auc_ci": [
+                0.8525876921065579,
+                0.9014385466717203
+              ],
+              "balanced_accuracy_ci": [
+                0.7801507314898151,
+                0.8336654315595398
+              ],
+              "n_scored": 631,
+              "n_unscored": 0,
+              "n_groups": 507,
+              "n_pos": 204,
+              "n_neg": 427,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.02761130680017972,
+              "shape": 0.07771295219859109,
+              "orientation": 0.025188528485451143,
+              "echogenicity": -0.03423613314642326,
+              "posterior": 0.09282587703693802
+            },
+            "malignancy_axis_cosine": 0.019052649555029652
+          },
+          "bus_uclm": {
+            "n_images": 264,
+            "n_groups": 35,
+            "rho": 0.014210948331079096,
+            "excess_random": 0.00757003160200044,
+            "excess_random_ci": [
+              -0.003594069012862278,
+              0.018387260519768592
+            ],
+            "excess_placebo": 0.0067593348049039435,
+            "excess_placebo_ci": [
+              -0.005039319361624518,
+              0.01717793669745774
+            ],
+            "excess_malignancy": 0.005794362811083059,
+            "excess_malignancy_ci": [
+              -0.0039868030539634905,
+              0.015549062361542847
+            ],
+            "excess_placebo_image_weighted": 0.009560628293317861,
+            "excess_placebo_group_minus_image": -0.0028012934884139177,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.013377475915226731,
+              "rho_min": 0.0061732650793037405,
+              "plac_excess_mean": 0.005673387639086034,
+              "plac_excess_min": 0.0003285213649143106,
+              "plac_excess_all": [
+                0.009242643278015262,
+                0.006215666529185829,
+                0.008296657758290213,
+                0.0003285213649143106,
+                0.0042834492650245595
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.68065549348159,
+              "balanced_accuracy": 0.6050068791386117,
+              "auc_ci": [
+                0.5831790004016593,
+                0.779701653064055
+              ],
+              "balanced_accuracy_ci": [
+                0.530869617075609,
+                0.6811611996609462
+              ],
+              "n_scored": 264,
+              "n_unscored": 0,
+              "n_groups": 35,
+              "n_pos": 90,
+              "n_neg": 174,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.018125241361174483,
+              "shape": 0.10437353812407751,
+              "orientation": -0.013331029162912195,
+              "echogenicity": -0.055762210793496164,
+              "posterior": 0.007491378213077122
+            },
+            "malignancy_axis_cosine": 0.010479587223652422
+          },
+          "bus_bra": {
+            "n_images": 1875,
+            "n_groups": 1064,
+            "rho": 0.017183335442453068,
+            "excess_random": 0.010570361388860179,
+            "excess_random_ci": [
+              0.003954572667336933,
+              0.017159323764490343
+            ],
+            "excess_placebo": 0.0009425036938095939,
+            "excess_placebo_ci": [
+              -0.006775618189725101,
+              0.009724950179966824
+            ],
+            "excess_malignancy": 0.011589342414505835,
+            "excess_malignancy_ci": [
+              0.0037989111262038814,
+              0.01839522626988949
+            ],
+            "excess_placebo_image_weighted": 0.002860088085682411,
+            "excess_placebo_group_minus_image": -0.0019175843918728171,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.016332027847385445,
+              "rho_min": 0.01250856625160833,
+              "plac_excess_mean": 0.0007238168428914258,
+              "plac_excess_min": -0.004932929938867608,
+              "plac_excess_all": [
+                0.0028880071804942946,
+                0.0006316872641114434,
+                0.002488958160847883,
+                0.0025433615478711157,
+                -0.004932929938867608
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7820209862143861,
+              "balanced_accuracy": 0.7209910741766696,
+              "auc_ci": [
+                0.7615323238148304,
+                0.8022560065338254
+              ],
+              "balanced_accuracy_ci": [
+                0.7024120583166853,
+                0.7404068381618891
+              ],
+              "n_scored": 1875,
+              "n_unscored": 0,
+              "n_groups": 1064,
+              "n_pos": 607,
+              "n_neg": 1268,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.00042971904627272725,
+              "shape": 0.06143512357455752,
+              "orientation": 0.06658293121068826,
+              "echogenicity": -0.060761634109580104,
+              "posterior": 0.07386325070227738
+            },
+            "malignancy_axis_cosine": 0.007778406413609934
+          },
+          "busi_whu": {
+            "n_images": 925,
+            "n_groups": 814,
+            "rho": 0.006474484173132844,
+            "excess_random": 1.5558071604186707e-05,
+            "excess_random_ci": [
+              -0.00278650668364168,
+              0.003904815694790566
+            ],
+            "excess_placebo": 0.0013994374001825459,
+            "excess_placebo_ci": [
+              -0.0027427688683379237,
+              0.005253842968977848
+            ],
+            "excess_malignancy": -0.006643019922924957,
+            "excess_malignancy_ci": [
+              -0.010810824920239959,
+              -0.0005075014506645896
+            ],
+            "excess_placebo_image_weighted": 0.004809166852260073,
+            "excess_placebo_group_minus_image": -0.0034097294520775276,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.006396954479068334,
+              "rho_min": 0.004970236880276948,
+              "plac_excess_mean": 0.0013499862317787748,
+              "plac_excess_min": 0.00018993572928871407,
+              "plac_excess_all": [
+                0.00018993572928871407,
+                0.002419719586629631,
+                0.0005881618680352654,
+                0.0017433848110122588,
+                0.0018087291639280047
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.73937706457658,
+              "balanced_accuracy": 0.6672464287714415,
+              "auc_ci": [
+                0.712697300164611,
+                0.7673160892125777
+              ],
+              "balanced_accuracy_ci": [
+                0.6414007042374873,
+                0.6930922606350705
+              ],
+              "n_scored": 925,
+              "n_unscored": 0,
+              "n_groups": 814,
+              "n_pos": 366,
+              "n_neg": 559,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.05093058590303451,
+              "shape": 0.027741336837203406,
+              "orientation": 0.03284559834942009,
+              "echogenicity": 0.026352010382776618,
+              "posterior": 0.013994972252331605
+            },
+            "malignancy_axis_cosine": 0.10909664485379683
+          },
+          "udiat": {
+            "n_images": 163,
+            "n_groups": 158,
+            "rho": 0.017022509169808697,
+            "excess_random": 0.010373897339340415,
+            "excess_random_ci": [
+              0.0009778693488153008,
+              0.020130593540317477
+            ],
+            "excess_placebo": 0.010530009995898367,
+            "excess_placebo_ci": [
+              0.0004752847552088273,
+              0.020632652489257563
+            ],
+            "excess_malignancy": 0.008124395613141605,
+            "excess_malignancy_ci": [
+              6.143254647277136e-05,
+              0.01760758651974677
+            ],
+            "excess_placebo_image_weighted": 0.009044915070847582,
+            "excess_placebo_group_minus_image": 0.0014850949250507853,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.016371243560913806,
+              "rho_min": 0.008843638412117704,
+              "plac_excess_mean": 0.009756024428256748,
+              "plac_excess_min": 0.003737994605279145,
+              "plac_excess_all": [
+                0.010674840492461066,
+                0.011327345175788785,
+                0.00914763323906145,
+                0.003737994605279145,
+                0.013892308628693294
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7903610042147711,
+              "balanced_accuracy": 0.6809602345611141,
+              "auc_ci": [
+                0.7281659882406151,
+                0.8516907649253725
+              ],
+              "balanced_accuracy_ci": [
+                0.6251273510971787,
+                0.7401823444895198
+              ],
+              "n_scored": 163,
+              "n_unscored": 0,
+              "n_groups": 158,
+              "n_pos": 54,
+              "n_neg": 109,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": -0.009818539509173569,
+              "shape": 0.11891435554834046,
+              "orientation": -0.009729855814698096,
+              "echogenicity": -0.0036915707546944353,
+              "posterior": 0.04012421026808795
+            },
+            "malignancy_axis_cosine": 0.07418753158855074
+          },
+          "breast": {
+            "n_images": 252,
+            "n_groups": 252,
+            "rho": 0.017733302962858338,
+            "excess_random": 0.011280785964749719,
+            "excess_random_ci": [
+              0.0027566805041212,
+              0.020391401221723646
+            ],
+            "excess_placebo": 0.0071435171149310875,
+            "excess_placebo_ci": [
+              -0.002208554343787049,
+              0.016882618006555883
+            ],
+            "excess_malignancy": 0.01480826242793899,
+            "excess_malignancy_ci": [
+              0.006036998957409738,
+              0.02337430852760862
+            ],
+            "excess_placebo_image_weighted": 0.007143517114929597,
+            "excess_placebo_group_minus_image": 1.4901274658640773e-15,
+            "fold_refit": {
+              "n_folds": 5,
+              "rho_mean": 0.017556612859219195,
+              "rho_min": 0.012981475506126258,
+              "plac_excess_mean": 0.007478151936001846,
+              "plac_excess_min": 0.001971046220023861,
+              "plac_excess_all": [
+                0.009516492105852568,
+                0.01135492276864655,
+                0.001971046220023861,
+                0.009258483355538073,
+                0.00528981522994818
+              ]
+            },
+            "oof_performance": {
+              "auc": 0.7303869599787944,
+              "balanced_accuracy": 0.6730055658627088,
+              "auc_ci": [
+                0.6811106060606076,
+                0.7796585179534249
+              ],
+              "balanced_accuracy_ci": [
+                0.6291990567632765,
+                0.7164861751152073
+              ],
+              "n_scored": 252,
+              "n_unscored": 0,
+              "n_groups": 252,
+              "n_pos": 98,
+              "n_neg": 154,
+              "n_folds": 5,
+              "folds_used": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "boot_invalid_frac": 0.0,
+              "weak_probe": false
+            },
+            "boot_invalid_frac": 0.0,
+            "axis_cosine": {
+              "margin": 0.008169736817967805,
+              "shape": 0.05093724329180254,
+              "orientation": 0.0742297491255175,
+              "echogenicity": -0.03292044063088543,
+              "posterior": 0.09079389250078265
+            },
+            "malignancy_axis_cosine": 0.013627524749518631
+          }
+        },
+        "global": {
+          "sites": [
+            "busi",
+            "bus_uclm",
+            "bus_bra",
+            "busi_whu",
+            "udiat",
+            "breast"
+          ],
+          "T_clin": 0.015148623899767233,
+          "p_random": 0.005149742512874356,
+          "placebo_tail_fraction": 0.016479743648432136,
+          "placebo_rank": 72,
+          "n_placebo_reference": 4368,
+          "mean_excess_random": 0.008661124068104686,
+          "mean_excess_placebo": 0.005975109983263564,
+          "mean_excess_placebo_ci": [
+            0.0017831608924655888,
+            0.008990936937745556
+          ],
+          "mean_excess_malignancy": 0.007702219591209632,
+          "placebo_meta": {
+            "n_subsets_total": 4368,
+            "n_full_rank": 4368,
+            "n_dropped": 0
+          }
+        }
+      }
+    },
+    "global_family": {
+      "holm_family": "six_backbone_p_random",
+      "alpha": 0.05,
+      "gate_k_primary": 2.0,
+      "verdict_rule": "Holm-adjusted p_random < alpha AND placebo tail fraction < 0.05 AND bootstrap CI low > 0 AND mean excess > 2m/d",
+      "backbones": {
+        "biomedclip": {
+          "p_random": 4.999750012499375e-05,
+          "holm_adjusted_p_random": 0.0002999850007499625,
+          "holm_reject": true,
+          "holm_threshold": 0.008333333333333333,
+          "placebo_tail_fraction": 0.00022888532845044633,
+          "placebo_rank": 1,
+          "verdict_by_k": {
+            "k=1.5": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.00022888532845044633,
+              "ci_excludes_zero": true,
+              "delta_min": 0.0146484375,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 1.5,
+              "tail_alpha": 0.05
+            },
+            "k=2.0": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.00022888532845044633,
+              "ci_excludes_zero": true,
+              "delta_min": 0.01953125,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            },
+            "k=3.0": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.00022888532845044633,
+              "ci_excludes_zero": true,
+              "delta_min": 0.029296875,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 3.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "expressible": true
+        },
+        "unimed_clip": {
+          "p_random": 4.999750012499375e-05,
+          "holm_adjusted_p_random": 0.0002999850007499625,
+          "holm_reject": true,
+          "holm_threshold": 0.01,
+          "placebo_tail_fraction": 0.11764705882352941,
+          "placebo_rank": 514,
+          "verdict_by_k": {
+            "k=1.5": {
+              "holm_reject_random": true,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.11764705882352941,
+              "ci_excludes_zero": true,
+              "delta_min": 0.0146484375,
+              "passes_gate": true,
+              "expressible": false,
+              "k": 1.5,
+              "tail_alpha": 0.05
+            },
+            "k=2.0": {
+              "holm_reject_random": true,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.11764705882352941,
+              "ci_excludes_zero": true,
+              "delta_min": 0.01953125,
+              "passes_gate": true,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            },
+            "k=3.0": {
+              "holm_reject_random": true,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.11764705882352941,
+              "ci_excludes_zero": true,
+              "delta_min": 0.029296875,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 3.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "expressible": false
+        },
+        "pmc_clip": {
+          "p_random": 4.999750012499375e-05,
+          "holm_adjusted_p_random": 0.0002999850007499625,
+          "holm_reject": true,
+          "holm_threshold": 0.0125,
+          "placebo_tail_fraction": 0.00022888532845044633,
+          "placebo_rank": 1,
+          "verdict_by_k": {
+            "k=1.5": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.00022888532845044633,
+              "ci_excludes_zero": true,
+              "delta_min": 0.009765625,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 1.5,
+              "tail_alpha": 0.05
+            },
+            "k=2.0": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.00022888532845044633,
+              "ci_excludes_zero": true,
+              "delta_min": 0.013020833333333334,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            },
+            "k=3.0": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.00022888532845044633,
+              "ci_excludes_zero": true,
+              "delta_min": 0.01953125,
+              "passes_gate": true,
+              "expressible": true,
+              "k": 3.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "expressible": true
+        },
+        "pubmedclip": {
+          "p_random": 0.8751062446877657,
+          "holm_adjusted_p_random": 1.0,
+          "holm_reject": false,
+          "holm_threshold": 0.025,
+          "placebo_tail_fraction": 1.0,
+          "placebo_rank": 4369,
+          "verdict_by_k": {
+            "k=1.5": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 1.0,
+              "ci_excludes_zero": false,
+              "delta_min": 0.0146484375,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 1.5,
+              "tail_alpha": 0.05
+            },
+            "k=2.0": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 1.0,
+              "ci_excludes_zero": false,
+              "delta_min": 0.01953125,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            },
+            "k=3.0": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 1.0,
+              "ci_excludes_zero": false,
+              "delta_min": 0.029296875,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 3.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "expressible": false
+        },
+        "clip": {
+          "p_random": 0.9228038598070096,
+          "holm_adjusted_p_random": 1.0,
+          "holm_reject": false,
+          "holm_threshold": 0.05,
+          "placebo_tail_fraction": 0.9571984435797666,
+          "placebo_rank": 4182,
+          "verdict_by_k": {
+            "k=1.5": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.9571984435797666,
+              "ci_excludes_zero": false,
+              "delta_min": 0.0146484375,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 1.5,
+              "tail_alpha": 0.05
+            },
+            "k=2.0": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.9571984435797666,
+              "ci_excludes_zero": false,
+              "delta_min": 0.01953125,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            },
+            "k=3.0": {
+              "holm_reject_random": false,
+              "placebo_extreme": false,
+              "placebo_tail_fraction": 0.9571984435797666,
+              "ci_excludes_zero": false,
+              "delta_min": 0.029296875,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 3.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "expressible": false
+        },
+        "siglip": {
+          "p_random": 0.005149742512874356,
+          "holm_adjusted_p_random": 0.01544922753862307,
+          "holm_reject": true,
+          "holm_threshold": 0.016666666666666666,
+          "placebo_tail_fraction": 0.016479743648432136,
+          "placebo_rank": 72,
+          "verdict_by_k": {
+            "k=1.5": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.016479743648432136,
+              "ci_excludes_zero": true,
+              "delta_min": 0.009765625,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 1.5,
+              "tail_alpha": 0.05
+            },
+            "k=2.0": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.016479743648432136,
+              "ci_excludes_zero": true,
+              "delta_min": 0.013020833333333334,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 2.0,
+              "tail_alpha": 0.05
+            },
+            "k=3.0": {
+              "holm_reject_random": true,
+              "placebo_extreme": true,
+              "placebo_tail_fraction": 0.016479743648432136,
+              "ci_excludes_zero": true,
+              "delta_min": 0.01953125,
+              "passes_gate": false,
+              "expressible": false,
+              "k": 3.0,
+              "tail_alpha": 0.05
+            }
+          },
+          "expressible": false
+        }
+      }
+    }
+  }
+}

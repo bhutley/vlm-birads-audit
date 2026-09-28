@@ -1,0 +1,23 @@
+[project]
+name = "vlm-birads-audit"
+version = "0.1.0"
+description = "Auditing BI-RADS Expressibility of Breast-Ultrasound Decisions in Frozen Vision-Language Models"
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.0",
+    "open-clip-torch",
+    "torchvision",
+    "transformers",
+    "scikit-learn",
+    "scikit-image",
+    "matplotlib",
+    "seaborn",
+    "pyyaml",
+    "pillow",
+    "numpy",
+    "scipy",
+    "openpyxl",
+]
+
+[project.optional-dependencies]
+dev = ["ipython", "jupyter"]

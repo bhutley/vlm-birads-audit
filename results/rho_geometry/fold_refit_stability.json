@@ -1,0 +1,450 @@
+{
+  "source": "results/rho_geometry/results.json",
+  "analysis_commit": "2e374b1",
+  "by_backbone": {
+    "biomedclip": {
+      "busi": {
+        "n_images": 631,
+        "n_groups": 507,
+        "full_excess_placebo": 0.136861716020441,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.16251390934864737,
+          "rho_min": 0.15112802908125705,
+          "plac_excess_mean": 0.13733095069720697,
+          "plac_excess_min": 0.12058713318673095
+        }
+      },
+      "bus_uclm": {
+        "n_images": 264,
+        "n_groups": 35,
+        "full_excess_placebo": 0.008731937890941878,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.06696387736291338,
+          "rho_min": 0.041554253417452655,
+          "plac_excess_mean": 0.013254444661956128,
+          "plac_excess_min": -0.01774796245453269
+        }
+      },
+      "bus_bra": {
+        "n_images": 1875,
+        "n_groups": 1064,
+        "full_excess_placebo": 0.047088523738906644,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.08651161167463675,
+          "rho_min": 0.07056495247543992,
+          "plac_excess_mean": 0.04898911790732009,
+          "plac_excess_min": 0.026964664281652846
+        }
+      },
+      "busi_whu": {
+        "n_images": 925,
+        "n_groups": 814,
+        "full_excess_placebo": 0.051891116076817886,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.1114042056816786,
+          "rho_min": 0.0831399048671372,
+          "plac_excess_mean": 0.0505280344362968,
+          "plac_excess_min": 0.02064985822375704
+        }
+      },
+      "udiat": {
+        "n_images": 163,
+        "n_groups": 158,
+        "full_excess_placebo": 0.1113347898056008,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.144533595762115,
+          "rho_min": 0.13487052760157064,
+          "plac_excess_mean": 0.10748559281997858,
+          "plac_excess_min": 0.09357179179784089
+        }
+      },
+      "breast": {
+        "n_images": 252,
+        "n_groups": 252,
+        "full_excess_placebo": 0.08215738081673479,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.11298489545810364,
+          "rho_min": 0.10336563587468774,
+          "plac_excess_mean": 0.08081943767155901,
+          "plac_excess_min": 0.07087201510723434
+        }
+      }
+    },
+    "unimed_clip": {
+      "busi": {
+        "n_images": 631,
+        "n_groups": 507,
+        "full_excess_placebo": 0.04009791203417268,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.10308851608657303,
+          "rho_min": 0.08888347810837617,
+          "plac_excess_mean": 0.03900142027609752,
+          "plac_excess_min": 0.020222701775644045
+        }
+      },
+      "bus_uclm": {
+        "n_images": 264,
+        "n_groups": 35,
+        "full_excess_placebo": 0.04721214382526916,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.08288440625861665,
+          "rho_min": 0.07178783497117164,
+          "plac_excess_mean": 0.04345367692102061,
+          "plac_excess_min": 0.030388877158807656
+        }
+      },
+      "bus_bra": {
+        "n_images": 1875,
+        "n_groups": 1064,
+        "full_excess_placebo": -0.03515339677904816,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.020868768038114768,
+          "rho_min": 0.01667529689398985,
+          "plac_excess_mean": -0.03356817984531814,
+          "plac_excess_min": -0.043022840690821906
+        }
+      },
+      "busi_whu": {
+        "n_images": 925,
+        "n_groups": 814,
+        "full_excess_placebo": -0.0035773704751976693,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.05617314599903791,
+          "rho_min": 0.04564954405893603,
+          "plac_excess_mean": -0.003382619643578888,
+          "plac_excess_min": -0.016146215362852462
+        }
+      },
+      "udiat": {
+        "n_images": 163,
+        "n_groups": 158,
+        "full_excess_placebo": 0.02083274706317899,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.06177669504545609,
+          "rho_min": 0.043119765277406435,
+          "plac_excess_mean": 0.022873804133114416,
+          "plac_excess_min": 0.006888491454952683
+        }
+      },
+      "breast": {
+        "n_images": 252,
+        "n_groups": 252,
+        "full_excess_placebo": 0.056438871157676165,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.08999101184645035,
+          "rho_min": 0.07600433921868513,
+          "plac_excess_mean": 0.0527003627667282,
+          "plac_excess_min": 0.03468281429602034
+        }
+      }
+    },
+    "pmc_clip": {
+      "busi": {
+        "n_images": 631,
+        "n_groups": 507,
+        "full_excess_placebo": 0.07138300944495023,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.08590524349904409,
+          "rho_min": 0.07968723320688115,
+          "plac_excess_mean": 0.07571858727612645,
+          "plac_excess_min": 0.06947458155979763
+        }
+      },
+      "bus_uclm": {
+        "n_images": 264,
+        "n_groups": 35,
+        "full_excess_placebo": 0.07736929314643047,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.08633067915764378,
+          "rho_min": 0.06405529980039663,
+          "plac_excess_mean": 0.07282907358224291,
+          "plac_excess_min": 0.050064276932748064
+        }
+      },
+      "bus_bra": {
+        "n_images": 1875,
+        "n_groups": 1064,
+        "full_excess_placebo": 0.06712883012402865,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.08407587103463954,
+          "rho_min": 0.07258204558261963,
+          "plac_excess_mean": 0.06895162063805102,
+          "plac_excess_min": 0.05761593478952866
+        }
+      },
+      "busi_whu": {
+        "n_images": 925,
+        "n_groups": 814,
+        "full_excess_placebo": 0.04778398470572604,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.05779599268375546,
+          "rho_min": 0.04484201650851429,
+          "plac_excess_mean": 0.048905537306144234,
+          "plac_excess_min": 0.035677780959383565
+        }
+      },
+      "udiat": {
+        "n_images": 163,
+        "n_groups": 158,
+        "full_excess_placebo": 0.11672845470328469,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.13093223147842342,
+          "rho_min": 0.12135407432136841,
+          "plac_excess_mean": 0.11412769196687869,
+          "plac_excess_min": 0.10179527656686385
+        }
+      },
+      "breast": {
+        "n_images": 252,
+        "n_groups": 252,
+        "full_excess_placebo": 0.03997489299281645,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.05042796152400179,
+          "rho_min": 0.04347002634468988,
+          "plac_excess_mean": 0.0392445723803685,
+          "plac_excess_min": 0.03129101070785354
+        }
+      }
+    },
+    "pubmedclip": {
+      "busi": {
+        "n_images": 631,
+        "n_groups": 507,
+        "full_excess_placebo": -0.007485146392557406,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.0055118633788423825,
+          "rho_min": 0.004508900316907231,
+          "plac_excess_mean": -0.008333300526600678,
+          "plac_excess_min": -0.011076678894236535
+        }
+      },
+      "bus_uclm": {
+        "n_images": 264,
+        "n_groups": 35,
+        "full_excess_placebo": -0.001610677678960372,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.011717956262986145,
+          "rho_min": 0.005970178592817446,
+          "plac_excess_mean": -0.003269803232528251,
+          "plac_excess_min": -0.006795250896787843
+        }
+      },
+      "bus_bra": {
+        "n_images": 1875,
+        "n_groups": 1064,
+        "full_excess_placebo": -0.016215188075039133,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.0038835705568699584,
+          "rho_min": 0.0028945438587991363,
+          "plac_excess_mean": -0.01662821813005699,
+          "plac_excess_min": -0.020850720846787334
+        }
+      },
+      "busi_whu": {
+        "n_images": 925,
+        "n_groups": 814,
+        "full_excess_placebo": -0.004170999317786483,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.006884574607916152,
+          "rho_min": 0.0057225552777518795,
+          "plac_excess_mean": -0.0044974153370045105,
+          "plac_excess_min": -0.007518647005627729
+        }
+      },
+      "udiat": {
+        "n_images": 163,
+        "n_groups": 158,
+        "full_excess_placebo": -0.01577986164567003,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.0030838150037481703,
+          "rho_min": 0.0021821198654314697,
+          "plac_excess_mean": -0.0155650487245115,
+          "plac_excess_min": -0.017420458322803107
+        }
+      },
+      "breast": {
+        "n_images": 252,
+        "n_groups": 252,
+        "full_excess_placebo": -0.01605928316808676,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.0021798269534737303,
+          "rho_min": 0.0010984620219683472,
+          "plac_excess_mean": -0.015042098413574304,
+          "plac_excess_min": -0.016584184884220515
+        }
+      }
+    },
+    "clip": {
+      "busi": {
+        "n_images": 631,
+        "n_groups": 507,
+        "full_excess_placebo": -0.0007264865481362258,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.008481864399021771,
+          "rho_min": 0.0059867542199519876,
+          "plac_excess_mean": -0.0009832657740870975,
+          "plac_excess_min": -0.0039057716481560216
+        }
+      },
+      "bus_uclm": {
+        "n_images": 264,
+        "n_groups": 35,
+        "full_excess_placebo": 0.004906843782568379,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.012386504328506628,
+          "rho_min": 0.00793052227062411,
+          "plac_excess_mean": 0.004600923998822928,
+          "plac_excess_min": 0.0011181795703026345
+        }
+      },
+      "bus_bra": {
+        "n_images": 1875,
+        "n_groups": 1064,
+        "full_excess_placebo": -0.006588383063802593,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.0025282973470559934,
+          "rho_min": 0.001655187857437841,
+          "plac_excess_mean": -0.005808603115647889,
+          "plac_excess_min": -0.006985384352729153
+        }
+      },
+      "busi_whu": {
+        "n_images": 925,
+        "n_groups": 814,
+        "full_excess_placebo": -0.0026235454619664283,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.004424950833171519,
+          "rho_min": 0.003402789706151004,
+          "plac_excess_mean": -0.003202292118928267,
+          "plac_excess_min": -0.005441898265462634
+        }
+      },
+      "udiat": {
+        "n_images": 163,
+        "n_groups": 158,
+        "full_excess_placebo": -0.007118331315399436,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.005242136735881897,
+          "rho_min": 0.0031642048050786256,
+          "plac_excess_mean": -0.006908806451932402,
+          "plac_excess_min": -0.010467505193522792
+        }
+      },
+      "breast": {
+        "n_images": 252,
+        "n_groups": 252,
+        "full_excess_placebo": -0.004359134758054969,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.001708493817042257,
+          "rho_min": 0.000718303960553142,
+          "plac_excess_mean": -0.004275430740963026,
+          "plac_excess_min": -0.0053076771309964075
+        }
+      }
+    },
+    "siglip": {
+      "busi": {
+        "n_images": 631,
+        "n_groups": 507,
+        "full_excess_placebo": 0.009075856889855868,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.018817088592692273,
+          "rho_min": 0.016907972962083646,
+          "plac_excess_mean": 0.00953248104930204,
+          "plac_excess_min": 0.007414299051356505
+        }
+      },
+      "bus_uclm": {
+        "n_images": 264,
+        "n_groups": 35,
+        "full_excess_placebo": 0.0067593348049039435,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.013377475915226731,
+          "rho_min": 0.0061732650793037405,
+          "plac_excess_mean": 0.005673387639086034,
+          "plac_excess_min": 0.0003285213649143106
+        }
+      },
+      "bus_bra": {
+        "n_images": 1875,
+        "n_groups": 1064,
+        "full_excess_placebo": 0.0009425036938095939,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.016332027847385445,
+          "rho_min": 0.01250856625160833,
+          "plac_excess_mean": 0.0007238168428914258,
+          "plac_excess_min": -0.004932929938867608
+        }
+      },
+      "busi_whu": {
+        "n_images": 925,
+        "n_groups": 814,
+        "full_excess_placebo": 0.0013994374001825459,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.006396954479068334,
+          "rho_min": 0.004970236880276948,
+          "plac_excess_mean": 0.0013499862317787748,
+          "plac_excess_min": 0.00018993572928871407
+        }
+      },
+      "udiat": {
+        "n_images": 163,
+        "n_groups": 158,
+        "full_excess_placebo": 0.010530009995898367,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.016371243560913806,
+          "rho_min": 0.008843638412117704,
+          "plac_excess_mean": 0.009756024428256748,
+          "plac_excess_min": 0.003737994605279145
+        }
+      },
+      "breast": {
+        "n_images": 252,
+        "n_groups": 252,
+        "full_excess_placebo": 0.0071435171149310875,
+        "fold_refit": {
+          "n_folds": 5,
+          "rho_mean": 0.017556612859219195,
+          "rho_min": 0.012981475506126258,
+          "plac_excess_mean": 0.007478151936001846,
+          "plac_excess_min": 0.001971046220023861
+        }
+      }
+    }
+  }
+}

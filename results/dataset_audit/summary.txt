@@ -1,0 +1,37 @@
+====================================================================
+WP1 Dataset Audit — six BUS sites
+====================================================================
+Total images: 4684   exact-dup clusters: 2   near-dup clusters: 179
+Cross-dataset overlap clusters: 0   label-conflict clusters: 10   excluded images: 20
+Manifest images (in-task, cleaned): 4241
+
+site        imgs bin-elig  groups bin-grp  excl                   src
+--------------------------------------------------------------------
+busi         780      631     598     507    18      image_level_only
+bus_uclm     683      264      35      35     0documented_heuristic_prefix
+bus_bra     1875     1875    1064    1064     0        native_case_id
+busi_whu     927      925     814     814     2  native_patient_index
+udiat        163      163     158     158     0      image_level_only
+breast       256      252     252     252     0        native_case_id
+
+Regression vs SII audit:
+  busi       OK  expected={'raw': 780, 'conflict_excluded': 18, 'cleaned': 762, 'binary_eligible': 631} got={'raw': 780, 'binary_eligible': 631, 'conflict_excluded': 18}
+  bus_uclm   OK  expected={'raw': 683, 'binary_eligible': 264, 'binary_groups_approx': 35} got={'raw': 683, 'binary_eligible': 264, 'conflict_excluded': 0}
+  bus_bra    OK  expected={'raw': 1875, 'native_cases': 1064} got={'raw': 1875, 'binary_eligible': 1875, 'conflict_excluded': 0}
+  busi_whu   OK  expected={'raw': 927, 'conflict_excluded': 2, 'cleaned': 925} got={'raw': 927, 'binary_eligible': 925, 'conflict_excluded': 2}
+  udiat      OK  expected={'raw': 163, 'audit_groups': 158} got={'raw': 163, 'binary_eligible': 163, 'conflict_excluded': 0}
+  breast     new site (no SII baseline)
+
+Label-conflict clusters (excluded in full):
+  exact exact_0000 ['busi'] labels=['benign', 'malignant'] n=2
+  near near_0012 ['busi'] labels=['benign', 'malignant'] n=3
+  near near_0028 ['busi'] labels=['benign', 'malignant'] n=3
+  near near_0078 ['busi'] labels=['benign', 'normal'] n=2
+  near near_0093 ['busi'] labels=['benign', 'malignant'] n=2
+  near near_0096 ['busi'] labels=['benign', 'malignant'] n=2
+  near near_0099 ['busi'] labels=['benign', 'malignant'] n=2
+  near near_0100 ['busi'] labels=['benign', 'malignant'] n=2
+  near near_0101 ['busi'] labels=['benign', 'normal'] n=2
+  near near_0172 ['busi_whu'] labels=['benign', 'malignant'] n=2
+
+Manifest SHA-256 (fold_manifest): 87ed7f453ae023a0…

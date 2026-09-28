@@ -1,0 +1,57 @@
+==============================================================================
+ROB-03 — carrier-template and prompt-wording stability (SENSITIVITY)
+==============================================================================
+declaration : docs/20260724-prompt-robustness-declaration.md
+status      : SENSITIVITY — bootstrap fractions are not p-values
+draws       : 1000 prompt bootstraps; 3 carrier templates jackknifed
+
+Polarities with a single phrasing CANNOT be perturbed by the bootstrap:
+  {'shape': ['pos'], 'orientation': ['neg'], 'echogenicity': ['pos'], 'posterior': ['pos']}
+
+Fractions below are sensitivity summaries over OUR prompt bank, NOT p-values.
+
+biomedclip
+    full bank      exc=+0.0730  r_plac=0.0002
+    jackknife      exc range [+0.0705, +0.0730, +0.0720]
+    bootstrap exc  median +0.0664  [+0.0481,+0.0799]
+    max princ.angle median 0.8020 rad  p95 0.9917  max 1.0789
+    frac of draws  placebo-extreme 1.000  gate 1.000  random-sig 1.000  ALL-3 1.000
+    per-axis angle (median rad): margi=0.552  shape=0.346  orien=0.363  echog=0.407  poste=0.562
+unimed_clip
+    full bank      exc=+0.0210  r_plac=0.1176
+    jackknife      exc range [+0.0127, +0.0288, +0.0117]
+    bootstrap exc  median +0.0210  [-0.0063,+0.0412]
+    max princ.angle median 0.8086 rad  p95 1.0610  max 1.2287
+    frac of draws  placebo-extreme 0.262  gate 0.540  random-sig 1.000  ALL-3 0.262
+    per-axis angle (median rad): margi=0.649  shape=0.443  orien=0.527  echog=0.503  poste=0.530
+pmc_clip
+    full bank      exc=+0.0701  r_plac=0.0002
+    jackknife      exc range [+0.0694, +0.0626, +0.0683]
+    bootstrap exc  median +0.0598  [+0.0444,+0.0717]
+    max princ.angle median 0.7392 rad  p95 0.9065  max 1.0581
+    frac of draws  placebo-extreme 1.000  gate 1.000  random-sig 1.000  ALL-3 1.000
+    per-axis angle (median rad): margi=0.670  shape=0.368  orien=0.455  echog=0.456  poste=0.432
+pubmedclip
+    full bank      exc=-0.0102  r_plac=1.0000
+    jackknife      exc range [-0.0089, -0.0106, -0.0110]
+    bootstrap exc  median -0.0097  [-0.0116,-0.0062]
+    max princ.angle median 0.7384 rad  p95 0.8946  max 1.0229
+    frac of draws  placebo-extreme 0.000  gate 0.000  random-sig 0.000  ALL-3 0.000
+    per-axis angle (median rad): margi=0.664  shape=0.453  orien=0.399  echog=0.348  poste=0.294
+clip
+    full bank      exc=-0.0028  r_plac=0.9572
+    jackknife      exc range [-0.0030, -0.0028, -0.0020]
+    bootstrap exc  median -0.0022  [-0.0047,+0.0010]
+    max princ.angle median 0.8012 rad  p95 1.0127  max 1.2032
+    frac of draws  placebo-extreme 0.000  gate 0.000  random-sig 0.000  ALL-3 0.000
+    per-axis angle (median rad): margi=0.653  shape=0.488  orien=0.402  echog=0.444  poste=0.317
+siglip
+    full bank      exc=+0.0060  r_plac=0.0165
+    jackknife      exc range [+0.0058, +0.0051, +0.0050]
+    bootstrap exc  median +0.0046  [-0.0003,+0.0087]
+    max princ.angle median 0.7703 rad  p95 0.9130  max 1.0414
+    frac of draws  placebo-extreme 0.438  gate 0.000  random-sig 0.830  ALL-3 0.000
+    per-axis angle (median rad): margi=0.703  shape=0.393  orien=0.373  echog=0.552  poste=0.461
+
+A stable subspace = small principal angles AND fractions near 1 for the
+checkpoints the primary analysis calls expressible.

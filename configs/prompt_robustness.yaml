@@ -1,0 +1,24 @@
+# ROB-03 — prompt/template stability of the clinical subspace.
+# Overlays configs/default.yaml. Concept bank = default.yaml:birads_concept_bank.
+#
+# SENSITIVITY ANALYSIS, declared before running in
+# docs/20260724-prompt-robustness-declaration.md. Bootstrap fractions are
+# sensitivity summaries, NOT p-values, and do not revise the primary verdict.
+
+prompt_robustness:
+  backbones: [biomedclip, unimed_clip, pmc_clip, pubmedclip, clip, siglip]
+  sites: [busi, bus_uclm, bus_bra, busi_whu, udiat, breast]
+
+  orthonormalize_basis: true
+  probe_C: 1.0                     # identical to E3, so w is the same direction
+  batch_size: 32
+  embedding_cache: results/cross_modal_probe/embeddings
+  cohort_manifest: results/dataset_audit
+
+  n_prompt_bootstrap: 1000         # resample templates + descriptors within polarity
+  global_random_trials: 20000
+  gate_k_primary: 2.0
+
+  # Both null distributions depend only on the site directions and m, never on the
+  # clinical basis, so they are computed ONCE per backbone and every bootstrap draw
+  # is scored against the same fixed references.

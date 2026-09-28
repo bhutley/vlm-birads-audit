@@ -1,0 +1,59 @@
+==============================================================================
+ROB-04 — logistic regularisation sensitivity (SENSITIVITY)
+==============================================================================
+declaration : docs/20260724-probe-regularisation-declaration.md
+status      : SENSITIVITY — C=1 remains primary; do not select a new C from this
+criteria    : Holm(p_random), placebo tail<0.05, gate; the cohort bootstrap CI is held at its C=1 value (2000 refits per grid point is prohibitive)
+
+EXPRESSIBLE (3 criteria) across the C grid:
+
+backbone          C=0.01       C=0.1         C=1        C=10       C=100
+------------------------------------------------------------------------
+biomedclip             E           E           E           E           .
+unimed_clip            .           .           .           E           .
+pmc_clip               E           E           E           E           .
+pubmedclip             .           .           .           .           .
+clip                   .           .           .           .           .
+siglip                 .           .           .           .           .
+
+Equal-site mean placebo excess / min cos(w_C, w_1) / median OOF AUC:
+
+  biomedclip
+    C=0.01     exc=+0.0777  r_plac=0.0002  min_cos=+0.8578  medAUC=0.753
+    C=0.1      exc=+0.0785  r_plac=0.0002  min_cos=+0.9152  medAUC=0.762
+    C=1        exc=+0.0730  r_plac=0.0002  min_cos=+1.0000  medAUC=0.786
+    C=10       exc=+0.0454  r_plac=0.0002  min_cos=+0.8593  medAUC=0.808
+    C=100      exc=+0.0131  r_plac=0.0819  min_cos=+0.5874  medAUC=0.801
+  unimed_clip
+    C=0.01     exc=+0.0224  r_plac=0.1089  min_cos=+0.8375  medAUC=0.738
+    C=0.1      exc=+0.0235  r_plac=0.0911  min_cos=+0.9126  medAUC=0.754
+    C=1        exc=+0.0210  r_plac=0.1176  min_cos=+1.0000  medAUC=0.782
+    C=10       exc=+0.0214  r_plac=0.0263  min_cos=+0.8671  medAUC=0.802
+    C=100      exc=+0.0148  r_plac=0.0256  min_cos=+0.5648  medAUC=0.791
+  pmc_clip
+    C=0.01     exc=+0.0869  r_plac=0.0002  min_cos=+0.8380  medAUC=0.782
+    C=0.1      exc=+0.0860  r_plac=0.0002  min_cos=+0.9077  medAUC=0.804
+    C=1        exc=+0.0701  r_plac=0.0002  min_cos=+1.0000  medAUC=0.831
+    C=10       exc=+0.0262  r_plac=0.0002  min_cos=+0.8305  medAUC=0.849
+    C=100      exc=+0.0014  r_plac=0.3204  min_cos=+0.5197  medAUC=0.847
+  pubmedclip
+    C=0.01     exc=-0.0115  r_plac=0.9998  min_cos=+0.8843  medAUC=0.716
+    C=0.1      exc=-0.0116  r_plac=0.9998  min_cos=+0.9294  medAUC=0.726
+    C=1        exc=-0.0102  r_plac=1.0000  min_cos=+1.0000  medAUC=0.755
+    C=10       exc=-0.0051  r_plac=0.9444  min_cos=+0.8508  medAUC=0.799
+    C=100      exc=-0.0002  r_plac=0.5049  min_cos=+0.5724  medAUC=0.824
+  clip
+    C=0.01     exc=-0.0040  r_plac=0.9924  min_cos=+0.8209  medAUC=0.667
+    C=0.1      exc=-0.0038  r_plac=0.9906  min_cos=+0.8838  medAUC=0.682
+    C=1        exc=-0.0028  r_plac=0.9572  min_cos=+1.0000  medAUC=0.719
+    C=10       exc=-0.0028  r_plac=0.9815  min_cos=+0.8683  medAUC=0.779
+    C=100      exc=-0.0043  r_plac=0.9995  min_cos=+0.5956  medAUC=0.796
+  siglip
+    C=0.01     exc=+0.0059  r_plac=0.0023  min_cos=+0.8510  medAUC=0.714
+    C=0.1      exc=+0.0060  r_plac=0.0018  min_cos=+0.9175  medAUC=0.721
+    C=1        exc=+0.0060  r_plac=0.0165  min_cos=+1.0000  medAUC=0.761
+    C=10       exc=+0.0045  r_plac=0.1625  min_cos=+0.8855  medAUC=0.801
+    C=100      exc=+0.0020  r_plac=0.2264  min_cos=+0.5746  medAUC=0.801
+
+min_cos near 1 means regularisation barely moves the decision DIRECTION,
+which is all rho depends on. C=1 remains primary by declaration.

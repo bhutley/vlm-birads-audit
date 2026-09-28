@@ -1,0 +1,15 @@
+============================================================================================
+Reviewer addenda: anatomy null (P0-1), completeness (P1-4), retention (P1-6)
+============================================================================================
+backbone     exc_plac exc_anat  p_anat  gate   aucF aucClin aucPlac sklClin sklPlac  retC  retP  retA
+----------------------------------------------------------------------------------------------------
+biomedclip     +0.073   +0.058  0.0040     Y  0.839   0.690   0.655    0.55    0.46  0.60  0.53  0.52
+pmc_clip       +0.070   +0.062  0.0040     Y  0.895   0.750   0.666    0.62    0.41  0.17  0.16  0.16
+clip           -0.003   -0.004  0.9170     n  0.789   0.601   0.636    0.36    0.47  0.08  0.10  0.10
+
+aucPlac/aucAnat are DIMENSION-MATCHED (mean over random 5-dim null subsets).
+P0-1: exc_anat>0, small p_anat, gate=Y => clinical excess survives a RICH,
+      non-diagnostic anatomy null (not just the terse placebo pool).
+P1-4: sklClin = fraction of full-probe AUC skill kept by the 5-dim clinical C;
+      sklClin > sklPlac => C carries more decision content than a matched null.
+P1-6: retC vs retP/retA => whether clinical dirs sit closer to the image manifold.

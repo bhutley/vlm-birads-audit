@@ -1,0 +1,40 @@
+==============================================================================
+Pooled-label permutation test (SECONDARY sensitivity — STAT-01)
+==============================================================================
+declaration : docs/20260723-pooled-permutation-declaration.md
+status      : SECONDARY sensitivity — not the confirmatory family
+
+pool        : 5 clinical + 10 anatomy (richness-matched)
+clinical    : margin, shape, orientation, echogenicity, posterior
+control     : rib_cooper, pectoralis_fat, glandular_adipose, skin_chestwall, duct_vessel, fascia_muscle, retro_premammary, node_vessel, fibroglandular_fatty, nipple_areola
+
+H0: the clinical/control label is uninformative about alignment with w.
+The observed clinical subset is one of the enumerated subsets, so
+p = #{T_S >= T_clin} / n_reference is EXACT (no +1 smoothing).
+
+backbone       T_clin  pool_mean   excess        rank  p_pooled   holm
+------------------------------------------------------------------------------
+biomedclip     0.1144     0.0811  +0.0333    426/3003    0.1419     --
+unimed_clip   EXCLUDED (outcome-independent): control-pool prompts absent from the cached text embeddings
+pmc_clip       0.0825     0.0437  +0.0388     94/3003    0.0313     --
+pubmedclip     0.0058     0.0110  -0.0052   2718/3003    0.9051     --
+clip           0.0058     0.0088  -0.0029   2421/3003    0.8062     --
+siglip         0.0151     0.0147  +0.0005   1315/3003    0.4379     --
+
+Composition of the subsets that OUTRANK the clinical set, by how many of the
+5 clinical axes they retain. k=0 means a PURE control subset wins (controls
+explain the alignment); mass at high k means the labelled set is simply not
+the best subset of the pooled bank (one weak clinical axis).
+
+backbone          k=0      k=1      k=2      k=3      k=4      k=5  outrank
+(reference)       252     1050     1200      450       50        1     3003
+biomedclip          0       78      209      122       16        0      425
+pmc_clip            0        0       39       44       10        0       93
+pubmedclip        252     1005     1056      368       36        0     2717
+clip              231      902      938      320       29        0     2420
+siglip            110      452      524      205       23        0     1314
+
+rank 1 = the clinical subspace beats every richness-matched alternative.
+Read against the pre-committed interpretation table in the declaration:
+an unfavourable result is reported, not demoted, and the primary verdict
+is NOT revised on this secondary test alone.

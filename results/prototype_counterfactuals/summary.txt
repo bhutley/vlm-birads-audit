@@ -1,0 +1,36 @@
+======================================================================
+E5 — prototype counterfactuals & plausibility (RQ6)   backbone=biomedclip
+======================================================================
+BUSI lesions: 647
+
+Prototype-anchored (nearest opposite-class real lesion):
+  retrieval distance  mean=0.067  median=0.060  (smaller = more plausible)
+  concept-explained fraction of the edit = 0.073
+  oriented benign->malignant axis profile (which BI-RADS features change):
+      shape         +0.021
+      orientation   +0.016
+      posterior     +0.015
+      echogenicity  -0.010
+      margin        +0.008
+
+Directional counterfactual (flip the probe along the malignancy axis):
+  flip rate            = 0.998
+  opposite-class rate  = 0.247  (nearest real image is the target class)
+  retrieval distance   = 0.139
+  figure: /Users/brett/Dropbox/uts/research/vlm_busi/results/prototype_counterfactuals/figures/counterfactuals.png
+
+Counterfactual BI-RADS faithfulness (bus_bra, n=1875; radiologist BI-RADS of retrieved opposite-class prototype):
+  nearest-opposite: oriented dBI-RADS=+1.188  concordance=0.791  (b->m +1.20, m->b -1.16)
+  random-opposite : oriented dBI-RADS=+1.365  concordance=0.880
+  concept fraction=0.063  retrieval dist=0.059  (Wilcoxon: dir>0 p=5.3e-235, vs-random p=1.5e-15)
+  oriented benign->malignant axis profile on this site:
+      shape         +0.009
+      posterior     +0.009
+      margin        +0.006
+      orientation   +0.004
+      echogenicity  +0.003
+
+BUS-BRA BI-RADS concordance (borderline 3/4 vs clear 2/5):
+  n_test=938  borderline=562  clear=376
+  mean s:    borderline=0.3082295141442312  clear=0.2624672647260562  (MWU p=0.0093)
+  mean conf: borderline=0.11854060339892761  clear=0.15391028341065463  (MWU p=0.0000)

@@ -1,0 +1,28 @@
+========================================================================
+E4 (WP5) — per-case test (RQ5), audit-unit + out-of-fold   backbone=biomedclip
+========================================================================
+BUSI: 631 images -> 507 audit units; OOF errors=100 base error=0.197
+(out-of-fold over 5 canonical group-disjoint folds; 2000 audit-unit bootstraps)
+
+Does clinical share s(z) predict error BEYOND confidence?
+  corr(s,error)   = +0.296  95%CI[+0.205,+0.386]
+  CV-AUC(conf)    = 0.755
+  CV-AUC(conf+s)  = 0.758
+  delta-AUC       = +0.003 +/- 0.002   95%CI[-0.007,+0.017]  (valid boot frac 1.00)
+  LR test (MLE, df=1): stat=2.241  p=0.1344  valid=True
+    ll(conf)=-216.52  ll(conf+s)=-215.40
+  power: min detectable delta-AUC @80% = 0.018; equivalence margin = 0.017
+  (null = 'no DETECTABLE gain at this n', not 'provably zero')
+
+Matched-confidence stratification (error rate by clinical share):
+  low-s err=0.173  high-s err=0.222  pooled gap=-0.050  95%CI[-0.130,+0.014]
+
+>>> VERDICT: s(z) adds value beyond confidence?  NO
+    (PASS = bootstrap delta-AUC CI lower bound > 0 AND VALID unpenalized LR p < 0.05;
+     NO => 'no detectable incremental value' — keep model-level RQ2-RQ4 from E2/E3.)
+
+Cross-site fragility (EXPLORATORY; BUSI probe -> external audit units):
+  bus_uclm   n=264 g=35 base_err=0.337  gap=+0.008  95%CI[-0.140,+0.102]
+  bus_bra    n=1875 g=1064 base_err=0.327  gap=+0.075  95%CI[+0.028,+0.118]
+  busi_whu   n=925 g=814 base_err=0.391  gap=+0.023  95%CI[-0.053,+0.094]
+  udiat      n=163 g=158 base_err=0.233  gap=-0.009  95%CI[-0.132,+0.153]

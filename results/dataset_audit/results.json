@@ -1,0 +1,907 @@
+{
+  "metadata": {
+    "experiment": "dataset_audit",
+    "author": "unknown",
+    "timestamp": "2026-07-22T13:19:09.976040",
+    "git_commit": "2e374b1",
+    "config": {
+      "reproducibility": {
+        "global_seed": 42,
+        "deterministic_algorithms": true
+      },
+      "data": {
+        "busi_root": "~/var/data/busi/Dataset_BUSI_with_GT",
+        "tn3k_root": "~/var/data/tn3k",
+        "thyroid_cancer_root": "~/var/data/thyroid-cancer/Thyroid Data",
+        "test_split": 0.2,
+        "split_seed": 42,
+        "image_size": 224
+      },
+      "bus_datasets": {
+        "busi": "~/var/data/BUSdatasets/2020_BUSI/2020_BUSI",
+        "bus_uclm": "~/var/data/BUSdatasets/2025_BUS_UCLM/2025_BUS_UCLM",
+        "bus_bra": "~/var/data/BUSdatasets/2024_BUSBRA/2024_BUSBRA",
+        "busi_whu": "~/var/data/BUSdatasets/2025_BUSI_WHU/2025_BUSI_WHU",
+        "udiat": "~/var/data/BUSdatasets/2020_UDIAT/2020_UDIAT",
+        "breast": "~/var/data/BUSdatasets/2024_BrEaST_USG"
+      },
+      "few_shot": {
+        "k_values": [
+          2,
+          4,
+          8,
+          16,
+          32
+        ],
+        "n_trials": 10,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "models": {
+        "clip": {
+          "name": "ViT-B-32",
+          "pretrained": "openai"
+        },
+        "biomedclip": {
+          "name": "hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"
+        },
+        "resnet": {
+          "name": "resnet50",
+          "epochs": 50,
+          "lr": 0.001,
+          "batch_size": 32
+        }
+      },
+      "prompts": {
+        "bus": {
+          "lesion": "a breast ultrasound image showing a mass"
+        },
+        "busi": {
+          "simple": {
+            "normal": "normal",
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "normal": "a breast ultrasound image showing normal tissue with no abnormalities",
+            "benign": "a breast ultrasound image showing a benign lesion",
+            "malignant": "a breast ultrasound image showing a malignant tumor"
+          },
+          "clinical": {
+            "normal": "breast ultrasound demonstrating homogeneous fat lobules and normal fibroglandular tissue with no focal lesions",
+            "benign": "breast ultrasound showing a well-circumscribed oval homogeneous hypoechoic mass with parallel orientation consistent with a benign fibroadenoma",
+            "malignant": "breast ultrasound demonstrating an irregular hypoechoic mass with angular margins spiculation and posterior acoustic shadowing suggestive of malignancy"
+          }
+        },
+        "thyroid": {
+          "simple": {
+            "benign": "benign",
+            "malignant": "malignant"
+          },
+          "descriptive": {
+            "benign": "a thyroid ultrasound image showing a benign nodule",
+            "malignant": "a thyroid ultrasound image showing a malignant nodule"
+          },
+          "clinical": {
+            "benign": "thyroid ultrasound showing a well-defined isoechoic or hyperechoic nodule with smooth margins and regular shape consistent with a benign colloid nodule",
+            "malignant": "thyroid ultrasound demonstrating a solid hypoechoic nodule with irregular margins microcalcifications and taller-than-wide shape suggestive of papillary thyroid carcinoma"
+          }
+        }
+      },
+      "birads_concept_bank": {
+        "carrier_templates": [
+          "breast ultrasound showing a mass with {d}",
+          "a breast ultrasound image of a lesion with {d}",
+          "sonographic breast mass demonstrating {d}"
+        ],
+        "concepts": {
+          "margin": {
+            "pos": [
+              "spiculated margins",
+              "angular margins",
+              "microlobulated margins",
+              "indistinct margins"
+            ],
+            "neg": [
+              "circumscribed margins",
+              "well-defined smooth margins"
+            ]
+          },
+          "shape": {
+            "pos": [
+              "irregular shape"
+            ],
+            "neg": [
+              "oval shape",
+              "round shape"
+            ]
+          },
+          "orientation": {
+            "pos": [
+              "taller-than-wide non-parallel orientation",
+              "vertical orientation"
+            ],
+            "neg": [
+              "parallel wider-than-tall orientation"
+            ]
+          },
+          "echogenicity": {
+            "pos": [
+              "markedly hypoechoic echotexture"
+            ],
+            "neg": [
+              "isoechoic echotexture",
+              "hyperechoic echotexture"
+            ]
+          },
+          "posterior": {
+            "pos": [
+              "posterior acoustic shadowing"
+            ],
+            "neg": [
+              "posterior acoustic enhancement",
+              "no posterior acoustic features"
+            ]
+          }
+        },
+        "reference_axes": {
+          "malignancy": {
+            "pos": [
+              "malignant tumor",
+              "malignant breast lesion"
+            ],
+            "neg": [
+              "benign lesion",
+              "benign breast mass"
+            ]
+          }
+        },
+        "placebo_concepts": {
+          "laterality": {
+            "pos": [
+              "a left-breast annotation"
+            ],
+            "neg": [
+              "a right-breast annotation"
+            ]
+          },
+          "image_side": {
+            "pos": [
+              "a left-sided position in the image"
+            ],
+            "neg": [
+              "a right-sided position in the image"
+            ]
+          },
+          "scale_bar": {
+            "pos": [
+              "a centimeter scale bar"
+            ],
+            "neg": [
+              "no scale markings"
+            ]
+          },
+          "caliper": {
+            "pos": [
+              "caliper measurement markers"
+            ],
+            "neg": [
+              "no caliper markers"
+            ]
+          },
+          "annotation": {
+            "pos": [
+              "overlaid annotation text"
+            ],
+            "neg": [
+              "no overlaid text"
+            ]
+          },
+          "transducer": {
+            "pos": [
+              "a linear-transducer appearance"
+            ],
+            "neg": [
+              "a curved-transducer appearance"
+            ]
+          },
+          "arrow_marker": {
+            "pos": [
+              "an arrow marker"
+            ],
+            "neg": [
+              "no arrow marker"
+            ]
+          },
+          "panel_layout": {
+            "pos": [
+              "a dual-panel layout"
+            ],
+            "neg": [
+              "a single-panel layout"
+            ]
+          },
+          "timestamp": {
+            "pos": [
+              "a timestamp overlay"
+            ],
+            "neg": [
+              "no timestamp overlay"
+            ]
+          },
+          "patient_banner": {
+            "pos": [
+              "a patient information banner"
+            ],
+            "neg": [
+              "no information banner"
+            ]
+          },
+          "institution_label": {
+            "pos": [
+              "a hospital name label"
+            ],
+            "neg": [
+              "no facility label"
+            ]
+          },
+          "body_marker": {
+            "pos": [
+              "a body-position pictogram"
+            ],
+            "neg": [
+              "no body pictogram"
+            ]
+          },
+          "image_border": {
+            "pos": [
+              "a rectangular image border"
+            ],
+            "neg": [
+              "no image border"
+            ]
+          },
+          "vendor_logo": {
+            "pos": [
+              "a manufacturer logo"
+            ],
+            "neg": [
+              "no manufacturer logo"
+            ]
+          },
+          "grid_overlay": {
+            "pos": [
+              "a measurement grid overlay"
+            ],
+            "neg": [
+              "no grid overlay"
+            ]
+          },
+          "thumbnail": {
+            "pos": [
+              "a thumbnail preview strip"
+            ],
+            "neg": [
+              "no thumbnail strip"
+            ]
+          }
+        },
+        "malignancy_synonym_concepts": {
+          "diagnosis": {
+            "pos": [
+              "a malignant tumor"
+            ],
+            "neg": [
+              "a benign lesion"
+            ]
+          },
+          "cancer": {
+            "pos": [
+              "a cancerous mass"
+            ],
+            "neg": [
+              "a non-cancerous mass"
+            ]
+          },
+          "entity": {
+            "pos": [
+              "a carcinoma"
+            ],
+            "neg": [
+              "a fibroadenoma"
+            ]
+          },
+          "aggressiveness": {
+            "pos": [
+              "an aggressive tumor"
+            ],
+            "neg": [
+              "an indolent lesion"
+            ]
+          },
+          "suspicion": {
+            "pos": [
+              "a high-suspicion lesion"
+            ],
+            "neg": [
+              "a low-suspicion lesion"
+            ]
+          },
+          "biopsy": {
+            "pos": [
+              "a lesion requiring biopsy"
+            ],
+            "neg": [
+              "a lesion needing no biopsy"
+            ]
+          },
+          "probability": {
+            "pos": [
+              "a probably malignant mass"
+            ],
+            "neg": [
+              "a probably benign mass"
+            ]
+          },
+          "concern": {
+            "pos": [
+              "a worrisome breast finding"
+            ],
+            "neg": [
+              "a reassuring breast finding"
+            ]
+          },
+          "malignant_benign": {
+            "pos": [
+              "a cancer"
+            ],
+            "neg": [
+              "a cyst"
+            ]
+          },
+          "grade": {
+            "pos": [
+              "a high-grade tumor"
+            ],
+            "neg": [
+              "a low-grade lesion"
+            ]
+          }
+        }
+      },
+      "evaluation": {
+        "metrics": [
+          "accuracy",
+          "f1_macro",
+          "f1_weighted",
+          "auc_roc"
+        ],
+        "confidence_level": 0.95
+      },
+      "output": {
+        "results_dir": "results",
+        "figures_dpi": 300
+      },
+      "dataset_audit": {
+        "sites": [
+          "busi",
+          "bus_uclm",
+          "bus_bra",
+          "busi_whu",
+          "udiat",
+          "breast"
+        ],
+        "phash": {
+          "side": 32,
+          "lowfreq": 8,
+          "hamming_threshold": 6
+        },
+        "exclusions": {
+          "rule": "full_cluster_on_label_conflict",
+          "pick_winning_label": false
+        },
+        "group_sources": {
+          "busi": {
+            "kind": "image_level"
+          },
+          "udiat": {
+            "kind": "image_level"
+          },
+          "bus_uclm": {
+            "kind": "documented_heuristic",
+            "key": "filename_prefix_before_last_underscore",
+            "status": "unverified"
+          },
+          "bus_bra": {
+            "kind": "native",
+            "file": "bus_data.csv",
+            "column": "Case"
+          },
+          "busi_whu": {
+            "kind": "native",
+            "file": "Patient_infos_BUSI-WHU.xlsx",
+            "column": "patient_index"
+          },
+          "breast": {
+            "kind": "native",
+            "file": "BrEaST-Lesions-USG-clinical-data-Dec-15-2023.xlsx",
+            "column": "CaseID"
+          }
+        },
+        "folds": {
+          "n_folds": 5,
+          "seed": 42,
+          "stratify": {
+            "busi": "3class",
+            "_default": "binary"
+          }
+        },
+        "outputs": {
+          "dir": "results/dataset_audit",
+          "commit_private_manifest": false
+        }
+      }
+    }
+  },
+  "results": {
+    "config": {
+      "phash": {
+        "side": 32,
+        "lowfreq": 8,
+        "hamming_threshold": 6
+      },
+      "hamming_threshold": 6,
+      "n_folds": 5,
+      "seed": 42
+    },
+    "datasets": {
+      "busi": {
+        "n_images": 780,
+        "class_counts": {
+          "benign": 437,
+          "malignant": 210,
+          "normal": 133
+        },
+        "group_source": "image_level_only",
+        "n_with_group_id": 0,
+        "n_conflict_excluded": 18,
+        "n_dropped_out_of_task": 0,
+        "n_manifest_images": 762,
+        "n_binary_eligible": 631,
+        "n_groups": 598,
+        "n_binary_groups": 507,
+        "per_fold": {
+          "0": {
+            "benign": 85,
+            "malignant": 41,
+            "normal": 27
+          },
+          "1": {
+            "benign": 86,
+            "malignant": 41,
+            "normal": 26
+          },
+          "2": {
+            "benign": 85,
+            "malignant": 41,
+            "normal": 26
+          },
+          "3": {
+            "benign": 85,
+            "malignant": 41,
+            "normal": 26
+          },
+          "4": {
+            "benign": 86,
+            "malignant": 40,
+            "normal": 26
+          }
+        }
+      },
+      "bus_uclm": {
+        "n_images": 683,
+        "class_counts": {
+          "benign": 174,
+          "normal": 419,
+          "malignant": 90
+        },
+        "group_source": "documented_heuristic_prefix",
+        "n_with_group_id": 683,
+        "n_conflict_excluded": 0,
+        "n_dropped_out_of_task": 419,
+        "n_manifest_images": 264,
+        "n_binary_eligible": 264,
+        "n_groups": 35,
+        "n_binary_groups": 35,
+        "per_fold": {
+          "0": {
+            "benign": 35,
+            "malignant": 17
+          },
+          "1": {
+            "malignant": 19,
+            "benign": 35
+          },
+          "2": {
+            "malignant": 17,
+            "benign": 36
+          },
+          "3": {
+            "benign": 34,
+            "malignant": 17
+          },
+          "4": {
+            "benign": 34,
+            "malignant": 20
+          }
+        }
+      },
+      "bus_bra": {
+        "n_images": 1875,
+        "class_counts": {
+          "malignant": 607,
+          "benign": 1268
+        },
+        "group_source": "native_case_id",
+        "n_with_group_id": 1875,
+        "n_conflict_excluded": 0,
+        "n_dropped_out_of_task": 0,
+        "n_manifest_images": 1875,
+        "n_binary_eligible": 1875,
+        "n_groups": 1064,
+        "n_binary_groups": 1064,
+        "per_fold": {
+          "0": {
+            "benign": 254,
+            "malignant": 121
+          },
+          "1": {
+            "malignant": 121,
+            "benign": 254
+          },
+          "2": {
+            "benign": 253,
+            "malignant": 122
+          },
+          "3": {
+            "malignant": 121,
+            "benign": 254
+          },
+          "4": {
+            "malignant": 122,
+            "benign": 253
+          }
+        }
+      },
+      "busi_whu": {
+        "n_images": 927,
+        "class_counts": {
+          "benign": 560,
+          "malignant": 367
+        },
+        "group_source": "native_patient_index",
+        "n_with_group_id": 927,
+        "n_conflict_excluded": 2,
+        "n_dropped_out_of_task": 0,
+        "n_manifest_images": 925,
+        "n_binary_eligible": 925,
+        "n_groups": 814,
+        "n_binary_groups": 814,
+        "per_fold": {
+          "0": {
+            "benign": 112,
+            "malignant": 73
+          },
+          "1": {
+            "malignant": 73,
+            "benign": 112
+          },
+          "2": {
+            "malignant": 73,
+            "benign": 112
+          },
+          "3": {
+            "benign": 111,
+            "malignant": 74
+          },
+          "4": {
+            "benign": 112,
+            "malignant": 73
+          }
+        }
+      },
+      "udiat": {
+        "n_images": 163,
+        "class_counts": {
+          "benign": 109,
+          "malignant": 54
+        },
+        "group_source": "image_level_only",
+        "n_with_group_id": 0,
+        "n_conflict_excluded": 0,
+        "n_dropped_out_of_task": 0,
+        "n_manifest_images": 163,
+        "n_binary_eligible": 163,
+        "n_groups": 158,
+        "n_binary_groups": 158,
+        "per_fold": {
+          "0": {
+            "benign": 22,
+            "malignant": 11
+          },
+          "1": {
+            "benign": 22,
+            "malignant": 11
+          },
+          "2": {
+            "benign": 22,
+            "malignant": 10
+          },
+          "3": {
+            "benign": 22,
+            "malignant": 11
+          },
+          "4": {
+            "benign": 21,
+            "malignant": 11
+          }
+        }
+      },
+      "breast": {
+        "n_images": 256,
+        "class_counts": {
+          "benign": 154,
+          "malignant": 98,
+          "normal": 4
+        },
+        "group_source": "native_case_id",
+        "n_with_group_id": 256,
+        "n_conflict_excluded": 0,
+        "n_dropped_out_of_task": 4,
+        "n_manifest_images": 252,
+        "n_binary_eligible": 252,
+        "n_groups": 252,
+        "n_binary_groups": 252,
+        "per_fold": {
+          "0": {
+            "benign": 31,
+            "malignant": 20
+          },
+          "1": {
+            "benign": 31,
+            "malignant": 20
+          },
+          "2": {
+            "malignant": 20,
+            "benign": 30
+          },
+          "3": {
+            "benign": 31,
+            "malignant": 19
+          },
+          "4": {
+            "benign": 31,
+            "malignant": 19
+          }
+        }
+      }
+    },
+    "totals": {
+      "n_images": 4684,
+      "n_exact_clusters": 2,
+      "n_near_clusters": 179,
+      "n_near_images": 395,
+      "n_cross_dataset_clusters": 0,
+      "n_label_conflict_clusters": 10,
+      "n_excluded": 20,
+      "n_manifest_images": 4241
+    },
+    "conflict_clusters": [
+      {
+        "kind": "exact",
+        "group": "exact_0000",
+        "datasets": [
+          "busi"
+        ],
+        "labels": [
+          "benign",
+          "malignant"
+        ],
+        "n": 2
+      },
+      {
+        "kind": "near",
+        "group": "near_0012",
+        "datasets": [
+          "busi"
+        ],
+        "labels": [
+          "benign",
+          "malignant"
+        ],
+        "n": 3
+      },
+      {
+        "kind": "near",
+        "group": "near_0028",
+        "datasets": [
+          "busi"
+        ],
+        "labels": [
+          "benign",
+          "malignant"
+        ],
+        "n": 3
+      },
+      {
+        "kind": "near",
+        "group": "near_0078",
+        "datasets": [
+          "busi"
+        ],
+        "labels": [
+          "benign",
+          "normal"
+        ],
+        "n": 2
+      },
+      {
+        "kind": "near",
+        "group": "near_0093",
+        "datasets": [
+          "busi"
+        ],
+        "labels": [
+          "benign",
+          "malignant"
+        ],
+        "n": 2
+      },
+      {
+        "kind": "near",
+        "group": "near_0096",
+        "datasets": [
+          "busi"
+        ],
+        "labels": [
+          "benign",
+          "malignant"
+        ],
+        "n": 2
+      },
+      {
+        "kind": "near",
+        "group": "near_0099",
+        "datasets": [
+          "busi"
+        ],
+        "labels": [
+          "benign",
+          "malignant"
+        ],
+        "n": 2
+      },
+      {
+        "kind": "near",
+        "group": "near_0100",
+        "datasets": [
+          "busi"
+        ],
+        "labels": [
+          "benign",
+          "malignant"
+        ],
+        "n": 2
+      },
+      {
+        "kind": "near",
+        "group": "near_0101",
+        "datasets": [
+          "busi"
+        ],
+        "labels": [
+          "benign",
+          "normal"
+        ],
+        "n": 2
+      },
+      {
+        "kind": "near",
+        "group": "near_0172",
+        "datasets": [
+          "busi_whu"
+        ],
+        "labels": [
+          "benign",
+          "malignant"
+        ],
+        "n": 2
+      }
+    ],
+    "cross_dataset_clusters": [],
+    "manifest_hashes": {
+      "image_inventory": "8ffde995f24b12247038c2cc4cef6e69d4f9b554ed77e07fc3006abfb5d91abc",
+      "exclusions": "4d1239248ebe919216344ed7881ceefebbaa06a67b3af80565a29aef66a80210",
+      "fold_manifest": "87ed7f453ae023a0db1b84e16c55a065f052c4e4d390f50ccf21fe0f6084673e"
+    },
+    "regression_vs_sii": {
+      "busi": {
+        "expected": {
+          "raw": 780,
+          "conflict_excluded": 18,
+          "cleaned": 762,
+          "binary_eligible": 631
+        },
+        "got": {
+          "raw": 780,
+          "binary_eligible": 631,
+          "conflict_excluded": 18
+        },
+        "match": true
+      },
+      "bus_uclm": {
+        "expected": {
+          "raw": 683,
+          "binary_eligible": 264,
+          "binary_groups_approx": 35
+        },
+        "got": {
+          "raw": 683,
+          "binary_eligible": 264,
+          "conflict_excluded": 0
+        },
+        "match": true
+      },
+      "bus_bra": {
+        "expected": {
+          "raw": 1875,
+          "native_cases": 1064
+        },
+        "got": {
+          "raw": 1875,
+          "binary_eligible": 1875,
+          "conflict_excluded": 0
+        },
+        "match": true
+      },
+      "busi_whu": {
+        "expected": {
+          "raw": 927,
+          "conflict_excluded": 2,
+          "cleaned": 925
+        },
+        "got": {
+          "raw": 927,
+          "binary_eligible": 925,
+          "conflict_excluded": 2
+        },
+        "match": true
+      },
+      "udiat": {
+        "expected": {
+          "raw": 163,
+          "audit_groups": 158
+        },
+        "got": {
+          "raw": 163,
+          "binary_eligible": 163,
+          "conflict_excluded": 0
+        },
+        "match": true
+      },
+      "breast": {
+        "note": "new site (no SII baseline)"
+      }
+    }
+  }
+}

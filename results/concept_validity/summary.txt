@@ -1,0 +1,50 @@
+========================================================================
+E6 — concept-direction validity vs radiologist BI-RADS (BrEaST)
+========================================================================
+AUC of the per-axis projection <z, c_k> predicting the human BI-RADS
+feature pole (1 = malignant pole). Direction oriented benign->malignant,
+so a grounded direction gives AUC > 0.5. BrEaST has no orientation label; 4 of 5 axes validatable.
+
+backbone             shape        margin  echogenicity     posterior    diag     off
+------------------------------------------------------------------------------------
+biomedclip           0.72*         0.56          0.53          0.70*    0.63    0.59
+pmc_clip             0.82*         0.70*         0.60          0.75*    0.72    0.65
+clip                 0.59*         0.51          0.54          0.48     0.53    0.52
+
+* = bootstrap 95% CI lower bound > 0.5 (direction predicts its feature).
+diag = mean AUC of each direction on its OWN feature; off = mean AUC on the
+OTHER features. diag >> off and diag >> 0.5 => directions are feature-specific,
+not labels of convenience. CLIP (general control) should sit near 0.5.
+
+PRIMARY: feature-SPECIFICITY intersection-union test, Holm-corrected across
+the 12 backbone x axis hypotheses. p_spec = max(p_conditioned, p_own-vs-other, p_own-vs-malignancy);
+a cell is feature-SPECIFIC only if Holm-adjusted p_spec < 0.05 AND all directions +.
+backbone               shape          margin    echogenicity       posterior
+----------------------------------------------------------------------------
+biomedclip            1.000+          1.000-          1.000-          0.736+
+pmc_clip           0.012SPEC          1.000+          1.000-          0.869+
+clip                  1.000+          1.000-          1.000-          1.000-
+>>> FEATURE-SPECIFIC axes (Holm-adjusted IUT): ['pmc_clip:shape']
+    (SPEC=passes; += directions positive but not Holm-sig; -=a direction non-positive.
+     Marginal/conditioned AUCs above remain descriptive, not full specificity.)
+
+Diagnosis-controlled checks (own-feature axis; CI = 95% case bootstrap):
+  cond  = within-diagnosis AUC (feature signal beyond diagnosis; >0.5 = grounded)
+  permp = within-diagnosis permutation p for cond (H0: no signal beyond diagnosis)
+  d-off = AUC(own) - mean AUC(other features); d-mal = AUC(own) - AUC(malignancy axis)
+  a paired CI excluding 0 (d-off / d-mal) => the axis is feature-SPECIFIC.
+
+backbone   axis           cond        cond_CI  permp  d-off       d-off_CI  d-mal       d-mal_CI
+-------------------------------------------------------------------------------------------
+biomedclip shape         0.721  [+0.63,+0.80]  0.000 +0.039  [-0.02,+0.10] +0.023  [-0.05,+0.09]
+biomedclip margin        0.619  [+0.52,+0.71]  0.012 +0.023  [-0.04,+0.08] -0.134  [-0.21,-0.05]
+biomedclip echogenicity  0.486  [+0.37,+0.61]  0.594 +0.016  [-0.09,+0.13] -0.077  [-0.22,+0.06]
+biomedclip posterior     0.709  [+0.63,+0.79]  0.000 +0.078  [-0.01,+0.16] +0.082  [-0.02,+0.19]
+pmc_clip   shape         0.826  [+0.75,+0.89]  0.000 +0.092  [+0.04,+0.15] +0.177  [+0.10,+0.26]
+pmc_clip   margin        0.723  [+0.63,+0.80]  0.000 +0.012  [-0.04,+0.07] +0.023  [-0.09,+0.12]
+pmc_clip   echogenicity  0.585  [+0.46,+0.70]  0.070 +0.094  [-0.02,+0.21] -0.088  [-0.22,+0.05]
+pmc_clip   posterior     0.725  [+0.64,+0.80]  0.000 +0.055  [-0.03,+0.13] +0.094  [-0.01,+0.20]
+clip       shape         0.630  [+0.54,+0.72]  0.004 +0.089  [+0.02,+0.15] +0.017  [-0.09,+0.11]
+clip       margin        0.440  [+0.34,+0.54]  0.881 -0.031  [-0.08,+0.03] -0.094  [-0.17,-0.02]
+clip       echogenicity  0.528  [+0.42,+0.64]  0.332 -0.002  [-0.10,+0.10] -0.105  [-0.22,-0.01]
+clip       posterior     0.526  [+0.44,+0.61]  0.287 -0.032  [-0.12,+0.06] -0.124  [-0.27,+0.03]

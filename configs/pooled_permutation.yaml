@@ -1,0 +1,25 @@
+# Pooled-label permutation test — SECONDARY sensitivity for STAT-01.
+# Overlays configs/default.yaml. Concept bank = default.yaml:birads_concept_bank;
+# the richness-matched anatomy pool is imported from compute_reviewer_addenda
+# (single definition, not duplicated here).
+#
+# DECLARED 2026-07-23 BEFORE COMPUTATION — see
+# docs/20260723-pooled-permutation-declaration.md. This analysis does NOT replace
+# the primary verdict and does NOT enter the confirmatory Holm family. Do not
+# promote it to primary after seeing the result; the declaration forbids it.
+
+pooled_permutation:
+  backbones: [biomedclip, unimed_clip, pmc_clip, pubmedclip, clip, siglip]
+  sites: [busi, bus_uclm, bus_bra, busi_whu, udiat, breast]
+
+  control_pool: anatomy          # richness-matched; NOT the terse placebo pool
+  orthonormalize_basis: true
+  probe_C: 1.0                   # identical to E3, so w is the same direction
+  batch_size: 32
+  embedding_cache: results/cross_modal_probe/embeddings
+  cohort_manifest: results/dataset_audit
+
+  # Reference set = all C(5+10, 5) = 3003 full-rank 5-subsets of the pooled bank.
+  # The observed clinical subset is one of them and is scored in the same loop.
+  # p_pooled = #{T_S >= T_clin} / 3003 (exact; no +1 smoothing).
+  holm_descriptive: true         # Holm over the six backbones, reported, NOT confirmatory
